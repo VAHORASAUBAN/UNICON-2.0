@@ -10,9 +10,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false, // Remove the debug banner
-      title: 'Attendance Management App',
+      title: 'UNICON',
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange, // Set a theme color
+        primarySwatch: Colors.indigo, // Set a theme color
         fontFamily: 'Roboto', // Set default font
       ),
       home: LoginScreen(), // Set LoginScreen as the home screen

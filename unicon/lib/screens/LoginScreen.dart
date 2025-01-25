@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'LoginDetailsScreen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -15,6 +14,11 @@ class LoginScreen extends StatelessWidget {
               fit: BoxFit.cover,
               color: Colors.black.withOpacity(0.4),
               colorBlendMode: BlendMode.darken,
+              errorBuilder: (context, error, stackTrace) {
+                return Center(
+                  child: Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                );
+              },
             ),
           ),
           Center(
@@ -38,7 +42,7 @@ class LoginScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.network(
-                      'https://storage.googleapis.com/a1aa/image/5PYsGFJ1fPUuOauDw85IxaTl0FFvfFa0G9qeqLaWxZEKcbPoA.jpg',
+                      'https://www.glsmscit.org/img/building.jpg',
                       height: 100,
                       width: 100,
                     ),

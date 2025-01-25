@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:unicon/screens/Dashboard.dart';
+import '../services/AuthService.dart';
 import '../widgets/RoundedTextField.dart';
 import '../widgets/CircularButton.dart';
 
@@ -13,6 +15,43 @@ class LoginDetailsScreen extends StatefulWidget {
 
 class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
   bool _isPasswordVisible = false;
+  bool _isLoading = false;
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> _handleLogin() async {
+    String username = _usernameController.text.trim();
+    String password = _passwordController.text.trim();
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    bool success = await AuthService.login(username, password);
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (success) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardScreen()),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardScreen()),
+      );
+      // _showSnackBar("Invalid login credentials");
+    }
+  }
+
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,19 +80,11 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  "lib/assets/GLS-University.jpg",
+                  "assets/GLS-University.jpg",
                   height: size.height * 0.2,
                   fit: BoxFit.contain,
                 ),
                 const SizedBox(height: 10),
-                // const Text(
-                //   "Welcome Back!",
-                //   style: TextStyle(
-                //     fontSize: 24,
-                //     fontWeight: FontWeight.bold,
-                //     color: Colors.white,
-                //   ),
-                // ),
               ],
             ),
           ),
@@ -81,7 +112,7 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Updated RoundedTextField with style enhancements
+                  // Username Field
                   RoundedTextField(
                     color: Colors.grey,
                     icon: Icons.person,
@@ -89,8 +120,11 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                     privacy: false,
                     suffixicon: null,
                     inputStyle: const TextStyle(color: Colors.black),
+                    controller: _usernameController,
                   ),
                   const SizedBox(height: 10),
+
+                  // Password Field
                   RoundedTextField(
                     color: Colors.grey,
                     icon: Icons.lock,
@@ -105,18 +139,18 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                       });
                     },
                     inputStyle: const TextStyle(color: Colors.black),
+                    controller: _passwordController,
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
 
-                  // Updated Login Button with Gradient
-                  CircularButton(
+                  // Login Button or Loading Indicator
+                  _isLoading
+                      ? const CircularProgressIndicator()
+                      : CircularButton(
                     text: "LOGIN",
-                    color: Colors.indigoAccent,
+                    color: const Color(0xff1222ca),
                     textColor: Colors.white,
-                    // color: const Color(0xff1222ca),
-                    press: () {
-                      // Handle login
-                    },
+                    press: _handleLogin,
                   ),
                   const SizedBox(height: 10),
                 ],

@@ -9,14 +9,14 @@ class RoundedTextField extends StatelessWidget {
   final VoidCallback? togglePasswordVisibility;
   final TextStyle? inputStyle;
 
-  RoundedTextField({
+  const RoundedTextField({
     required this.color,
     required this.icon,
     required this.text,
     required this.privacy,
     this.suffixicon,
     this.togglePasswordVisibility,
-    this.inputStyle,
+    this.inputStyle, required TextEditingController controller,
   });
 
   @override
