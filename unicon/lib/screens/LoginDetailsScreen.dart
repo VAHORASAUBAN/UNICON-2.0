@@ -46,7 +46,6 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
     }
   }
 
-
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
@@ -60,27 +59,20 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Gradient Background
+          // Solid Background Color
           Container(
             width: double.infinity,
             height: double.infinity,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xff1e44e3), Color(0xFF4500BC)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
+            color: const Color(0xFF0A3B87), // Replaced with the provided color
           ),
 
-          // Centered Logo
+          // Centered Logo, moved upwards
           Align(
-            alignment: Alignment.center,
+            alignment: Alignment(0, -0.4), // Moves logo upwards
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  "assets/GLS-University.jpg",
+                  "assets/GLS.png",
                   height: size.height * 0.2,
                   fit: BoxFit.contain,
                 ),
@@ -112,6 +104,27 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Sign In Heading
+                  const Text(
+                    'Sign In',  // Main heading text
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,  // Text color set to black
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Subheading: Sign in to my account
+                  const Text(
+                    'Sign in to my account',  // Subheading text
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54,  // Slightly lighter black for subheading
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
                   // Username Field
                   RoundedTextField(
                     color: Colors.grey,
@@ -143,12 +156,33 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Login Button or Loading Indicator
+                  // Forgot Password Link aligned to the left
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          // Handle forgot password action
+                          // Example: Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordScreen()));
+                        },
+                        child: const Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  // Login Button or Loading Indicator with updated color
                   _isLoading
                       ? const CircularProgressIndicator()
                       : CircularButton(
                     text: "LOGIN",
-                    color: const Color(0xff1222ca),
+                    color: const Color(0xFF0A3B87), // Updated to match background color
                     textColor: Colors.white,
                     press: _handleLogin,
                   ),

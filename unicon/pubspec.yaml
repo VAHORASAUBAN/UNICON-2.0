@@ -19,4 +19,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/GLS-University.jpg
+    - assets/GLS.png
+    - assets/library.png
