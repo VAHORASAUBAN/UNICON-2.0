@@ -22,29 +22,30 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
   Future<void> _handleLogin() async {
     String username = _usernameController.text.trim();
     String password = _passwordController.text.trim();
+    print("HandleLogin: Username -> $username, Password -> $password"); // Debug
 
     setState(() {
       _isLoading = true;
     });
 
     bool success = await AuthService.login(username, password);
+
     setState(() {
       _isLoading = false;
     });
 
     if (success) {
+      print("HandleLogin: Redirecting to Dashboard");
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => DashboardScreen()),
       );
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => DashboardScreen()),
-      );
-      // _showSnackBar("Invalid login credentials");
+      print("HandleLogin: Showing invalid credentials snackbar");
+      _showSnackBar("Invalid login credentials");
     }
   }
+
 
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -63,12 +64,12 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
           Container(
             width: double.infinity,
             height: double.infinity,
-            color: const Color(0xFF0A3B87), // Replaced with the provided color
+            color: const Color(0xFF0A3B87),
           ),
 
           // Centered Logo, moved upwards
           Align(
-            alignment: Alignment(0, -0.4), // Moves logo upwards
+            alignment: Alignment(0, -0.4),
             child: Column(
               children: [
                 Image.asset(
@@ -106,27 +107,55 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                 children: [
                   // Sign In Heading
                   const Text(
-                    'Sign In',  // Main heading text
+                    'Sign In',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,  // Text color set to black
+                      color: Colors.black,
                     ),
                   ),
                   const SizedBox(height: 10),
 
                   // Subheading: Sign in to my account
                   const Text(
-                    'Sign in to my account',  // Subheading text
+                    'Sign in to my account',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.black54,  // Slightly lighter black for subheading
+                      color: Colors.black54,
                     ),
                   ),
                   const SizedBox(height: 20),
-
                   // Username Field
                   RoundedTextField(
+                    controller: _usernameController, // Pass the username controller
+                    color: Colors.grey,
+                    icon: Icons.person,
+                    text: "Your Username",
+                    privacy: false,
+                    suffixicon: null,
+                    inputStyle: const TextStyle(color: Colors.black),
+                  ),
+
+// Password Field
+                  RoundedTextField(
+                    color: Colors.grey,
+                    icon: Icons.lock,
+                    text: "Your Password",
+                    privacy: !_isPasswordVisible, // Control visibility based on state
+                    suffixicon: _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    togglePasswordVisibility: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible; // Toggle visibility
+                      });
+                    },
+                    inputStyle: const TextStyle(color: Colors.black),
+                    controller: _passwordController,
+                  ),
+
+
+
+                  // Username Field
+                  /*RoundedTextField(
                     color: Colors.grey,
                     icon: Icons.person,
                     text: "Your Username",
@@ -153,7 +182,7 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                     },
                     inputStyle: const TextStyle(color: Colors.black),
                     controller: _passwordController,
-                  ),
+                  ),*/
                   const SizedBox(height: 20),
 
                   // Forgot Password Link aligned to the left
@@ -182,7 +211,7 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                       ? const CircularProgressIndicator()
                       : CircularButton(
                     text: "LOGIN",
-                    color: const Color(0xFF0A3B87), // Updated to match background color
+                    color: const Color(0xFF0A3B87),
                     textColor: Colors.white,
                     press: _handleLogin,
                   ),
