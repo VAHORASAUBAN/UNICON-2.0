@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:unicon/screens/Dashboard.dart';
-import '../services/AuthService.dart';
-import '../widgets/RoundedTextField.dart';
-import '../widgets/CircularButton.dart';
+
+import '../../../services/AuthService.dart';
+import '../../shared/widgets/CircularButton.dart';
+import '../../shared/widgets/RoundedTextField.dart';
+import 'dashboard/Dashboard.dart';
+
 
 class LoginDetailsScreen extends StatefulWidget {
   final String userType;
@@ -73,7 +75,7 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
             child: Column(
               children: [
                 Image.asset(
-                  "assets/GLS.png",
+                  "assets/images/GLS.png",
                   height: size.height * 0.2,
                   fit: BoxFit.contain,
                 ),

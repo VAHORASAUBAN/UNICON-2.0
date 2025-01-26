@@ -10,14 +10,14 @@ class LoginScreen extends StatelessWidget {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/library.png',
+              'assets/images/library.png',
               fit: BoxFit.cover,
               color: Colors.black.withOpacity(0.4),
               colorBlendMode: BlendMode.darken,
               errorBuilder: (context, error, stackTrace) {
                 return Container(
                   color: Colors.black.withOpacity(0.4),
-                  child: Center(
+                  child: const Center(
                     child: Icon(Icons.broken_image, size: 50, color: Colors.grey),
                   ),
                 );
@@ -40,19 +40,19 @@ class LoginScreen extends StatelessWidget {
                   ],
                 ),
                 width: MediaQuery.of(context).size.width * 0.9,
-                constraints: BoxConstraints(maxWidth: 400),
+                constraints: const BoxConstraints(maxWidth: 400),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(50), // Ensures round corners
+                      borderRadius: BorderRadius.circular(50), // Circular logo
                       child: Image.asset(
-                        'assets/GLS.png',
+                        'assets/images/GLS.png',
                         height: 100,
                         width: 100,
-                        fit: BoxFit.contain, // Makes sure the whole image fits inside the circular shape
+                        fit: BoxFit.contain,
                         errorBuilder: (context, error, stackTrace) {
-                          return Icon(
+                          return const Icon(
                             Icons.image_not_supported,
                             size: 100,
                             color: Colors.grey,

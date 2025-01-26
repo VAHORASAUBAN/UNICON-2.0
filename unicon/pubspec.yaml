@@ -19,5 +19,12 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/GLS.png
-    - assets/library.png
+    - assets/images/article.jpg
+    - assets/images/attendance.jpg
+    - assets/images/timetable.jpg
+    - assets/images/events.jpg
+    - assets/images/GLS.png
+    - assets/images/library.png
+    - assets/images/mentor.jpg
+    - assets/images/placement.png
+    - assets/images/profile.png
