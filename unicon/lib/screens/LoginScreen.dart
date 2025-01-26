@@ -9,14 +9,17 @@ class LoginScreen extends StatelessWidget {
         children: [
           // Background Image
           Positioned.fill(
-            child: Image.network(
-              'https://storage.googleapis.com/a1aa/image/XtztH2WkC9LvNZEkI26vjf7bd6CfIExqCVijXGrQHlIEutHUA.jpg',
+            child: Image.asset(
+              'assets/library.png',
               fit: BoxFit.cover,
               color: Colors.black.withOpacity(0.4),
               colorBlendMode: BlendMode.darken,
               errorBuilder: (context, error, stackTrace) {
-                return Center(
-                  child: Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                return Container(
+                  color: Colors.black.withOpacity(0.4),
+                  child: Center(
+                    child: Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                  ),
                 );
               },
             ),
@@ -41,10 +44,21 @@ class LoginScreen extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Image.network(
-                      'https://www.glsmscit.org/img/building.jpg',
-                      height: 100,
-                      width: 100,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(50), // Ensures round corners
+                      child: Image.asset(
+                        'assets/GLS.png',
+                        height: 100,
+                        width: 100,
+                        fit: BoxFit.contain, // Makes sure the whole image fits inside the circular shape
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            Icons.image_not_supported,
+                            size: 100,
+                            color: Colors.grey,
+                          );
+                        },
+                      ),
                     ),
                     const SizedBox(height: 20),
                     const Text(
@@ -94,12 +108,10 @@ class LoginScreen extends StatelessWidget {
           ),
         );
       },
-
       child: Text(
         label,
         style: const TextStyle(fontSize: 16, color: Colors.white),
       ),
     );
   }
-
 }
