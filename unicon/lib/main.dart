@@ -33,7 +33,7 @@ import 'package:flutter/material.dart';
 import 'features/screens/dashboard/Dashboard.dart';
 import 'features/screens/LoginScreen.dart';
 import 'features/screens/LoginDetailsScreen.dart';
-import 'package:unicon/features/screens/dashboard/timetable_screen.dart' as timetable;
+import 'package:unicon/features/screens/timetable_screen.dart' as timetable;
 
 void main() {
   runApp(MyApp());
