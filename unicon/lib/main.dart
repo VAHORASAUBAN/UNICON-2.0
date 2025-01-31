@@ -1,5 +1,9 @@
+/*
 import 'package:flutter/material.dart';
-import 'package:unicon/screens/LoginScreen.dart';
+import 'package:unicon/shared/widgets/navbar.dart';
+
+import 'features/screens/LoginDetailsScreen.dart';
+import 'features/screens/LoginScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,12 +14,48 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false, // Remove the debug banner
-      title: 'Attendance Management App',
+      title: 'UNICON',
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange, // Set a theme color
+        primarySwatch: Colors.indigo, // Set a theme color
         fontFamily: 'Roboto', // Set default font
       ),
-      home: LoginScreen(), // Set LoginScreen as the home screen
+      initialRoute: '/', // Define the initial route
+      routes: {
+        '/': (context) => LoginScreen(), // Start with LoginScreen
+        '/loginDetails': (context) => LoginDetailsScreen(userType: ''), // LoginDetailsScreen with a placeholder
+        '/dashboard': (context) => NavBar(), // NavBar for navigating Dashboard, QR Scanner, Notifications
+      },
+    );
+  }
+}
+*/
+import 'package:flutter/material.dart';
+import 'features/screens/dashboard/Dashboard.dart';
+import 'features/screens/LoginScreen.dart';
+import 'features/screens/LoginDetailsScreen.dart';
+import 'package:unicon/features/screens/timetable_screen.dart' as timetable;
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'UNICON',
+      theme: ThemeData(
+        primarySwatch: Colors.indigo,
+        fontFamily: 'Roboto',
+      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => LoginScreen(),
+        '/loginDetails': (context) => LoginDetailsScreen(userType: ''),
+        '/dashboard': (context) => DashboardScreen(),
+        '/timetable': (context) => timetable.TimetableScreen(),
+      },
     );
   }
 }

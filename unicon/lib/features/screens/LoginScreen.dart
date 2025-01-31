@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'LoginDetailsScreen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -10,11 +9,19 @@ class LoginScreen extends StatelessWidget {
         children: [
           // Background Image
           Positioned.fill(
-            child: Image.network(
-              'https://storage.googleapis.com/a1aa/image/XtztH2WkC9LvNZEkI26vjf7bd6CfIExqCVijXGrQHlIEutHUA.jpg',
+            child: Image.asset(
+              'assets/images/library.png',
               fit: BoxFit.cover,
               color: Colors.black.withOpacity(0.4),
               colorBlendMode: BlendMode.darken,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  color: Colors.black.withOpacity(0.4),
+                  child: const Center(
+                    child: Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                  ),
+                );
+              },
             ),
           ),
           Center(
@@ -33,14 +40,25 @@ class LoginScreen extends StatelessWidget {
                   ],
                 ),
                 width: MediaQuery.of(context).size.width * 0.9,
-                constraints: BoxConstraints(maxWidth: 400),
+                constraints: const BoxConstraints(maxWidth: 400),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Image.network(
-                      'https://storage.googleapis.com/a1aa/image/5PYsGFJ1fPUuOauDw85IxaTl0FFvfFa0G9qeqLaWxZEKcbPoA.jpg',
-                      height: 100,
-                      width: 100,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(50), // Circular logo
+                      child: Image.asset(
+                        'assets/images/GLS.png',
+                        height: 100,
+                        width: 100,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(
+                            Icons.image_not_supported,
+                            size: 100,
+                            color: Colors.grey,
+                          );
+                        },
+                      ),
                     ),
                     const SizedBox(height: 20),
                     const Text(
@@ -90,12 +108,10 @@ class LoginScreen extends StatelessWidget {
           ),
         );
       },
-
       child: Text(
         label,
         style: const TextStyle(fontSize: 16, color: Colors.white),
       ),
     );
   }
-
 }
