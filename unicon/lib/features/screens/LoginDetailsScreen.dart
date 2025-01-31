@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../services/AuthService.dart';
 import '../../shared/widgets/CircularButton.dart';
 import '../../shared/widgets/RoundedTextField.dart';
-import 'dashboard/Dashboard.dart';
+import 'MenuBar.dart';
 
 
 class LoginDetailsScreen extends StatefulWidget {
@@ -69,20 +69,21 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
             color: const Color(0xFF0A3B87),
           ),
 
-          // Centered Logo, moved upwards
           Align(
-            alignment: Alignment(0, -0.4),
+            alignment: Alignment(0, 0.10),
             child: Column(
               children: [
+                SizedBox(height: 20),
                 Image.asset(
                   "assets/images/GLS.png",
-                  height: size.height * 0.2,
+                  height: size.height * 0.3,
                   fit: BoxFit.contain,
                 ),
                 const SizedBox(height: 10),
               ],
             ),
           ),
+
 
           // Input Fields Card at Bottom
           Align(
