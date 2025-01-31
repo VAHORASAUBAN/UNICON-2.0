@@ -408,7 +408,7 @@ class QRCodeScannerScreen extends StatelessWidget {
 }*/
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // For date formatting
-import 'package:unicon/features/screens/dashboard/timetable_screen.dart';
+import 'package:unicon/features/screens/timetable_screen.dart';
 
 import '../../../shared/widgets/navbar.dart'; // Import the TimetableService
 
@@ -567,6 +567,6 @@ class UpdatesScreen extends StatelessWidget {
 class QRCodeScannerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text("QR Code Scanner Screen"));
+    return const Center(child: Text("Updates Screen"));
   }
 }

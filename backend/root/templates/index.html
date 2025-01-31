@@ -100,7 +100,8 @@
   <body>
     <div class="login-container">
       <h1>Login</h1>
-      <form>
+      <form action="/dashboard/" method="POST">
+        {% csrf_token %}
         <div class="input-group">
           <label for="username">Username</label>
           <input
@@ -122,9 +123,6 @@
           />
         </div>
         <button type="submit" class="login-button">Login</button>
-        <p class="signup-text">
-          Don't have an account? <a href="#">Sign up</a>
-        </p>
       </form>
     </div>
   </body>
