@@ -23,7 +23,19 @@ from superadmin import views as superadmin_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', root_views.index, name='index'),
-    path('facultyindex/', faculty_views.facultyIndex, name='facultyindex'),
+
+    # all faculty urls 
+    path('dashboard/', faculty_views.dashboard, name='dashboard'),
+    path('facultyprofile/', faculty_views.facultyprofile, name='facultyprofile'),
+    # path('dashboard/', faculty_views.dashboard, name='dashboard'),
+    path('facultysubjects/', faculty_views.facultysubjects, name='facultysubjects'),
+    path('attendance/', faculty_views.attendance, name='attendance'),
+    path('subjects/', faculty_views.subjects, name='subjects'),
+    path('facultylogout/', faculty_views.logout, name='logout'),
+
+
+
+    # all superadmin urls 
     path('superadminindex/', superadmin_views.superadminIndex, name='superadminindex'),
 
 ]

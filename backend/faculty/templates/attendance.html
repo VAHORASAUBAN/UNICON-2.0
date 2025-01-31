@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attendance Table</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      .custom-control-input:checked ~ .custom-control-label::before {
+        background-color: green;
+        border-color: green;
+      }
+      .custom-control-input ~ .custom-control-label::before {
+        background-color: red;
+        border-color: red;
+      }
+      body {
+        position: relative;
+      }
+      .container {
+        position: absolute;
+        left: 18%;
+      }
+      .btn-primary {
+        background: #004aad;
+        border: 1px solid #004aad;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    {% include 'faculty.html' %}
+
+    <div class="container mt-5">
+      <h2 class="mb-4" style="text-align: center">Attendance Table</h2>
+
+      <!-- Search and Filter Options -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <input
+            type="text"
+            class="form-control"
+            id="search"
+            placeholder="Search by name..."
+          />
+        </div>
+        <div class="col-md-2">
+          <select class="form-control" id="filterSubject">
+            <option value="">All Subjects</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Physics">Physics</option>
+            <option value="Chemistry">Chemistry</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select class="form-control" id="filterSemester">
+            <option value="">All Semesters</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select class="form-control" id="filterCourse">
+            <option value="">All Courses</option>
+            <option value="B.Sc">B.Sc</option>
+            <option value="B.Tech">B.Tech</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-secondary" id="exportButton">Export</button>
+        </div>
+      </div>
+
+      <!-- Attendance Table -->
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Enrollment</th>
+              <th>Name</th>
+              <th>Subject</th>
+              <th>Semester</th>
+              <th>Course</th>
+              <th>Class</th>
+              <th>Present/Absent</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>001</td>
+              <td>John Doe</td>
+              <td>Mathematics</td>
+              <td>1</td>
+              <td>B.Sc</td>
+              <td>A</td>
+              <td>
+                <div class="custom-control custom-switch">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="attendance1"
+                  />
+                  <label class="custom-control-label" for="attendance1"></label>
+                </div>
+              </td>
+              <td>
+                <button class="btn btn-primary btn-sm">Edit</button>
+              </td>
+            </tr>
+            <tr>
+              <td>002</td>
+              <td>Jane Smith</td>
+              <td>Physics</td>
+              <td>2</td>
+              <td>B.Tech</td>
+              <td>B</td>
+              <td>
+                <div class="custom-control custom-switch">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="attendance2"
+                  />
+                  <label class="custom-control-label" for="attendance2"></label>
+                </div>
+              </td>
+              <td>
+                <button class="btn btn-primary btn-sm">Edit</button>
+              </td>
+            </tr>
+            <!-- Add more rows as needed -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        // Add search and filter functionality here
+      });
+    </script>
+  </body>
+</html>
