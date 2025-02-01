@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:unicon/features/screens/Faculty/faculty_dashboard_screen.dart';
 import 'package:unicon/features/screens/dashboard/DashboardScreen.dart';
 import '../../../services/AuthService.dart';
 import '../../shared/widgets/CircularButton.dart';
 import '../../shared/widgets/RoundedTextField.dart';
 import 'sidemenu.dart';
 
-
 class LoginDetailsScreen extends StatefulWidget {
-  final String userType;
+  final String userType;  // Receiving userType from the previous screen
 
   const LoginDetailsScreen({required this.userType});
 
@@ -21,34 +21,41 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  // Handle Login Logic
   Future<void> _handleLogin() async {
     String username = _usernameController.text.trim();
     String password = _passwordController.text.trim();
-    print("HandleLogin: Username -> $username, Password -> $password"); // Debug
 
     setState(() {
       _isLoading = true;
     });
 
-    bool success = await AuthService.login(username, password);
+    // Perform login based on userType passed to the widget
+    bool success = await AuthService.login(username, password, widget.userType);
 
     setState(() {
       _isLoading = false;
     });
 
     if (success) {
-      print("HandleLogin: Redirecting to Dashboard");
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => DashboardScreen()),
-      );
+      // Redirecting based on userType
+      if (widget.userType == 'Student') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => DashboardScreen()),
+        );
+      } else if (widget.userType == 'Faculty') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => FacultyDashboardScreen(userName: 'Faculty',)),
+        );
+      }
     } else {
-      print("HandleLogin: Showing invalid credentials snackbar");
       _showSnackBar("Invalid login credentials");
     }
   }
 
-
+  // Method to show Snackbar
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
@@ -69,6 +76,7 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
             color: const Color(0xFF0A3B87),
           ),
 
+          // Logo and Image
           Align(
             alignment: Alignment(0, 0.10),
             child: Column(
@@ -84,8 +92,7 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
             ),
           ),
 
-
-          // Input Fields Card at Bottom
+          // Login Form at the Bottom
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -128,6 +135,7 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
+
                   // Username Field
                   RoundedTextField(
                     controller: _usernameController, // Pass the username controller
@@ -139,7 +147,7 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                     inputStyle: const TextStyle(color: Colors.black),
                   ),
 
-// Password Field
+                  // Password Field
                   RoundedTextField(
                     color: Colors.grey,
                     icon: Icons.lock,
@@ -164,7 +172,6 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                       TextButton(
                         onPressed: () {
                           // Handle forgot password action
-                          // Example: Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordScreen()));
                         },
                         child: const Text(
                           'Forgot Password?',
@@ -178,7 +185,7 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                     ],
                   ),
 
-                  // Login Button or Loading Indicator with updated color
+                  // Login Button or Loading Indicator
                   _isLoading
                       ? const CircularProgressIndicator()
                       : CircularButton(
