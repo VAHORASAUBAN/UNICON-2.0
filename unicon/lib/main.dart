@@ -1,30 +1,28 @@
-
 import 'package:flutter/material.dart';
-import 'features/screens/MenuBar.dart';
-import 'features/screens/LoginScreen.dart';
-import 'features/screens/LoginDetailsScreen.dart';
-import 'package:unicon/features/screens/timetable_screen.dart' as timetable;
+import 'package:unicon/features/screens/dashboard/DashboardScreen.dart';
+import 'package:unicon/features/screens/LoginScreen.dart';
+import 'package:unicon/features/screens/LoginDetailsScreen.dart';
+import 'package:unicon/features/screens/timetable_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'UNICON',
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-        fontFamily: 'Roboto',
-      ),
+      theme: ThemeData(primarySwatch: Colors.indigo),
       initialRoute: '/',
       routes: {
-        '/loginscreen': (context) => LoginScreen(),
-        '/loginDetails': (context) => LoginDetailsScreen(userType: ''),
-        '/': (context) => DashboardScreen(),
-        '/timetable': (context) => timetable.TimetableScreen(),
+        '/dasboard': (context) => const DashboardScreen(),
+        '/': (context) => LoginScreen(),
+        '/loginDetails': (context) => LoginDetailsScreen(userType: 'student'),
+        '/timetable': (context) =>  TimetableScreen(),
       },
     );
   }

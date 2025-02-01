@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:unicon/features/screens/dashboard/DashboardScreen.dart';
 import '../../../services/AuthService.dart';
 import '../../shared/widgets/CircularButton.dart';
 import '../../shared/widgets/RoundedTextField.dart';
-import 'MenuBar.dart';
+import 'sidemenu.dart';
 
 
 class LoginDetailsScreen extends StatefulWidget {
@@ -155,37 +155,6 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                     controller: _passwordController,
                   ),
 
-
-
-                  // Username Field
-                  /*RoundedTextField(
-                    color: Colors.grey,
-                    icon: Icons.person,
-                    text: "Your Username",
-                    privacy: false,
-                    suffixicon: null,
-                    inputStyle: const TextStyle(color: Colors.black),
-                    controller: _usernameController,
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Password Field
-                  RoundedTextField(
-                    color: Colors.grey,
-                    icon: Icons.lock,
-                    text: "Your Password",
-                    privacy: true,
-                    suffixicon: _isPasswordVisible
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                    togglePasswordVisibility: () {
-                      setState(() {
-                        _isPasswordVisible = !_isPasswordVisible;
-                      });
-                    },
-                    inputStyle: const TextStyle(color: Colors.black),
-                    controller: _passwordController,
-                  ),*/
                   const SizedBox(height: 20),
 
                   // Forgot Password Link aligned to the left
