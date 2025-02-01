@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/dasboard': (context) => const DashboardScreen(),
         '/': (context) => LoginScreen(),
-        '/loginDetails': (context) => LoginDetailsScreen(userType: 'student'),
+        '/loginDetails': (context) => LoginDetailsScreen(userType: ' '),
         '/timetable': (context) =>  TimetableScreen(),
       },
     );

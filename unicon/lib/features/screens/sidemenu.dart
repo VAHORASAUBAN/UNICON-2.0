@@ -95,7 +95,11 @@ class sidemenu extends StatelessWidget {
           const Divider(),
 
           // ==== Logout Section ====
-          _buildDrawerItem(Icons.logout, "Logout", () => onMenuTap("/logout"), color: Colors.red),
+          _buildDrawerItem(Icons.logout, "Logout", (
+
+              ) {Navigator.pop(context);
+            onMenuTap("/logout");
+          }, color: Colors.red),
         ],
       ),
     );
