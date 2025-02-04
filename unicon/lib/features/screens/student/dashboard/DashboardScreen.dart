@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../shared/widgets/navbar.dart';
+import '../../../../shared/widgets/navbar.dart';
 import '../sidemenu.dart';
 
 class DashboardScreen extends StatefulWidget {

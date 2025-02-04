@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:unicon/features/screens/Faculty/faculty_dashboard_screen.dart';
-import 'package:unicon/features/screens/dashboard/DashboardScreen.dart';
+import 'package:unicon/features/screens/Faculty/dashboard/faculty_dashboard_screen.dart';
+import 'package:unicon/features/screens/student/dashboard/DashboardScreen.dart';
 import '../../../services/AuthService.dart';
 import '../../shared/widgets/CircularButton.dart';
 import '../../shared/widgets/RoundedTextField.dart';
-import 'sidemenu.dart';
+import 'student/sidemenu.dart';
 
 class LoginDetailsScreen extends StatefulWidget {
   final String userType;  // Receiving userType from the previous screen
