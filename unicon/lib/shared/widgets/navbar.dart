@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../features/screens/student/scanner/scanner_screen.dart';
+
 class CustomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
@@ -41,8 +43,13 @@ class CustomNavBar extends StatelessWidget {
           top: -20, // Adjust height to make it float
           left: MediaQuery.of(context).size.width / 2 - 30, // Center align
           child: FloatingActionButton(
-            backgroundColor: const Color(0xFF0A3B87), // Button color
-            onPressed: onScannerTap, // Callback function for scan button
+            backgroundColor: const Color(0xFF0A3B87),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ScannerScreen()),
+              );
+            },
             child: const Icon(Icons.qr_code_scanner, color: Colors.white), // Scanner icon
             shape: const CircleBorder(), // Circular shape
             elevation: 6, // Adds shadow effect
