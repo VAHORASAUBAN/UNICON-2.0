@@ -55,7 +55,7 @@ import 'package:flutter/material.dart';
 // Data model to represent a subject with a time range
 class Subject {
   final String name;
-  final String timeRange;  // Time range such as "9:00 AM - 10:00 AM"
+  final String timeRange; // Time range such as "9:00 AM - 10:00 AM"
 
   Subject({required this.name, required this.timeRange});
 }
@@ -96,8 +96,16 @@ class TimetableService {
   static List<Subject> getTodaysTimetable() {
     String today = DateTime.now().weekday == 7
         ? "Sunday"
-        : ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][DateTime.now().weekday - 1];
-    return timetable[today] ?? [Subject(name: "No classes today", timeRange: "")];
+        : [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday"
+          ][DateTime.now().weekday - 1];
+    return timetable[today] ??
+        [Subject(name: "No classes today", timeRange: "")];
   }
 
   static List<Subject> getFullTimetable() {
@@ -109,6 +117,8 @@ class TimetableService {
 }
 
 class TimetableScreen extends StatelessWidget {
+  const TimetableScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final timetableData = TimetableService.timetable;
@@ -116,7 +126,10 @@ class TimetableScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF0A3B87),
-        title: const Text("Full Timetable",style: TextStyle(color: Colors.white),),
+        title: const Text(
+          "Full Timetable",
+          style: TextStyle(color: Colors.white),
+        ),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Padding(
@@ -140,7 +153,9 @@ class TimetableScreen extends StatelessWidget {
                     _buildTableCell('Sunday'),
                   ],
                 ),
-                for (int i = 0; i < 4; i++) // Limit to 4 time slots (for example)
+                for (int i = 0;
+                    i < 4;
+                    i++) // Limit to 4 time slots (for example)
                   TableRow(
                     children: [
                       _buildTableCell(_getTimeSlot(i)),
@@ -184,6 +199,8 @@ class TimetableScreen extends StatelessWidget {
 
   String _getSubjectForDay(String day, int index) {
     final subjects = TimetableService.timetable[day];
-    return subjects != null && index < subjects.length ? subjects[index].name : '';
+    return subjects != null && index < subjects.length
+        ? subjects[index].name
+        : '';
   }
 }
