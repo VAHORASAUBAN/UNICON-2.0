@@ -1,40 +1,18 @@
-/*
 import 'package:flutter/material.dart';
-import 'package:unicon/shared/widgets/navbar.dart';
-
-import 'features/screens/LoginDetailsScreen.dart';
-import 'features/screens/LoginScreen.dart';
+import 'package:unicon/features/screens/LoginScreen.dart';
+import 'package:unicon/features/screens/LoginDetailsScreen.dart';
+import 'package:unicon/features/screens/student/scanner/scanner_screen.dart';
+import 'package:unicon/features/screens/timetable_screen.dart';
+import 'features/screens/student/dashboard/DashboardScreen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false, // Remove the debug banner
-      title: 'UNICON',
-      theme: ThemeData(
-        primarySwatch: Colors.indigo, // Set a theme color
-        fontFamily: 'Roboto', // Set default font
-      ),
-      initialRoute: '/', // Define the initial route
-      routes: {
-        '/': (context) => LoginScreen(), // Start with LoginScreen
-        '/loginDetails': (context) => LoginDetailsScreen(userType: ''), // LoginDetailsScreen with a placeholder
-        '/dashboard': (context) => NavBar(), // NavBar for navigating Dashboard, QR Scanner, Notifications
-      },
-    );
-  }
-}
-*/
-import 'package:flutter/material.dart';
-import 'features/screens/dashboard/Dashboard.dart';
-import 'features/screens/LoginScreen.dart';
-import 'features/screens/LoginDetailsScreen.dart';
-import 'package:unicon/features/screens/timetable_screen.dart' as timetable;
+  const MyApp({super.key});
 
+<<<<<<< HEAD
 void main() {
   runApp(MyApp());
 }
@@ -42,21 +20,22 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+=======
+>>>>>>> d02777fb5578d6d0195d1236c67bcf0ac45bf6d9
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'UNICON',
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-        fontFamily: 'Roboto',
-      ),
+      theme: ThemeData(primarySwatch: Colors.indigo),
       initialRoute: '/',
       routes: {
+        '/dasboard': (context) => const DashboardScreen(),
         '/': (context) => LoginScreen(),
-        '/loginDetails': (context) => LoginDetailsScreen(userType: ''),
-        '/dashboard': (context) => DashboardScreen(),
-        '/timetable': (context) => timetable.TimetableScreen(),
+        '/loginDetails': (context) => LoginDetailsScreen(userType: ' '),
+        '/timetable': (context) =>  TimetableScreen(),
+        '/scanner': (context) =>  ScannerScreen(),
+
       },
     );
   }
