@@ -1,148 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Attendance Dashboard</title>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        font-family: "Arial", sans-serif;
-        background-color: #ffffff; /* White background */
-        margin: 0;
-        padding: 0;
-      }
 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Attendance Dashboard</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background-color: #ffffff;
+      /* White background */
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-left: 250px;
+      /* Adjusting for sidebar */
+      padding: 20px;
+      transition: margin-left 0.3s ease;
+    }
+
+    .card {
+      background-color: #ffffff;
+      /* White background for cards */
+      color: #1e3a8a;
+      /* Blue color for text */
+      width: 280px;
+      height: 280px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .card h3 {
+      font-size: 1.4em;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #1e3a8a;
+      /* Blue color for headings */
+    }
+
+    .card p {
+      font-size: 1.1em;
+      margin-bottom: 12px;
+      font-weight: 500;
+      color: #333333;
+      /* Darker gray for other text */
+    }
+
+    .card .btn {
+      background-color: #1e3a8a;
+      /* Blue color for buttons */
+      color: white;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .card .btn:hover {
+      background-color: #3b5bbf;
+      /* Slightly lighter blue on hover */
+    }
+
+    .title {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #1e3a8a;
+      /* Blue color for the title */
+      text-align: center;
+      margin-left: 250px;
+      /* Adjusting for sidebar */
+      transition: margin-left 0.3s ease;
+    }
+
+    /* For larger screens, we ensure the cards are well-spaced */
+    @media (min-width: 768px) {
       .container {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 30px;
-        position: absolute;
-        left: 20%;
-        top: 10%;
-        padding: 20px;
+        justify-content: space-around;
       }
+    }
 
-      .card {
-        background-color: #ffffff; /* White background for cards */
-        color: #1e3a8a; /* Blue color for text */
-        width: 280px;
-        height: 280px;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-
-      .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-      }
-
-      .card h3 {
-        font-size: 1.4em;
-        margin-bottom: 10px;
-        font-weight: 600;
-        color: #1e3a8a; /* Blue color for headings */
-      }
-
-      .card p {
-        font-size: 1.1em;
-        margin-bottom: 12px;
-        font-weight: 500;
-        color: #333333; /* Darker gray for other text */
-      }
-
-      .card .btn {
-        background-color: #1e3a8a; /* Blue color for buttons */
-        color: white;
-        padding: 12px 18px;
-        border: none;
-        border-radius: 25px;
-        font-size: 1em;
-        cursor: pointer;
-        transition: background-color 0.3s;
-      }
-
-      .card .btn:hover {
-        background-color: #3b5bbf; /* Slightly lighter blue on hover */
+    @media (max-width: 768px) {
+      .container {
+        margin-left: 200px;
+        /* Adjusting for smaller sidebar */
       }
 
       .title {
-        font-size: 2.5em;
-        font-weight: bold;
-        margin-top: 20px;
-        color: #1e3a8a; /* Blue color for the title */
-        text-align: center;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        text-decoration: underline;
+        margin-left: 200px;
+        /* Adjusting for smaller sidebar */
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        margin-left: 180px;
+        /* Adjusting for smallest sidebar */
       }
 
-      /* For larger screens, we ensure the cards are well-spaced */
-      @media (min-width: 768px) {
-        .container {
-          justify-content: space-around;
-        }
+      .title {
+        margin-left: 180px;
+        /* Adjusting for smallest sidebar */
       }
-    </style>
-  </head>
-  <body>
-    {% include 'faculty.html' %}
+    }
+  </style>
+</head>
 
-    <h1 class="title">Today's Session</h1>
-
-    <div class="container">
-      <!-- Card 1 -->
-      <div class="card">
-        <h3>Python</h3>
-        <p>Semester: SEM-8</p>
-        <p>Div: B</p>
-        <p>Course: IMSCIT</p>
-        <p>Time: 10:00 AM - 12:00 PM</p>
-        <button
-          class="btn"
-          onclick="alert('QR Code generation will be implemented later.')"
-        >
-          Generate QR Code
-        </button>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="card">
-        <h3>Database</h3>
-        <p>Semester: SEM-8</p>
-        <p>Div: A</p>
-        <p>Course: IMSCIT</p>
-        <p>Time: 12:00 PM - 2:00 PM</p>
-        <button
-          class="btn"
-          onclick="alert('QR Code generation will be implemented later.')"
-        >
-          Generate QR Code
-        </button>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="card">
-        <h3>Data Structures</h3>
-        <p>Semester: SEM-8</p>
-        <p>Div: C</p>
-        <p>Course: IMSCIT</p>
-        <p>Time: 2:00 PM - 4:00 PM</p>
-        <button
-          class="btn"
-          onclick="alert('QR Code generation will be implemented later.')"
-        >
-          Generate QR Code
-        </button>
-      </div>
+<body>
+  {% include 'faculty.html' %}
+  
+  
+  
+  <div class="container">
+    <!-- Card 1 -->
+    
+    <div class="card">
+      <h3>Python</h3>
+      <p>Semester: SEM-8</p>
+      <p>Div: B</p>
+      <p>Course: IMSCIT</p>
+      <p>Time: 10:00 AM - 12:00 PM</p>
+      <button class="btn" onclick="alert('QR Code generation will be implemented later.')">
+        Generate QR Code
+      </button>
     </div>
-  </body>
+
+    <!-- Card 2 -->
+    <div class="card">
+      <h3>Database</h3>
+      <p>Semester: SEM-8</p>
+      <p>Div: A</p>
+      <p>Course: IMSCIT</p>
+      <p>Time: 12:00 PM - 2:00 PM</p>
+      <button class="btn" onclick="alert('QR Code generation will be implemented later.')">
+        Generate QR Code
+      </button>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card">
+      <h3>Data Structures</h3>
+      <p>Semester: SEM-8</p>
+      <p>Div: C</p>
+      <p>Course: IMSCIT</p>
+      <p>Time: 2:00 PM - 4:00 PM</p>
+      <button class="btn" onclick="alert('QR Code generation will be implemented later.')">
+        Generate QR Code
+      </button>
+    </div>
+  </div>
+</body>
+
 </html>

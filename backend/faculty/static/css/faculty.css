@@ -27,18 +27,6 @@ body {
     transition: width 0.3s ease;
 }
 
-.sidebar .close-btn {
-    align-self: flex-end;
-    margin: 10px;
-    cursor: pointer;
-    font-size: 24px;
-    transition: transform 0.3s ease;
-}
-
-.sidebar .close-btn:hover {
-    transform: rotate(90deg);
-}
-
 .sidebar .profile-icon {
     margin: 20px auto;
     width: 60px;
