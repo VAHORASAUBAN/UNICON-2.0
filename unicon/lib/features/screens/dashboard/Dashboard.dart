@@ -413,6 +413,8 @@ import 'package:unicon/features/screens/timetable_screen.dart';
 import '../../../shared/widgets/navbar.dart'; // Import the TimetableService
 
 class DashboardScreen extends StatefulWidget {
+  const DashboardScreen({super.key});
+
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
 }
@@ -449,7 +451,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               decoration: BoxDecoration(
                 color: const Color(0xFF0A3B87),
               ),
-              child: const Text('Menu', style: TextStyle(color: Colors.white, fontSize: 24)),
+              child: const Text('Menu',
+                  style: TextStyle(color: Colors.white, fontSize: 24)),
             ),
             _buildDrawerItem(Icons.calendar_today, "Timetable", -1),
             _buildDrawerItem(Icons.assignment, "Attendance Report", 1),
@@ -495,7 +498,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       title: Text(title),
       onTap: () {
         if (screenIndex == -1) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => TimetableScreen()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => TimetableScreen()));
         } else if (screenIndex >= 0) {
           setState(() {
             if (screenIndex < _screens.length) {
@@ -513,6 +517,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 }
 
 class DashboardContent extends StatelessWidget {
+  const DashboardContent({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Get today's date
@@ -536,21 +542,27 @@ class DashboardContent extends StatelessWidget {
             const Text("No classes today.")
           else
             ...todaysTimetable.map((subject) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Row(
-                children: [
-                  Image.asset("assets/images/GLS.png", width: 40, height: 40), // Placeholder image
-                  const SizedBox(width: 8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Row(
                     children: [
-                      Text(subject.name, style: const TextStyle(fontSize: 16)), // Subject name
-                      Text(subject.timeRange, style: const TextStyle(fontSize: 14, color: Colors.grey)), // Subject time
+                      Image.asset("assets/images/GLS.png",
+                          width: 40, height: 40), // Placeholder image
+                      const SizedBox(width: 8),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(subject.name,
+                              style: const TextStyle(
+                                  fontSize: 16)), // Subject name
+                          Text(subject.timeRange,
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey)), // Subject time
+                        ],
+                      ),
                     ],
                   ),
-                ],
-              ),
-            )),
+                )),
         ],
       ),
     );
@@ -558,6 +570,8 @@ class DashboardContent extends StatelessWidget {
 }
 
 class UpdatesScreen extends StatelessWidget {
+  const UpdatesScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const Center(child: Text("Updates Screen"));
@@ -565,6 +579,8 @@ class UpdatesScreen extends StatelessWidget {
 }
 
 class QRCodeScannerScreen extends StatelessWidget {
+  const QRCodeScannerScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const Center(child: Text("Updates Screen"));

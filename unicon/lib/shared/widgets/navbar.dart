@@ -64,6 +64,7 @@ class CustomNavBar extends StatelessWidget {
   final Function(int) onTap;
 
   const CustomNavBar({
+    super.key,
     required this.currentIndex,
     required this.onTap,
   });

@@ -73,6 +73,7 @@ class RoundedTextField extends StatelessWidget {
   final TextEditingController controller;
 
   const RoundedTextField({
+    super.key,
     required this.color,
     required this.icon,
     required this.text,
@@ -111,9 +112,9 @@ class RoundedTextField extends StatelessWidget {
           border: InputBorder.none,
           suffixIcon: suffixicon != null
               ? GestureDetector(
-            onTap: togglePasswordVisibility, // Calls the toggle function
-            child: Icon(suffixicon, color: color),
-          )
+                  onTap: togglePasswordVisibility, // Calls the toggle function
+                  child: Icon(suffixicon, color: color),
+                )
               : null,
         ),
       ),

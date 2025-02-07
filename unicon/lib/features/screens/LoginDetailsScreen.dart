@@ -5,11 +5,10 @@ import '../../shared/widgets/CircularButton.dart';
 import '../../shared/widgets/RoundedTextField.dart';
 import 'dashboard/Dashboard.dart';
 
-
 class LoginDetailsScreen extends StatefulWidget {
   final String userType;
 
-  const LoginDetailsScreen({required this.userType});
+  const LoginDetailsScreen({super.key, required this.userType});
 
   @override
   _LoginDetailsScreenState createState() => _LoginDetailsScreenState();
@@ -47,7 +46,6 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
       _showSnackBar("Invalid login credentials");
     }
   }
-
 
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -129,7 +127,8 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                   const SizedBox(height: 20),
                   // Username Field
                   RoundedTextField(
-                    controller: _usernameController, // Pass the username controller
+                    controller:
+                        _usernameController, // Pass the username controller
                     color: Colors.grey,
                     icon: Icons.person,
                     text: "Your Username",
@@ -143,18 +142,20 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                     color: Colors.grey,
                     icon: Icons.lock,
                     text: "Your Password",
-                    privacy: !_isPasswordVisible, // Control visibility based on state
-                    suffixicon: _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    privacy:
+                        !_isPasswordVisible, // Control visibility based on state
+                    suffixicon: _isPasswordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off,
                     togglePasswordVisibility: () {
                       setState(() {
-                        _isPasswordVisible = !_isPasswordVisible; // Toggle visibility
+                        _isPasswordVisible =
+                            !_isPasswordVisible; // Toggle visibility
                       });
                     },
                     inputStyle: const TextStyle(color: Colors.black),
                     controller: _passwordController,
                   ),
-
-
 
                   // Username Field
                   /*RoundedTextField(
@@ -212,11 +213,11 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                   _isLoading
                       ? const CircularProgressIndicator()
                       : CircularButton(
-                    text: "LOGIN",
-                    color: const Color(0xFF0A3B87),
-                    textColor: Colors.white,
-                    press: _handleLogin,
-                  ),
+                          text: "LOGIN",
+                          color: const Color(0xFF0A3B87),
+                          textColor: Colors.white,
+                          press: _handleLogin,
+                        ),
                   const SizedBox(height: 10),
                 ],
               ),
