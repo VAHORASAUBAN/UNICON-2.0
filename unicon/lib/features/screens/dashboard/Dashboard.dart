@@ -476,7 +476,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               _currentIndex = index;
             }
           });
-        },
+        }, onScannerTap: () {  },
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFF0A3B87),
