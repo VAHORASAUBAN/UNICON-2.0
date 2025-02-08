@@ -7,7 +7,8 @@ class CircularButton extends StatelessWidget {
   final VoidCallback press;
   final Gradient? gradient;
 
-  CircularButton({
+  const CircularButton({
+    super.key,
     required this.text,
     required this.color,
     required this.textColor,

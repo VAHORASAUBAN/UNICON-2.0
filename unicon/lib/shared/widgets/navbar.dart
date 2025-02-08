@@ -8,6 +8,7 @@ class CustomNavBar extends StatelessWidget {
   final VoidCallback onScannerTap; // Function for Scanner button
 
   const CustomNavBar({
+    super.key,
     required this.currentIndex,
     required this.onTap,
     required this.onScannerTap, // Pass function for scanner tap

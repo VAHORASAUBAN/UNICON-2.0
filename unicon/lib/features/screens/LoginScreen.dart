@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'LoginDetailsScreen.dart';
 
 class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +20,8 @@ class LoginScreen extends StatelessWidget {
                 return Container(
                   color: Colors.black.withOpacity(0.4),
                   child: const Center(
-                    child: Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                    child:
+                        Icon(Icons.broken_image, size: 50, color: Colors.grey),
                   ),
                 );
               },
