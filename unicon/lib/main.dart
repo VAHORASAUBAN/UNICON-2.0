@@ -11,17 +11,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-<<<<<<< HEAD
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-=======
->>>>>>> d02777fb5578d6d0195d1236c67bcf0ac45bf6d9
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
