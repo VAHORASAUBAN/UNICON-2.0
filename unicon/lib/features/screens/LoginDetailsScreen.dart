@@ -34,7 +34,6 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
       _isLoading = true;
     });
 
-    // Perform login based on userType passed to the widget
     bool success = await AuthService.login(username, password, widget.userType);
 
     setState(() {
@@ -42,7 +41,6 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
     });
 
     if (success) {
-      // Redirecting based on userType
       if (widget.userType == 'Student') {
         Navigator.pushReplacement(
           context,
@@ -83,7 +81,6 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
             color: const Color(0xFF0A3B87),
           ),
 
-          // Logo and Image
           Align(
             alignment: Alignment(0, 0.10),
             child: Column(
@@ -99,7 +96,6 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
             ),
           ),
 
-          // Login Form at the Bottom
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -229,7 +225,6 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                     ],
                   ),
 
-                  // Login Button or Loading Indicator
                   _isLoading
                       ? const CircularProgressIndicator()
                       : CircularButton(
