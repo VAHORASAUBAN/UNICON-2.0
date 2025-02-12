@@ -23,7 +23,8 @@ class faculty_sidemenu extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF0A3B87), Color(0xFF004AAD)], // Gradient effect
+                colors: [Color(0xFF0A3B87), Color(0xFF004AAD)],
+                // Gradient effect
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -78,27 +79,33 @@ class faculty_sidemenu extends StatelessWidget {
 
           // ==== Academics Section ====
           _buildSectionTitle("Academics"),
-          _buildDrawerItem(Icons.calendar_today, "Timetable", () => onMenuTap("/timetable")),
-          _buildDrawerItem(Icons.assignment, "Attendance Report", () => onMenuTap("/attendance")),
+          _buildDrawerItem(
+              Icons.calendar_today, "Timetable", () => onMenuTap("/timetable")),
+          _buildDrawerItem(
+              Icons.calendar_month_rounded, "Attendance Report", () =>
+              onMenuTap("/attendance")),
           const Divider(),
 
           // ==== Support Section ====
           _buildSectionTitle("Support"),
-          _buildDrawerItem(Icons.contact_mail, "Contact Us", () => onMenuTap("/contact")),
-          _buildDrawerItem(Icons.help_outline, "Help & Support", () => onMenuTap("/help")),
+          _buildDrawerItem(
+              Icons.contact_mail, "Contact Us", () => onMenuTap("/contact")),
+          _buildDrawerItem(
+              Icons.help_outline, "Help & Support", () => onMenuTap("/help")),
           const Divider(),
 
           // ==== App Info Section ====
           _buildSectionTitle("App Info"),
-          _buildDrawerItem(Icons.info_outline, "About App", () => onMenuTap("/about")),
-          _buildDrawerItem(Icons.privacy_tip, "Privacy Policy", () => onMenuTap("/privacy")),
+          _buildDrawerItem(
+              Icons.info_outline, "About App", () => onMenuTap("/about")),
+          _buildDrawerItem(
+              Icons.privacy_tip, "Privacy Policy", () => onMenuTap("/privacy")),
           const Divider(),
 
           // ==== Logout Section ====
-          _buildDrawerItem(Icons.logout, "Logout", (
-
-              ) {Navigator.pop(context);
-          onMenuTap("/logout");
+          _buildDrawerItem(Icons.logout, "Logout", () {
+            Navigator.pop(context);
+            onMenuTap("/logout");
           }, color: Colors.red),
         ],
       ),
@@ -108,7 +115,8 @@ class faculty_sidemenu extends StatelessWidget {
   // ===== Helper Functions =====
 
   // Custom ListTile for Menu Items
-  ListTile _buildDrawerItem(IconData icon, String title, VoidCallback onTap, {Color color = const Color(0xFF0A3B87)}) {
+  ListTile _buildDrawerItem(IconData icon, String title, VoidCallback onTap,
+      {Color color = const Color(0xFF0A3B87)}) {
     return ListTile(
       leading: Icon(icon, color: color),
       title: Text(title, style: TextStyle(color: color)),
@@ -122,8 +130,10 @@ class faculty_sidemenu extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       child: Text(
         title,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black54),
+        style: const TextStyle(
+            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black54),
       ),
     );
   }
+
 }
