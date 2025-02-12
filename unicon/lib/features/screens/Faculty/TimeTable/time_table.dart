@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // For formatting dates
 
 void main() {
   runApp(FacultyTimetableApp());
@@ -51,59 +50,54 @@ class FacultyTimetableScreen extends StatelessWidget {
       {"subject": "Full-Stack Development", "division": "iMscIT-Sem 7 (Div A)", "time": "08:00 AM - 09:00 AM"},
       {"subject": "AI Ethics", "division": "iMscIT-Sem 7 (Div B)", "time": "09:00 AM - 10:00 AM"},
     ],
-    "Sunday": [], // No classes on Sunday
+    "Sunday": [],
   };
-
-  // Get the current day of the week
-  String getCurrentDay() {
-    final dayOfWeek = DateFormat('EEEE').format(DateTime.now());
-    return dayOfWeek;
-  }
 
   @override
   Widget build(BuildContext context) {
-    // Get today's classes
-    String today = getCurrentDay();
-    List<Map<String, String>> todaysClasses = weeklyClasses[today] ?? [];
-
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue.shade900,
+        backgroundColor: const Color(0xFF0A3B87),
         title: const Text(
-          "Today's Timetable",
+          "Weekly Timetable",
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white), // Back button color set to white
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context).pop();
           },
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
-          children: [
-            if (todaysClasses.isEmpty)
-              Center(child: Text("No Classes Today", style: TextStyle(fontSize: 18, color: Colors.grey)))
-            else
-              ...todaysClasses.map((classData) {
-                return ClassCard(
-                  subject: classData["subject"]!,
-                  division: classData["division"]!,
-                  time: classData["time"]!,
-                );
-              }).toList(),
-          ],
+          children: weeklyClasses.keys.map((day) {
+            List<Map<String, String>> classes = weeklyClasses[day]!;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  day,
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF0A3B87)),
+                ),
+                const SizedBox(height: 8),
+                if (classes.isEmpty)
+                  Center(child: Text("No Classes", style: TextStyle(fontSize: 16, color: Colors.grey)))
+                else
+                  ...classes.map((classData) {
+                    return ClassCard(
+                      subject: classData["subject"]!,
+                      division: classData["division"]!,
+                      time: classData["time"]!,
+                    );
+                  }).toList(),
+                const SizedBox(height: 16),
+              ],
+            );
+          }).toList(),
         ),
       ),
-      bottomNavigationBar: BottomNavBar(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: Colors.blue.shade900,
-        child: const Icon(Icons.add, size: 32, color: Colors.white),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
@@ -126,7 +120,7 @@ class ClassCard extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 20,
-              backgroundColor: Colors.blue.shade200,
+              backgroundColor: const Color(0xFF0A3B87),
               child: const Text("iM", style: TextStyle(color: Colors.white)),
             ),
             const SizedBox(width: 12),
@@ -134,32 +128,14 @@ class ClassCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(subject, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  Text(division, style: const TextStyle(color: Colors.grey)),
+                  Text(subject, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                  Text(division, style: const TextStyle(color: Colors.black)),
                 ],
               ),
             ),
             Text(time, style: const TextStyle(fontSize: 14, color: Colors.grey)),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class BottomNavBar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      shape: const CircularNotchedRectangle(),
-      notchMargin: 10.0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          IconButton(icon: const Icon(Icons.home, size: 28), onPressed: () {}),
-          const SizedBox(width: 40), // Space for floating button
-          IconButton(icon: const Icon(Icons.notifications, size: 28), onPressed: () {}),
-        ],
       ),
     );
   }
