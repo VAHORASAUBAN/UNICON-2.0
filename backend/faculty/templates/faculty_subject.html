@@ -5,12 +5,12 @@
 
 <head>
     <meta charset="utf-8" />
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
 
     <title>UNICON</title>
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/logo_unicon.png' %}" />
-    
+
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet" />
 
@@ -33,6 +33,7 @@
             overflow-y: auto;
             max-height: 80vh;
         }
+
         .container-fluid {
             overflow-x: hidden;
         }
@@ -74,7 +75,7 @@
                 <ul class="nav user-menu float-right">
                     <li class="nav-item dropdown d-none d-sm-block">
                         <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                            <i class="fa-solid fa-bell"  style="color: #337AB7;"></i>
+                            <i class="fa-solid fa-bell" style="color: #337AB7;"></i>
                         </a>
                         <div class="dropdown-menu notifications">
                             <div class="topnav-dropdown-header">
@@ -173,12 +174,11 @@
                     <li class="nav-item dropdown has-arrow">
                         <a href="#" class="nav-link user-link" data-toggle="dropdown">
                             <span class="user-img">
-                                <i class="fa-solid fa-user"  style="color: #337AB7;"></i>
+                                <i class="fa-solid fa-user" style="color: #337AB7;"></i>
                             </span>
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/profile/">My Profile</a>
-                            <a class="dropdown-item" href="/edit_profile/">Edit Profile</a>
+                            <a class="dropdown-item" href="/faculty_profile/">My Profile</a>
                             <a class="dropdown-item" href="/login/">Logout</a>
                         </div>
                     </li>
@@ -189,8 +189,6 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <a class="dropdown-item" href="/faculty_profile/">My Profile</a>
-                        <a class="dropdown-item" href="/edit_profile/">Edit Profile</a>
-                        <a class="dropdown-item" href="/settings/">Settings</a>
                         <a class="dropdown-item" href="/login/">Logout</a>
                     </div>
                 </div>
@@ -202,7 +200,7 @@
                     <div class="page-header">
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                                <h5 class="text-uppercase mb-0 mt-0 page-title">My Profile</h5>
+                                <h5 class="text-uppercase mb-0 mt-0 page-title">Subject</h5>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                                 <ul class="breadcrumb float-right p-0 mb-0">
@@ -215,6 +213,11 @@
                         </div>
                     </div>
                     <!-- add faculty subject cards with subject details -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2>Monday</h2>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="card">
@@ -259,7 +262,49 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="row mt-4">
+                        <div class="col-md-12">
+                            <h2>Tuesday</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Subject Physics</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted">Subject Details</h6>
+                                    <p class="card-text">Time: Tuesday & Thursday, 11:00 AM - 12:30 PM</p>
+                                    <p class="card-text">Department: Science</p>
+                                    <p class="card-text">Division: B</p>
+                                    <a href="#" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Subject Chemistry</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted">Subject Details</h6>
+                                    <p class="card-text">Time: Tuesday & Thursday, 1:00 PM - 2:30 PM</p>
+                                    <p class="card-text">Department: Science</p>
+                                    <p class="card-text">Division: C</p>
+                                    <a href="#" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <h2>Wednesday</h2>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-header">
@@ -303,15 +348,136 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <h2>Thursday</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Subject Physics</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted">Subject Details</h6>
+                                    <p class="card-text">Time: Tuesday & Thursday, 11:00 AM - 12:30 PM</p>
+                                    <p class="card-text">Department: Science</p>
+                                    <p class="card-text">Division: B</p>
+                                    <a href="#" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Subject Chemistry</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted">Subject Details</h6>
+                                    <p class="card-text">Time: Tuesday & Thursday, 1:00 PM - 2:30 PM</p>
+                                    <p class="card-text">Department: Science</p>
+                                    <p class="card-text">Division: C</p>
+                                    <a href="#" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <h2>Friday</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Subject Physics</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted">Subject Details</h6>
+                                    <p class="card-text">Time: Tuesday & Thursday, 11:00 AM - 12:30 PM</p>
+                                    <p class="card-text">Department: Science</p>
+                                    <p class="card-text">Division: B</p>
+                                    <a href="#" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Subject Chemistry</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted">Subject Details</h6>
+                                    <p class="card-text">Time: Tuesday & Thursday, 1:00 PM - 2:30 PM</p>
+                                    <p class="card-text">Department: Science</p>
+                                    <p class="card-text">Division: C</p>
+                                    <a href="#" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <h2>Saturday</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Subject Physics</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted">Subject Details</h6>
+                                    <p class="card-text">Time: Tuesday & Thursday, 11:00 AM - 12:30 PM</p>
+                                    <p class="card-text">Department: Science</p>
+                                    <p class="card-text">Division: B</p>
+                                    <a href="#" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Subject Chemistry</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted">Subject Details</h6>
+                                    <p class="card-text">Time: Tuesday & Thursday, 1:00 PM - 2:30 PM</p>
+                                    <p class="card-text">Department: Science</p>
+                                    <p class="card-text">Division: C</p>
+                                    <a href="#" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Subject Chemistry</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted">Subject Details</h6>
+                                    <p class="card-text">Time: Tuesday & Thursday, 1:00 PM - 2:30 PM</p>
+                                    <p class="card-text">Department: Science</p>
+                                    <p class="card-text">Division: C</p>
+                                    <a href="#" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
     </div>
     <!-- end of faculty subject card -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
 </body>
 
 </html>
