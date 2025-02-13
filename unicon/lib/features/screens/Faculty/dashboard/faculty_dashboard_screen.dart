@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:intl/intl.dart';
 import 'package:unicon/features/screens/Faculty/faculty_sidemenu.dart';
+import '../../../../shared/AttendancePieChart.dart';
 import '../../../../shared/widgets/faculty_navbar.dart';
+import 'package:unicon/shared/styles/colors.dart';
+import 'package:unicon/shared/styles/fonts.dart';
 
 class FacultyDashboardScreen extends StatefulWidget {
   final String userName;
@@ -30,15 +31,16 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Dashboard"),
-        backgroundColor: const Color(0xFF0A3B87),
-        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 24),
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
-            onPressed: () => Scaffold.of(context).openDrawer(),
+        title: const Text(
+          "Dashboard",
+          style: TextStyle(
+            fontSize: 24,
+            fontFamily: "Arial",
+            fontWeight: FontWeight.bold,
+            color: Colors.white, // Remove AppColors.white for const support
           ),
         ),
+        backgroundColor: AppColors.primaryBlue, // Use color from colors.dart
       ),
       drawer: faculty_sidemenu(
         onMenuTap: (route) {
@@ -55,7 +57,11 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
           Center(
             child: Text(
               "Updates Content",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: AppFonts.comment.copyWith(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
           ),
         ],
@@ -74,85 +80,8 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildAttendanceChart(),
+          AttendancePieChart(),
         ],
-      ),
-    );
-  }
-
-  Widget _buildAttendanceChart() {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("This Month Attendance Details", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey)),
-          SizedBox(height: 10),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                height: 150,
-                child: PieChart(
-                  PieChartData(
-                    sections: [
-                      PieChartSectionData(color: Colors.blue.shade800, value: 75, title: ""),
-                      PieChartSectionData(color: Colors.blue.shade300, value: 25, title: ""),
-                    ],
-                  ),
-                ),
-              ),
-              Text(
-                '75%',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 5),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildStatBox("Present", "22", Colors.green),
-              _buildStatBox("Absent", "03", Colors.orange),
-              _buildStatBox("Total", "25", Colors.blue),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatBox(String title, String value, Color color) {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: color),
-            ),
-            SizedBox(height: 3),
-            Text(
-              value,
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: color),
-            ),
-          ],
-        ),
       ),
     );
   }

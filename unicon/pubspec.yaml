@@ -21,6 +21,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
   assets:
     - assets/images/article.jpg
     - assets/images/attendance.jpg
@@ -31,3 +32,17 @@ flutter:
     - assets/images/mentor.jpg
     - assets/images/placement.png
     - assets/images/profile.png
+
+  fonts:
+
+    - family: SansSerifCollection
+      fonts:
+        - asset: assets/fonts/SansSerifCollection.ttf
+
+    - family: Arial
+      fonts:
+        - asset: assets/fonts/arial.ttf
+
+    - family: ArialBlack
+      fonts:
+        - asset: assets/fonts/arialblk.ttf

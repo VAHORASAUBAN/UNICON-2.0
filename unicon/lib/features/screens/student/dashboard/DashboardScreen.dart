@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../shared/AttendancePieChart.dart';
 import '../../../../shared/widgets/navbar.dart';
 import '../sidemenu.dart';
 
@@ -50,6 +51,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: IndexedStack(
         index: _currentIndex, // Display content based on the selected tab
         children: [
+          _buildDashboardContent(),
           Center(
             child: Text(
               "Dashboard Content",
@@ -68,6 +70,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
         currentIndex: _currentIndex,
         onTap: _onTabSelected, // Handle tab change
         onScannerTap: _onScannerTap, // Handle scanner button tap
+      ),
+    );
+  }
+  Widget _buildDashboardContent() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AttendancePieChart(),
+        ],
       ),
     );
   }

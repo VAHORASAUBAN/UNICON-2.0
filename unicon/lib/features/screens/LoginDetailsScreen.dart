@@ -66,7 +66,6 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Solid Background Color
           Container(
             width: double.infinity,
             height: double.infinity,

@@ -3,7 +3,8 @@ import 'package:unicon/features/screens/LoginScreen.dart';
 import 'package:unicon/features/screens/LoginDetailsScreen.dart';
 import 'package:unicon/features/screens/student/scanner/scanner_screen.dart';
 import 'package:unicon/features/screens/timetable_screen.dart';
-
+import 'package:unicon/shared/styles/colors.dart';
+import 'package:unicon/shared/styles/fonts.dart';
 import 'features/screens/Faculty/TimeTable/time_table.dart';
 import 'features/screens/student/dashboard/DashboardScreen.dart';
 
