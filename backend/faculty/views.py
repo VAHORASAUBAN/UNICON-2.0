@@ -43,3 +43,9 @@ def faculty_subject(request):
 
 def faculty_all_students(request):
     return render(request, 'faculty_all-students.html')
+
+def faculty_stud_edit(request):
+    return render(request, 'faculty_stud_edit.html')
+
+def faculty_attendence(request):
+    return render(request, 'faculty_attendence.html')

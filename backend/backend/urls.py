@@ -38,6 +38,8 @@ urlpatterns = [
     path('qr_code/', faculty_views.qr_code),
     path('faculty_subject/', faculty_views.faculty_subject),
     path('faculty_all_student/', faculty_views.faculty_all_student),
+    path('faculty_stud_edit/', faculty_views.faculty_stud_edit),
+    path('faculty_attendence/', faculty_views.faculty_attendence),
     
 
     

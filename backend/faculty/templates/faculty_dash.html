@@ -125,7 +125,7 @@
                                                 <div class="media-body">
                                                     <p class="noti-details">
                                                         <span class="noti-title">Tarah Shropshire</span> sent you a
-
+                                                        message.
                                                     </p>
                                                     <p class="noti-time">
                                                         <span class="notification-time">6 mins ago</span>
@@ -195,8 +195,7 @@
                             </span>
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/profile/">My Profile</a>
-                            <a class="dropdown-item" href="/edit_profile/">Edit Profile</a>
+                            <a class="dropdown-item" href="/faculty_profile/">My Profile</a>
                             <a class="dropdown-item" href="/login/">Logout</a>
                         </div>
                     </li>
@@ -207,8 +206,6 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <a class="dropdown-item" href="/faculty_profile/">My Profile</a>
-                        <a class="dropdown-item" href="/edit_profile/">Edit Profile</a>
-                        <a class="dropdown-item" href="/settings/">Settings</a>
                         <a class="dropdown-item" href="/login/">Logout</a>
                     </div>
                 </div>
@@ -221,7 +218,7 @@
                 <div class="page-header">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                            <h5 class="text-uppercase mb-0 mt-0 page-title">My Profile</h5>
+                            <h5 class="text-uppercase mb-0 mt-0 page-title">Dashboard</h5>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                             <ul class="breadcrumb float-right p-0 mb-0">
@@ -233,47 +230,66 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                        <div class="dash-widget dash-widget5">
-                            <span class="float-left"><img src="{% static 'assets/img/dash/dash-1.png' %}" alt=""
-                                    width="80"></span>
-                            <div class="dash-widget-info text-right">
-                                <span>Students</span>
-                                <h3>60,000</h3>
+                    <div class="col-lg-6 d-flex">
+                      <div class="card flex-fill">
+                        <div class="card-header">
+                          <div class="row align-items-center">
+                            <div class="col-auto">
+                              <div class="page-title">Students Survey</div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                        <div class="dash-widget dash-widget5">
-                            <div class="dash-widget-info text-left d-inline-block">
-                                <span>Teachers</span>
-                                <h3>12,000</h3>
+                            <div class="col text-right">
+                              <div class="mt-sm-0 mt-2">
+                                <button class="btn btn-light" type="button" data-toggle="dropdown" aria-haspopup="true"
+                                  aria-expanded="false">
+                                  <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <div role="separator" class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <div role="separator" class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                              </div>
                             </div>
-                            <span class="float-right"><img src="{% static 'assets/img/dash/dash-2.png' %}" width="80"
-                                    alt=""></span>
+                          </div>
                         </div>
+                        <div class="card-body">
+                          <div id="chart1"></div>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                        <div class="dash-widget dash-widget5">
-                            <span class="float-left"><img src="{% static 'assets/img/dash/dash-3.png' %}" alt=""
-                                    width="80"></span>
-                            <div class="dash-widget-info text-right">
-                                <span>Parents</span>
-                                <h3>20,000</h3>
+                    <div class="col-lg-6 d-flex">
+                      <div class="card flex-fill">
+                        <div class="card-header">
+                          <div class="row align-items-center">
+                            <div class="col-auto">
+                              <div class="page-title">Student Performance</div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                        <div class="dash-widget dash-widget5">
-                            <div class="dash-widget-info d-inline-block text-left">
-                                <span>Total Earnings</span>
-                                <h3>$20,000</h3>
+                            <div class="col text-right">
+                              <div class="mt-sm-0 mt-2">
+                                <button class="btn btn-light" type="button" data-toggle="dropdown" aria-haspopup="true"
+                                  aria-expanded="false">
+                                  <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <div role="separator" class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <div role="separator" class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                              </div>
                             </div>
-                            <span class="float-right"><img src="{% static 'assets/img/dash/dash-4.png' %}" alt=""
-                                    width="80"></span>
+                          </div>
                         </div>
+                        <div class="card-body">
+                          <div id="chart2"></div>
+                        </div>
+                      </div>
                     </div>
-                </div>
+                  </div>
+               
                 <h1>Today Session</h1>
                 <div class="row">
                     <!-- add cards here -->
@@ -357,11 +373,20 @@
         </div>
     </div>
 
-    <!-- Font Awesome -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <!-- Bootstrap JS and jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ 
+    <!-- <script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/jquery.slimscroll.js' %}"></script>
+    <script src="{% static 'assets/js/select2.min.js' %}"></script>
+    <script src="{% static 'assets/js/moment.min.js' %}"></script>
+    <script src="{% static 'assets/js/fullcalendar.min.js' %}"></script>
+    <script src="{% static 'assets/js/jquery.fullcalendar.js' %}"></script>
+    <script src="{% static 'assets/plugins/morris/morris.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/raphael/raphael-min.js' %}"></script> -->
+    <script src="{% static 'assets/js/apexcharts.js' %}"></script>
+    <script src="{% static 'assets/js/chart-data.js' %}"></script>
+  
+    <script src="assets/js/app.js"></script>
 </body>
 
 </html>
