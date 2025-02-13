@@ -47,3 +47,5 @@ def all_course(request):
     return render(request, 'all-course.html')
 def all_subject(request):
     return render(request, 'all-subject.html')
+def timetable(request):
+    return render(request, 'timetable.html')

@@ -6,14 +6,12 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
     <title>UNICON</title>
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/logo_unicon.png' %}" />
-    <link
-    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
-    rel="stylesheet"
-/>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/unicon_logo.png' %}">
+
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
 
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
@@ -178,9 +176,6 @@
                         </div>
                     </li>
                 </ul>
-
-
-
                 <div class="dropdown mobile-user-menu float-right">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-ellipsis-v"></i>
@@ -201,63 +196,112 @@
                 <div class="page-header">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                            <h5 class="text-uppercase mb-0 mt-0 page-title">Add Batch</h5>
+                            <h5 class="text-uppercase mb-0 mt-0 page-title">Time Table</h5>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                             <ul class="breadcrumb float-right p-0 mb-0">
-                                <li class="breadcrumb-item">
-                                    <a href="/index/"><i class="fas fa-home"></i> Home</a>
+                                <li class="breadcrumb-item"><a href="/index/"><i class="fas fa-home"></i> Home</a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="/index/">Batch</a></li>
-                                <li class="breadcrumb-item"><span> Add Batch</span></li>
+                                <li class="breadcrumb-item"><span>Time Table</span></li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="page-content">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                                            <form class="custom-mt-form">
-                                                <div class="form-group">
-                                                    <label>Start-Year</label>
-                                                    <input type="date" class="form-control" />
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                                            <form class="custom-mt-form">
-                                                <div class="form-group" E>
-                                                    <label>End-Year</label>
-                                                    <input type="date" class="form-control" />
-                                                </div>
-                                            </form>
-                                        </div>
-
-
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                            <form class="custom-mt-form">
-                                                <div class="form-group text-center custom-mt-form-group">
-                                                    <button class="btn btn-primary mr-2" type="submit">
-                                                        Submit
-                                                    </button>
-                                                    <button class="btn btn-secondary" type="reset">
-                                                        Cancel
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <!-- <div class="row">
+                    <div class="col-sm-4 col-12">
+                    </div>
+                    <div class="col-sm-8 col-12 text-right add-btn-col">
+                        <a href="/add_teacher/" class="btn btn-primary btn-rounded float-right"><i
+                                class="fas fa-plus"></i> Add Teacher</a>
+                        <div class="view-icons">
+                            <a href="/all_teachers/" class="grid-view btn btn-link active"><i class="fas fa-th"></i></a>
+                            <a href="/teachers_list/" class="list-view btn btn-link"><i class="fas fa-bars"></i></a>
                         </div>
                     </div>
+                </div> -->
+                <div class="row filter-row">
+                    <div class="col-sm-6 col-md-5.6">
+                        <div class="form-group">
+                            <label>Subject Name</label>
+                            <select class="form-control select">
+                                <option>ADS</option>
+                                <option>CNS</option>
+                                <option>HPC</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-5.6">
+                        <div class="form-group">
+                            <label>Faculty Name</label>
+                            <select class="form-control select">
+                                <option>Dr. Vishal</option>
+                                <option>Dr. Rachna</option>
+                                <option>Kartik</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-5.6">
+                        <div class="form-group">
+                            <label>Day</label>
+                            <select class="form-control select">
+                                <option>Monday</option>
+                                <option>Tusesday</option>
+                                <option>Wednesday</option>
+                                <option>Thursday</option>
+                                <option>Friday</option>
+                                <option>Saturday</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-5.6">
+                        <div class="form-group">
+                            <label>Time</label>
+                            <select class="form-control select">
+                                <option>7:30 PM to 8:30 PM</option>
+                                <option>9:30 PM to 10:30 PM</option>
+                                <option>10:30 PM to 11:30 PM</option>
+                                <option>11:30 PM to 12:30 PM</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-5.6">
+                        <div class="form-group">
+                            <label>Course</label>
+                            <select class="form-control select">
+                                <option>IMSCIT</option>
+                                <option>BCA</option>
+                                <option>MCA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-5.6">
+                        <div class="form-group">
+                            <label>Department</label>
+                            <select class="form-control select">
+                                <option>FCAIT</option>
+                                <option>FOBA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-5.6">
+                        <div class="form-group">
+                            <label>Batch</label>
+                            <select class="form-control select">
+                                <option>2025-2031</option>
+                                <option>2026-2032</option>
+                                <option>2027-2033</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    
+                    <div class="col-sm-6 col-md-12">
+                        <a href="#" class="btn btn-search rounded btn-block mb-3">Add Time Table</a>
+                    </div>
                 </div>
-            </div>
-            <!-- <div class="notification-box">
+
+                <div class="notification-box">
                     <div class="msg-sidebar notifications msg-noti">
                         <div class="topnav-dropdown-header">
                             <span>Messages</span>
@@ -265,7 +309,7 @@
                         <div class="drop-scroll msg-list-scroll">
                             <ul class="list-box">
                                 <li>
-                                    <a href="chat.html">
+                                    <a href="chat">
                                         <div class="list-item">
                                             <div class="list-left">
                                                 <span class="avatar">R</span>
@@ -281,10 +325,10 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="chat.html">
+                                    <a href="chat">
                                         <div class="list-item new-message">
                                             <div class="list-left">
-                                                <span class="avatar">J</span>
+                                                <span class="avatar">R</span>
                                             </div>
                                             <div class="list-body">
                                                 <span class="message-author">Ruth C. Gault</span>
@@ -297,7 +341,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="chat.html">
+                                    <a href="chat">
                                         <div class="list-item">
                                             <div class="list-left">
                                                 <span class="avatar">T</span>
@@ -313,7 +357,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="chat.html">
+                                    <a href="chat">
                                         <div class="list-item">
                                             <div class="list-left">
                                                 <span class="avatar">M</span>
@@ -329,7 +373,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="chat.html">
+                                    <a href="chat">
                                         <div class="list-item">
                                             <div class="list-left">
                                                 <span class="avatar">C</span>
@@ -345,7 +389,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="chat.html">
+                                    <a href="chat">
                                         <div class="list-item">
                                             <div class="list-left">
                                                 <span class="avatar">D</span>
@@ -361,7 +405,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="chat.html">
+                                    <a href="chat">
                                         <div class="list-item">
                                             <div class="list-left">
                                                 <span class="avatar">B</span>
@@ -377,7 +421,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="chat.html">
+                                    <a href="chat">
                                         <div class="list-item">
                                             <div class="list-left">
                                                 <span class="avatar">R</span>
@@ -393,7 +437,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="chat.html">
+                                    <a href="chat">
                                         <div class="list-item">
                                             <div class="list-left">
                                                 <span class="avatar">C</span>
@@ -409,7 +453,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="chat.html">
+                                    <a href="chat">
                                         <div class="list-item">
                                             <div class="list-left">
                                                 <span class="avatar">M</span>
@@ -425,7 +469,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="chat.html">
+                                    <a href="chat">
                                         <div class="list-item">
                                             <div class="list-left">
                                                 <span class="avatar">J</span>
@@ -441,7 +485,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="chat.html">
+                                    <a href="chat">
                                         <div class="list-item">
                                             <div class="list-left">
                                                 <span class="avatar">L</span>
@@ -457,7 +501,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="chat.html">
+                                    <a href="chat">
                                         <div class="list-item">
                                             <div class="list-left">
                                                 <span class="avatar">T</span>
@@ -475,13 +519,12 @@
                             </ul>
                         </div>
                         <div class="topnav-dropdown-footer">
-                            <a href="chat.html">See all messages</a>
+                            <a href="chat">See all messages</a>
                         </div>
                     </div>
-                </div> -->
+                </div>
+            </div>
         </div>
-
-    </div>
 </body>
 
 </html>

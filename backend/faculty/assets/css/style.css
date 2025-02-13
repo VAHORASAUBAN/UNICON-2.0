@@ -1402,7 +1402,7 @@ label {
 }
 
 .sidebar-menu li a i.back-icon {
-    margin-left: 0
+    margin-left: -10px
 }
 
 .sidebar-menu li.active a {

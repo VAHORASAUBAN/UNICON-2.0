@@ -28,6 +28,7 @@ urlpatterns = [
     path('all_department/', superadmin_views.all_department),
     path('all_course/', superadmin_views.all_course),
     path('all_subject/', superadmin_views.all_subject),
+    path('timetable/', superadmin_views.timetable),
 
     
     path('faculty_my_profile/', faculty_views.faculty_my_profile),
