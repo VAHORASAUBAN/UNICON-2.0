@@ -1,140 +1,151 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Preschool - Bootstrap Admin Template</title>
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=0"
-    />
 
-    <link
-      rel="shortcut icon"
-      type="image/x-icon"
-      href="{% static 'assets/img/favicon.png' %}"
-    />
+<head>
+  <meta charset="utf-8" />
+  <title>UNICON</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
 
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900"
-      rel="stylesheet"
-    />
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/logo_unicon.png' %}" />
 
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+  
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet" />
 
-    <link
-      rel="stylesheet"
-      href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
-    />
-    <link
-      rel="stylesheet"
-      href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}"
-    />
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
 
-    <link rel="stylesheet" href="{% static 'assets/css/select2.min.css' %}" />
+  <!-- Replacing the local FontAwesome with the CDN link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
 
-    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
-    <!--[if lt IE 9]>
+  <link rel="stylesheet" href="{% static 'assets/css/select2.min.css' %}" />
+
+  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+  <!--[if lt IE 9]>
       <script src="{% static 'assets/js/html5shiv.min.js' %}"></script>
       <script src="{% static 'assets/js/respond.min.js' %}"></script>
     <![endif]-->
-  </head>
-  <body>
-    <div class="sidebar" id="sidebar">
-      <div class="sidebar-inner slimscroll">
-        <div id="sidebar-menu" class="sidebar-menu">
-          <div class="header-left">
-            <a href="/index/" class="logo">
-              <img
-                src="{% static 'assets/img/logo1.png' %}"
-                width="40"
-                height="40"
-                alt=""
-              />
-              <span class="text-uppercase">Preschool</span>
-            </a>
-          </div>
-          <ul class="sidebar-ul">
-            <li class="menu-title">Menu</li>
-            <li class="active">
-              <a href="/index/"
-                ><img
-                  src="{% static 'assets/img/sidebar/icon-1.png' %}"
-                  alt="icon"
-                /><span>Dashboard</span></a
-              >
-            </li>
-            <li class="submenu">
-              <a href="#"
-                ><img
-                  src="{% static 'assets/img/sidebar/icon-2.png' %}"
-                  alt="icon" />
-                <span> Teachers</span> <span class="menu-arrow"></span
-              ></a>
-              <ul class="list-unstyled" style="display: none">
-                <li>
-                  <a href="/all_teachers/"><span>All Teachers</span></a>
-                </li>
-                <li>
-                  <a href="/add_teacher/"><span>Add Teacher</span></a>
-                </li>
-              </ul>
-            </li>
-            <li class="submenu">
-              <a href="#"
-                ><img
-                  src="{% static 'assets/img/sidebar/icon-3.png' %}"
-                  alt="icon" />
-                <span> Students</span> <span class="menu-arrow"></span
-              ></a>
-              <ul class="list-unstyled" style="display: none">
-                <li>
-                  <a href="/all_students/"><span>All Students</span></a>
-                </li>
-                <li>
-                  <a href="/add_student/"><span>Add Student</span></a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a href="/calendar/"
-                ><img
-                  src="{% static 'assets/img/sidebar/icon-9.png' %}"
-                  alt="icon"
-                /><span> Events</span></a
-              >
-            </li>
-            <li class="submenu">
-              <a href="#"
-                ><img
-                  src="{% static 'assets/img/sidebar/icon-12.png' %}"
-                  alt="icon" />
-                <span> Blog</span> <span class="menu-arrow"></span
-              ></a>
-              <ul class="list-unstyled" style="display: none">
-                <li>
-                  <a href="/blog/"><span>Blog</span></a>
-                </li>
-                <li>
-                  <a href="/blog_details/"><span>Blog View</span></a>
-                </li>
-                <li>
-                  <a href="/add_blog/"><span>Add Blog</span></a>
-                </li>
-                <li>
-                  <a href="/edit_blog/"><span>Edit Blog</span></a>
-                </li>
-              </ul>
-            </li>
-          </ul>
+</head>
+
+<body>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-inner slimscroll">
+      <div id="sidebar-menu" class="sidebar-menu">
+        <div class="header-left">
+          <a href="/index/" class="logo">
+            <img style="margin-top: -30px;" src="{% static 'assets/img/logo_unicon.png' %}" width="150" height="150" alt="" />
+          </a>
         </div>
+        <ul class="sidebar-ul">
+          <li class="menu-title">Menu</li>
+          <li class="active">
+            <a href="/index/"><i class="fa-solid fa-house" style="font-size: 1.5em; color: #337AB7;"></i><span>Dashboard</span></a>
+          </li>
+          <li class="submenu">
+            <a href="#"><i class="fa-solid fa-chalkboard-user" style="font-size: 1.5em; color: #337AB7;"></i>
+              <span> Faculty</span> <span class="menu-arrow"></span></a>
+            <ul class="list-unstyled" style="display: none">
+              <li>
+                <a href="/all_teachers/"><span>All Faculty</span></a>
+              </li>
+              <li>
+                <a href="/add_teacher/"><span>Add Faculty</span></a>
+              </li>
+            </ul>
+          </li>
+          <li class="submenu">
+            <a href="#"><i class="fa-solid fa-user-graduate" style="font-size: 1.5em; color: #337AB7;"></i>
+              <span> Students</span> <span class="menu-arrow"></span></a>
+            <ul class="list-unstyled" style="display: none">
+              <li>
+                <a href="/all_students/"><span>All Students</span></a>
+              </li>
+              <li>
+                <a href="/add_student/"><span>Add Student</span></a>
+              </li>
+            </ul>
+          </li>
+          <li class="submenu">
+            <a href="#"><i class="fa-solid fa-building" style="font-size: 1.5em; color: #337AB7;"></i>
+              <span>Department</span> <span class="menu-arrow"></span></a>
+            <ul class="list-unstyled" style="display: none">
+              <li>
+                <a href="/all_department/"><span>All Department</span></a>
+              </li>
+              <li>
+                <a href="/add_department/"><span>Add Department</span></a>
+              </li>
+            </ul>
+          </li>
+
+
+          <li class="submenu">
+            <a href="#"><i class="fa-solid fa-book-open-reader" style="font-size: 1.5em; color: #337AB7;"></i>
+              <span>Course</span> <span class="menu-arrow"></span></a>
+            <ul class="list-unstyled" style="display: none">
+              <li>
+                <a href="/add_course/"><span>Add Course</span></a>
+              </li>
+              <li>
+                <a href="/all_course/"><span>All Course</span></a>
+              </li>
+            </ul>
+          </li>
+          <li class="submenu">
+            <a href="#"><i class="fa-solid fa-users" style="font-size: 1.5em; color: #337AB7;"></i>
+              <span>Batch</span> <span class="menu-arrow"></span></a>
+            <ul class="list-unstyled" style="display: none">
+              <li>
+                <a href="/add_batch/"><span>Add Batch</span></a>
+              </li>
+              <li>
+                <a href="/all_batch/"><span>All Batch</span></a>
+              </li>
+            </ul>
+          </li>
+          <li class="submenu">
+            <a href="#"><i class="fa-solid fa-book" style="font-size: 1.5em; color: #337AB7;"></i>
+              <span>Subject</span> <span class="menu-arrow"></span></a>
+            <ul class="list-unstyled" style="display: none">
+              <li>
+                <a href="/all_subject/"><span>All Subject</span></a>
+              </li>
+              <li>
+                <a href="/add_subject/"><span>Add Subject</span></a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="/calendar/"><i class="fa-solid fa-calendar" style="font-size: 1.5em; color: #337AB7;"></i><span>
+                Events</span></a>
+          </li>
+          <li class="submenu">
+            <a href="#"><i class="fa-brands fa-blogger-b" style="font-size: 1.5em; color: #337AB7;"></i>
+              <span> Blog</span> <span class="menu-arrow"></span></a>
+            <ul class="list-unstyled" style="display: none">
+              <li>
+                <a href="/blog/"><span>Blog</span></a>
+              </li>
+              <li>
+                <a href="/blog_details/"><span>Blog View</span></a>
+              </li>
+              <li>
+                <a href="/add_blog/"><span>Add Blog</span></a>
+              </li>
+              <li>
+                <a href="/edit_blog/"><span>Edit Blog</span></a>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </div>
     </div>
-  </body>
-  <script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
-  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'assets/js/jquery.slimscroll.js' %}"></script>
-  <script src="{% static 'assets/js/select2.min.js' %}"></script>
-  <script src="{% static 'assets/js/moment.min.js' %}"></script>
-  <script src="{% static 'assets/js/app.js' %}"></script>
+  </div>
+</body>
+<script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/js/jquery.slimscroll.js' %}"></script>
+<script src="{% static 'assets/js/select2.min.js' %}"></script>
+<script src="{% static 'assets/js/moment.min.js' %}"></script>
+<script src="{% static 'assets/js/app.js' %}"></script>
+
 </html>

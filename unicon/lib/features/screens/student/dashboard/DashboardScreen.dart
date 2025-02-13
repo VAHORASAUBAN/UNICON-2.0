@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../shared/AttendancePieChart.dart';
-import '../../../../shared/widgets/navbar.dart';
-import '../sidemenu.dart';
+
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -40,14 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
-      drawer: sidemenu(
-        onMenuTap: (route) {
-          Navigator.pop(context); // Close drawer before navigating
-          Navigator.pushNamed(context, route);
-        },
-        userName: "John Doe",
-        userEmail: "johndoe@example.com",
-      ),
+
       body: IndexedStack(
         index: _currentIndex, // Display content based on the selected tab
         children: [
@@ -66,11 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: CustomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onTabSelected, // Handle tab change
-        onScannerTap: _onScannerTap, // Handle scanner button tap
-      ),
+
     );
   }
   Widget _buildDashboardContent() {

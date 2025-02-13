@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:unicon/features/screens/Faculty/dashboard/faculty_dashboard_screen.dart';
 import 'package:unicon/features/screens/student/dashboard/DashboardScreen.dart';
 import '../../../services/AuthService.dart';
-import '../../shared/widgets/CircularButton.dart';
-import '../../shared/widgets/RoundedTextField.dart';
+
 
 
 class LoginDetailsScreen extends StatefulWidget {
@@ -131,36 +130,7 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                   const SizedBox(height: 20),
 
                   // Username Field
-                  RoundedTextField(
-                    controller:
-                        _usernameController, // Pass the username controller
-                    color: Colors.grey,
-                    icon: Icons.person,
-                    text: "Your Username",
-                    privacy: false,
-                    suffixicon: null,
-                    inputStyle: const TextStyle(color: Colors.black),
-                  ),
 
-                  // Password Field
-                  RoundedTextField(
-                    color: Colors.grey,
-                    icon: Icons.lock,
-                    text: "Your Password",
-                    privacy:
-                        !_isPasswordVisible, // Control visibility based on state
-                    suffixicon: _isPasswordVisible
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                    togglePasswordVisibility: () {
-                      setState(() {
-                        _isPasswordVisible =
-                            !_isPasswordVisible; // Toggle visibility
-                      });
-                    },
-                    inputStyle: const TextStyle(color: Colors.black),
-                    controller: _passwordController,
-                  ),
 
 
                   const SizedBox(height: 20),
@@ -185,14 +155,7 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                     ],
                   ),
 
-                  _isLoading
-                      ? const CircularProgressIndicator()
-                      : CircularButton(
-                          text: "LOGIN",
-                          color: const Color(0xFF0A3B87),
-                          textColor: Colors.white,
-                          press: _handleLogin,
-                        ),
+
                   const SizedBox(height: 10),
                 ],
               ),

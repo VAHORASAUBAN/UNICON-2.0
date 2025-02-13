@@ -9,6 +9,8 @@ def all_students(request):
     return render(request, 'all-students.html')
 def all_teachers(request):
     return render(request, 'all-teachers.html')
+def all_department(request):
+    return render(request, 'all-department.html')
 def blog_details(request):
     return render(request, 'blog-details.html')
 def blog(request):
@@ -31,3 +33,17 @@ def profile(request):
     return render(request, 'profile.html')
 def sidebar(request):
     return render(request, 'sidebar.html')
+def add_subject(request):
+    return render(request, 'add-subject.html')
+def add_department(request):
+    return render(request, 'add-department.html')
+def add_course(request):
+    return render(request, 'add-course.html')
+def add_batch(request):
+    return render(request, 'add-batch.html')
+def all_batch(request):
+    return render(request, 'all-batch.html')
+def all_course(request):
+    return render(request, 'all-course.html')
+def all_subject(request):
+    return render(request, 'all-subject.html')

@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:unicon/features/screens/LoginScreen.dart';
 import 'package:unicon/features/screens/LoginDetailsScreen.dart';
-import 'package:unicon/features/screens/student/scanner/scanner_screen.dart';
-import 'package:unicon/features/screens/timetable_screen.dart';
 import 'package:unicon/shared/styles/colors.dart';
 import 'package:unicon/shared/styles/fonts.dart';
-import 'features/screens/Faculty/TimeTable/time_table.dart';
 import 'features/screens/student/dashboard/DashboardScreen.dart';
 
 void main() {
@@ -24,11 +20,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/dasboard': (context) => const DashboardScreen(),
-        '/': (context) => LoginScreen(),
         '/loginDetails': (context) => LoginDetailsScreen(userType: ' '),
-        '/timetable': (context) =>  TimetableScreen(),
-        '/scanner': (context) =>  ScannerScreen(),
-        '/timetable': (context) => FacultyTimetableScreen(),
+
         /*'/timetable': (context) =>  _FacultyTimetableScreenState(),*/
 
 

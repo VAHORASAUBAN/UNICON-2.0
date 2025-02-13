@@ -3,17 +3,17 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Preschool - Bootstrap Admin Template</title>
     <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=0"
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=0"
     />
-
+    
+    <title>UNICON</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/logo_unicon.png' %}" />
     <link
-      rel="shortcut icon"
-      type="image/x-icon"
-      href="{% static 'assets/img/favicon.png' %}"
-    />
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+    rel="stylesheet"
+/>
 
     <link
       href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900"
@@ -53,7 +53,7 @@
             <i class="fas fa-bars" aria-hidden="true"></i>
           </a>
           <a id="toggle_btn" class="float-left" href="javascript:void(0);">
-            <img src="{% static 'assets/img/sidebar/icon-21.png' %}" alt="" />
+            <i class="ri-layout-grid-fill" style="font-size: 2em; color: #337AB7;"></i>
           </a>
 
           <ul class="nav float-left">
@@ -91,147 +91,116 @@
 
           <ul class="nav user-menu float-right">
             <li class="nav-item dropdown d-none d-sm-block">
-              <a
-                href="#"
-                class="dropdown-toggle nav-link"
-                data-toggle="dropdown"
-              >
-                <img
-                  src="{% static 'assets/img/sidebar/icon-22.png' %}"
-                  alt=""
-                />
-              </a>
-              <div class="dropdown-menu notifications">
-                <div class="topnav-dropdown-header">
-                  <span>Notifications</span>
+                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                    <i class="fa-solid fa-bell"  style="color: #337AB7;"></i>
+                </a>
+                <div class="dropdown-menu notifications">
+                    <div class="topnav-dropdown-header">
+                        <span>Notifications</span>
+                    </div>
+                    <div class="drop-scroll">
+                        <ul class="notification-list">
+                            <li class="notification-message">
+                                <a href="activities">
+                                    <div class="media">
+                                        <span class="avatar">
+                                            <img alt="John Doe" src="{% static 'assets/img/user-06.jpg' %}"
+                                                class="img-fluid rounded-circle" />
+                                        </span>
+                                        <div class="media-body">
+                                            <p class="noti-details">
+                                                <span class="noti-title">John Doe</span> is now following you
+                                            </p>
+                                            <p class="noti-time">
+                                                <span class="notification-time">4 mins ago</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="notification-message">
+                                <a href="activities">
+                                    <div class="media">
+                                        <span class="avatar">T</span>
+                                        <div class="media-body">
+                                            <p class="noti-details">
+                                                <span class="noti-title">Tarah Shropshire</span> sent you a
+                                                message.
+                                            </p>
+                                            <p class="noti-time">
+                                                <span class="notification-time">6 mins ago</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="notification-message">
+                                <a href="activities">
+                                    <div class="media">
+                                        <span class="avatar">L</span>
+                                        <div class="media-body">
+                                            <p class="noti-details">
+                                                <span class="noti-title">Misty Tison</span> liked your photo.
+                                            </p>
+                                            <p class="noti-time">
+                                                <span class="notification-time">8 mins ago</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="notification-message">
+                                <a href="activities">
+                                    <div class="media">
+                                        <span class="avatar">G</span>
+                                        <div class="media-body">
+                                            <p class="noti-details">
+                                                <span class="noti-title">Rolland Webber</span> booked an
+                                                appointment for a meeting.
+                                            </p>
+                                            <p class="noti-time">
+                                                <span class="notification-time">12 mins ago</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="notification-message">
+                                <a href="activities">
+                                    <div class="media">
+                                        <span class="avatar">T</span>
+                                        <div class="media-body">
+                                            <p class="noti-details">
+                                                <span class="noti-title">Bernardo Galaviz</span> liked your
+                                                photo.
+                                            </p>
+                                            <p class="noti-time">
+                                                <span class="notification-time">2 days ago</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="topnav-dropdown-footer">
+                        <a href="activities">View all Notifications</a>
+                    </div>
                 </div>
-                <div class="drop-scroll">
-                  <ul class="notification-list">
-                    <li class="notification-message">
-                      <a href="activities.html">
-                        <div class="media">
-                          <span class="avatar">
-                            <img
-                              alt="John Doe"
-                              src="{% static 'assets/img/user-06.jpg' %}"
-                              class="img-fluid rounded-circle"
-                            />
-                          </span>
-                          <div class="media-body">
-                            <p class="noti-details">
-                              <span class="noti-title">John Doe</span> is now
-                              following you
-                            </p>
-                            <p class="noti-time">
-                              <span class="notification-time">4 mins ago</span>
-                            </p>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="notification-message">
-                      <a href="activities.html">
-                        <div class="media">
-                          <span class="avatar">T</span>
-                          <div class="media-body">
-                            <p class="noti-details">
-                              <span class="noti-title">Tarah Shropshire</span>
-                              sent you a message.
-                            </p>
-                            <p class="noti-time">
-                              <span class="notification-time">6 mins ago</span>
-                            </p>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="notification-message">
-                      <a href="activities.html">
-                        <div class="media">
-                          <span class="avatar">L</span>
-                          <div class="media-body">
-                            <p class="noti-details">
-                              <span class="noti-title">Misty Tison</span> liked
-                              your photo.
-                            </p>
-                            <p class="noti-time">
-                              <span class="notification-time">8 mins ago</span>
-                            </p>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="notification-message">
-                      <a href="activities.html">
-                        <div class="media">
-                          <span class="avatar">G</span>
-                          <div class="media-body">
-                            <p class="noti-details">
-                              <span class="noti-title">Rolland Webber</span>
-                              booked an appointment for a meeting.
-                            </p>
-                            <p class="noti-time">
-                              <span class="notification-time">12 mins ago</span>
-                            </p>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="notification-message">
-                      <a href="activities.html">
-                        <div class="media">
-                          <span class="avatar">T</span>
-                          <div class="media-body">
-                            <p class="noti-details">
-                              <span class="noti-title">Bernardo Galaviz</span>
-                              liked your photo.
-                            </p>
-                            <p class="noti-time">
-                              <span class="notification-time">2 days ago</span>
-                            </p>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="topnav-dropdown-footer">
-                  <a href="activities.html">View all Notifications</a>
-                </div>
-              </div>
-            </li>
-            <li class="nav-item dropdown d-none d-sm-block">
-              <a
-                href="javascript:void(0);"
-                id="open_msg_box"
-                class="hasnotifications nav-link"
-              >
-                <img
-                  src="{% static 'assets/img/sidebar/icon-23.png' %}"
-                  alt=""
-                />
-              </a>
             </li>
             <li class="nav-item dropdown has-arrow">
-              <a href="#" class="nav-link user-link" data-toggle="dropdown">
-                <span class="user-img">
-                  <img
-                    class="rounded-circle"
-                    src="{% static 'assets/img/user-06.jpg' %}"
-                    width="30"
-                    alt="Admin"
-                  />
-                  <span class="status online"></span>
-                </span>
-                <span>Admin</span>
-              </a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="/profile/">My Profile</a>
-                <a class="dropdown-item" href="/edit_profile/">Edit Profile</a>
-                <a class="dropdown-item" href="/login/">Logout</a>
-              </div>
+                <a href="#" class="nav-link user-link" data-toggle="dropdown">
+                    <span class="user-img">
+                        <i class="fa-solid fa-user"  style="color: #337AB7;"></i>
+                    </span>
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/profile/">My Profile</a>
+                    <a class="dropdown-item" href="/edit_profile/">Edit Profile</a>
+                    <a class="dropdown-item" href="/login/">Logout</a>
+                </div>
             </li>
-          </ul>
+        </ul>
           <div class="dropdown mobile-user-menu float-right">
             <a
               href="#"
