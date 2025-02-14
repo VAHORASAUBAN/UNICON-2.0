@@ -49,3 +49,5 @@ def all_subject(request):
     return render(request, 'all-subject.html')
 def timetable(request):
     return render(request, 'timetable.html')
+def show_timetable(request):
+    return render(request, 'show_timetable.html')
