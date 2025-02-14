@@ -192,82 +192,25 @@
 				<div class="page-header">
 					<div class="row">
 						<div class="col-lg-6 col-md-6 col-sm-6 col-12">
-							<h5 class="text-uppercase mb-0 mt-0 page-title">All Attendence</h5>
+							<h5 class="text-uppercase mb-0 mt-0 page-title">All Subjects</h5>
 						</div>
 						<div class="col-lg-6 col-md-6 col-sm-6 col-12">
 							<ul class="breadcrumb float-right p-0 mb-0">
 								<li class="breadcrumb-item"><a href="/index/"><I class="fas fa-home"></i> Home</a>
 								</li>
-								<li class="breadcrumb-item"> <span>All Attendence</span></li>
+								<li class="breadcrumb-item"> <span>All Subjects</span></li>
 							</ul>
 						</div>
 					</div>
 				</div>
-				<div class="row filter-row">
-					<div class="col-sm-6 col-md-3">
-						<div class="form-group form-focus">
-							<input type="text" class="form-control floating">
-							<label class="focus-label">Student ID</label>
-						</div>
-					</div>
-					<div class="col-sm-6 col-md-3">
-						<div class="form-group form-focus">
-							<input type="text" class="form-control floating">
-							<label class="focus-label">Student Name</label>
-						</div>
-					</div>
-					<div class="col-sm-6 col-md-3">
-						<div class="form-group form-focus select-focus">
-							<select class="select form-control">
-								<option>Select Sem</option>
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-								<option>6</option>
-								<option>7</option>
-								<option>8</option>
-								<option>9</option>
-								<option>10</option>
-							</select>
-							<label class="focus-label">Sem</label>
-						</div>
-					</div>
-					<div class="col-sm-6 col-md-3">
-						<a href="#" class="btn btn-search rounded btn-block mb-3"> search </a>
-					</div>
-				</div>
+			
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="card">
 							<div class="card-header">
 								<div class="row align-items-center">
 									<div class="col-sm-6">
-										<div class="page-title">All Students</div>
-									</div>
-									<div class="col-sm-6 text-sm-right">
-										<div class="mt-sm-0 mt-2">
-											<button class="btn btn-outline-primary mr-2">
-												<img src="{% static 'assets/img/excel.png %'}" alt="" /><span
-													class="ml-2">Excel</span>
-											</button>
-											<button class="btn btn-outline-danger mr-2">
-												<img src="{ % static 'assets/img/pdf.png' %}" alt="" height="18" /><span
-													class="ml-2">PDF</span>
-											</button>
-											<button class="btn btn-light" type="button" data-toggle="dropdown"
-												aria-haspopup="true" aria-expanded="false">
-												<i class="fas fa-ellipsis-h"></i>
-											</button>
-											<div class="dropdown-menu dropdown-menu-right">
-												<a class="dropdown-item" href="#">Action</a>
-												<div role="separator" class="dropdown-divider"></div>
-												<a class="dropdown-item" href="#">Another action</a>
-												<div role="separator" class="dropdown-divider"></div>
-												<a class="dropdown-item" href="#">Something else here</a>
-											</div>
-										</div>
+										<div class="page-title"></div>
 									</div>
 								</div>
 							</div>
@@ -276,187 +219,51 @@
 									<table class="table custom-table">
 										<thead class="thead-light">
 											<tr>
-												<th>Name</th>
-												<th>Student ID</th>
-												<th>Class</th>
-												<th>Section</th>
-												<th>Mobile</th>
-												<th>Date of Birth</th>
+												<th>Subject Name</th>
+												<th>Department</th>
+												<th>Course</th>
+												<th>Sem</th>
 												<th class="text-right">Action</th>
 											</tr>
 										</thead>
 										<tbody>
+											<!-- Subject 1 -->
 											<tr>
-												<td>
-													<h2>
-														<img
-																src="{% static 'assets/img/profile/img-1.jpg' % }"
-																alt="" /></a><a href="/profile/">Parker
-															<span></span></a>
-													</h2>
-												</td>
-												<td>ST-0d001</td>
+												<td>Data Structures</td>
+												<td>Computer Science</td>
+												<td>BCA</td>
 												<td>1</td>
-												<td>A</td>
-												<td>973-584-58700</td>
-												<td>20/1/2021</td>
 												<td class="text-right">
-													<a href="/faculty_stud_edit/" class="btn btn-primary btn-sm mb-1">
-														<i class="far fa-edit"></i>
+													<a href="/faculty_attendence_1/""
+														class="btn btn-primary btn-sm mb-1">
+														<i class="far fa-eye"></i>
 													</a>
-													<button type="submit" data-toggle="modal"
-														data-target="#delete_employee"
-														class="btn btn-danger btn-sm mb-1">
-														<i class="far fa-trash-alt"></i>
-													</button>
 												</td>
 											</tr>
+											<!-- Subject 2 -->
 											<tr>
-												<td>
-													<h2>
-														<img
-																src="{% static 'assets/img/profile/img-2.jpg' % }"
-																alt="" /></a><a href="/profile/">Smith <span></span></a>
-													</h2>
+												<td>Algorithms</td>
+												<td>Computer Science</td>
+												<td>IMSCIT</td>
+												<td>1</td>
+												<td class="text-right">
+													<a href="/faculty_attendence_1/"
+														class="btn btn-primary btn-sm mb-1">
+														<i class="far fa-eye"></i>
+													</a>
 												</td>
-												<td>ST-0d002</td>
+											</tr>
+											<!-- Subject 3 -->
+											<tr>
+												<td>Mathematics</td>
+												<td>Mathematics</td>
+												<td>MCA</td>
 												<td>2</td>
-												<td>B</td>
-												<td>973-584-58700</td>
-												<td>20/1/2021</td>
 												<td class="text-right">
-													<a href="/faculty_stud_edit/" class="btn btn-primary btn-sm mb-1">
-														<i class="far fa-edit"></i>
+													<a href="/faculty_attendence_1/""
+														class="btn btn-primary btn-sm mb-1">
+														<i class="far fa-eye"></i>
 													</a>
-													<button type="submit" data-toggle="modal"
-														data-target="#delete_employee"
-														class="btn btn-danger btn-sm mb-1">
-														<i class="far fa-trash-alt"></i>
-													</button>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<h2>
-														<img
-																src="{% static 'assets/img/profile/img-3.jpg' % }"
-																alt="" /></a><a
-															href="/profile/">Hensley<span></span></a>
-													</h2>
-												</td>
-												<td>ST-0d003</td>
-												<td>1</td>
-												<td>A</td>
-												<td>973-584-58700</td>
-												<td>20/1/2021</td>
-												<td class="text-right">
-													<a href="/faculty_stud_edit/" class="btn btn-primary btn-sm mb-1">
-														<i class="far fa-edit"></i>
-													</a>
-													<button type="submit" data-toggle="modal"
-														data-target="#delete_employee"
-														class="btn btn-danger btn-sm mb-1">
-														<i class="far fa-trash-alt"></i>
-													</button>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<h2>
-														<img
-																src="{% static 'assets/img/profile/img-4.jpg' % }"
-																alt="" /></a><a
-															href="/profile/">Friesen<span></span></a>
-													</h2>
-												</td>
-												<td>ST-0d004</td>
-												<td>1</td>
-												<td>A</td>
-												<td>973-584-58700</td>
-												<td>20/1/2021</td>
-												<td class="text-right">
-													<a href="/faculty_stud_edit/" class="btn btn-primary btn-sm mb-1">
-														<i class="far fa-edit"></i>
-													</a>
-													<button type="submit" data-toggle="modal"
-														data-target="#delete_employee"
-														class="btn btn-danger btn-sm mb-1">
-														<i class="far fa-trash-alt"></i>
-													</button>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<h2>
-														<img
-																src="{% static 'assets/img/profile/img-5.jpg' % }"
-																alt="" /></a><a
-															href="/profile/">Jackson<span></span></a>
-													</h2>
-												</td>
-												<td>ST-0d005</td>
-												<td>1</td>
-												<td>A</td>
-												<td>973-584-58700</td>
-												<td>20/1/2021</td>
-												<td class="text-right">
-													<a href="/faculty_stud_edit/" class="btn btn-primary btn-sm mb-1">
-														<i class="far fa-edit"></i>
-													</a>
-													<button type="submit" data-toggle="modal"
-														data-target="#delete_employee"
-														class="btn btn-danger btn-sm mb-1">
-														<i class="far fa-trash-alt"></i>
-													</button>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<h2>
-														<img
-																src="{% static 'assets/img/profile/img-6.jpg' % }"
-																alt="" /></a><a href="/profile/">Mason<span></span></a>
-													</h2>
-												</td>
-												<td>ST-0d006</td>
-												<td>1</td>
-												<td>A</td>
-												<td>973-584-58700</td>
-												<td>20/1/2021</td>
-												<td class="text-right">
-													<a href="/faculty_stud_edit/" class="btn btn-primary btn-sm mb-1">
-														<i class="far fa-edit"></i>
-													</a>
-													<button type="submit" data-toggle="modal"
-														data-target="#delete_employee"
-														class="btn btn-danger btn-sm mb-1">
-														<i class="far fa-trash-alt"></i>
-													</button>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<h2>
-														<img
-																src="{% static 'assets/img/profile/img-7.jpg' % }"
-																alt="" /></a><a href="/profile/">Garrett
-															<span></span></a>
-													</h2>
-												</td>
-												<td>ST-0d007</td>
-												<td>1</td>
-												<td>A</td>
-												<td>973-584-58700</td>
-												<td>20/1/2021</td>
-												<td class="text-right">
-													<a href="/faculty_stud_edit/" class="btn btn-primary btn-sm mb-1">
-														<i class="far fa-edit"></i>
-													</a>
-													<button type="submit" data-toggle="modal"
-														data-target="#delete_employee"
-														class="btn btn-danger btn-sm mb-1">
-														<i class="far fa-trash-alt"></i>
-													</button>
 												</td>
 											</tr>
 										</tbody>
@@ -466,6 +273,8 @@
 						</div>
 					</div>
 				</div>
+
+
 				<div class="notification-box">
 					<div class="msg-sidebar notifications msg-noti">
 						<div class="topnav-dropdown-header">

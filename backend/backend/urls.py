@@ -41,6 +41,7 @@ urlpatterns = [
     path('faculty_all_student/', faculty_views.faculty_all_student),
     path('faculty_stud_edit/', faculty_views.faculty_stud_edit),
     path('faculty_attendence/', faculty_views.faculty_attendence),
+    path('faculty_attendence_1/', faculty_views.faculty_attendence_1),
     
 
     
