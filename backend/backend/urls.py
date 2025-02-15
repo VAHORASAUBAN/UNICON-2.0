@@ -29,6 +29,7 @@ urlpatterns = [
     path('all_course/', superadmin_views.all_course),
     path('all_subject/', superadmin_views.all_subject),
     path('timetable/', superadmin_views.timetable),
+    path('show_timetable/', superadmin_views.show_timetable),
 
     
     path('faculty_my_profile/', faculty_views.faculty_my_profile),
@@ -40,6 +41,7 @@ urlpatterns = [
     path('faculty_all_student/', faculty_views.faculty_all_student),
     path('faculty_stud_edit/', faculty_views.faculty_stud_edit),
     path('faculty_attendence/', faculty_views.faculty_attendence),
+    path('faculty_attendence_1/', faculty_views.faculty_attendence_1),
     
 
     

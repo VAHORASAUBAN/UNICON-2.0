@@ -49,3 +49,6 @@ def faculty_stud_edit(request):
 
 def faculty_attendence(request):
     return render(request, 'faculty_attendence.html')
+
+def faculty_attendence_1(request):
+    return render(request, 'faculty_attendence_1.html')
