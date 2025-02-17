@@ -208,122 +208,113 @@
           <div class="card-body">
             <div class="row">
               <div class="col-md-12">
-                <form>
-                  <div class="form-group">
-                    <label>Blog Name</label>
-                    <input type="text" class="form-control" />
-                  </div>
-                  <div class="form-group">
-                    <label>Blog Images</label>
-                    <input type="file" name="pic" accept="image/*" class="form-control" />
-                    <small class="form-text text-muted">Max. file size: 50 MB. Allowed images: jpg, gif, png.
-                      Maximum 10 images only.</small>
-                  </div>
-                  <div class="form-group">
-                    <div class="row">
-                      <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
-                        <div class="product-thumbnail">
-                          <img src="{% static 'assets/img/blog/blog-thumb-01.jpg' %}" class="img-thumbnail img-fluid"
-                            alt="" />
-                          <span class="product-remove" title="remove"><i class="fas fa-times"></i></span>
-                        </div>
-                      </div>
-                      <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
-                        <div class="product-thumbnail">
-                          <img src="{% static 'assets/img/placeholder-thumb.jpg' %}" class="img-thumbnail img-fluid"
-                            alt="" />
-                          <span class="product-remove" title="remove"><i class="fas fa-times"></i></span>
-                        </div>
-                      </div>
-                      <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
-                        <div class="product-thumbnail">
-                          <img src="{% static 'assets/img/placeholder-thumb.jpg' %}" class="img-thumbnail img-fluid"
-                            alt="" />
-                          <span class="product-remove" title="remove"><i class="fas fa-times"></i></span>
-                        </div>
-                      </div>
-                      <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
-                        <div class="product-thumbnail">
-                          <img src="{% static 'assets/img/placeholder-thumb.jpg' %}" class="img-thumbnail img-fluid"
-                            alt="" />
-                          <span class="product-remove" title="remove"><i class="fas fa-times"></i></span>
-                        </div>
-                      </div>
-                      <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
-                        <div class="product-thumbnail">
-                          <img src="{% static 'assets/img/placeholder-thumb.jpg' %}" class="img-thumbnail img-fluid"
-                            alt="" />
-                          <span class="product-remove" title="remove"><i class="fas fa-times"></i></span>
-                        </div>
-                      </div>
-                      <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
-                        <div class="product-thumbnail">
-                          <img src="{% static 'assets/img/placeholder-thumb.jpg' %}" class="img-thumbnail img-fluid"
-                            alt="" />
-                          <span class="product-remove" title="remove"><i class="fas fa-times"></i></span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6">
+                  <form class="custom-mt-form">
                       <div class="form-group">
-                        <label>Blog Category</label>
-                        <select class="form-control select">
-                          <option>Sports</option>
-                          <option>Library</option>
-                          <option>Management</option>
-                        </select>
+                          <label>Blog Name</label>
+                          <input type="text" class="form-control" />
                       </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
                       <div class="form-group">
-                        <label>Blog Sub Category</label>
-                        <select class="form-control select">
-                          <option>Maths</option>
-                          <option>Science</option>
-                          <option>Social Science</option>
-                          <option>English</option>
-                          <option>Codeignitor</option>
-                          <option>Tamil</option>
-                          <option>H.O.D</option>
-                        </select>
+                          <label>Blog Images</label>
+                          <input type="file" name="pic" accept="image/*" class="form-control" />
+                          <small class="form-text text-muted">Max. file size: 50 MB. Allowed images: jpg, gif, png. Maximum 10 images only.</small>
                       </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>Blog Description</label>
-                    <input type="text" class="form-control" />
-                  </div>
-                  <div class="form-group">
-                    <label>Tags <small>(separated with a comma)</small></label>
-                    <input type="text" data-role="tagsinput" class="form-control" />
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                      <h4>Blog status</h4>
-                      <div class="form-check-inline">
-                        <label class="form-check-label" for="radio1">
-                          <input type="radio" class="form-check-input" id="radio1" name="optradio" value="option1"
-                            checked />Active
-                        </label>
+                      <div class="form-group">
+                          <div class="row">
+                              <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
+                                  <div class="product-thumbnail">
+                                      <img src="{% static 'assets/img/blog/blog-thumb-01.jpg' %}" class="img-thumbnail img-fluid" alt="" />
+                                      <span class="product-remove" title="remove"><i class="fas fa-times"></i></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
+                                  <div class="product-thumbnail">
+                                      <img src="{% static 'assets/img/placeholder-thumb.jpg' %}" class="img-thumbnail img-fluid" alt="" />
+                                      <span class="product-remove" title="remove"><i class="fas fa-times"></i></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
+                                  <div class="product-thumbnail">
+                                      <img src="{% static 'assets/img/placeholder-thumb.jpg' %}" class="img-thumbnail img-fluid" alt="" />
+                                      <span class="product-remove" title="remove"><i class="fas fa-times"></i></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
+                                  <div class="product-thumbnail">
+                                      <img src="{% static 'assets/img/placeholder-thumb.jpg' %}" class="img-thumbnail img-fluid" alt="" />
+                                      <span class="product-remove" title="remove"><i class="fas fa-times"></i></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
+                                  <div class="product-thumbnail">
+                                      <img src="{% static 'assets/img/placeholder-thumb.jpg' %}" class="img-thumbnail img-fluid" alt="" />
+                                      <span class="product-remove" title="remove"><i class="fas fa-times"></i></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
+                                  <div class="product-thumbnail">
+                                      <img src="{% static 'assets/img/placeholder-thumb.jpg' %}" class="img-thumbnail img-fluid" alt="" />
+                                      <span class="product-remove" title="remove"><i class="fas fa-times"></i></span>
+                                  </div>
+                              </div>
+                          </div>
                       </div>
-                      <div class="form-check-inline">
-                        <label class="form-check-label" for="radio2">
-                          <input type="radio" class="form-check-input" id="radio2" name="optradio"
-                            value="option2" />Inactive
-                        </label>
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label>Blog Category</label>
+                                  <select class="form-control select">
+                                      <option>Sports</option>
+                                      <option>Library</option>
+                                      <option>Management</option>
+                                  </select>
+                              </div>
+                          </div>
+                          <div class="col-lg-6 col-md-6">
+                              <div class="form-group">
+                                  <label>Blog Sub Category</label>
+                                  <select class="form-control select">
+                                      <option>Maths</option>
+                                      <option>Science</option>
+                                      <option>Social Science</option>
+                                      <option>English</option>
+                                      <option>Codeignitor</option>
+                                      <option>Tamil</option>
+                                      <option>H.O.D</option>
+                                  </select>
+                              </div>
+                          </div>
                       </div>
-                    </div>
-                  </div>
-                  <div class="m-t-20 text-center">
-                    <button class="btn btn-primary btn-lg">
-                      Publish Blog
-                    </button>
-                  </div>
-                </form>
+                      <div class="form-group">
+                          <label>Blog Description</label>
+                          <input type="text" class="form-control" />
+                      </div>
+                      <div class="form-group">
+                          <label>Tags <small>(separated with a comma)</small></label>
+                          <input type="text" data-role="tagsinput" class="form-control" />
+                      </div>
+                      <div class="row">
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                              <h4>Blog status</h4>
+                              <div class="form-check-inline">
+                                  <label class="form-check-label" for="radio1">
+                                      <input type="radio" class="form-check-input" id="radio1" name="optradio" value="option1" checked />Active
+                                  </label>
+                              </div>
+                              <div class="form-check-inline">
+                                  <label class="form-check-label" for="radio2">
+                                      <input type="radio" class="form-check-input" id="radio2" name="optradio" value="option2" />Inactive
+                                  </label>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="m-t-20 text-center">
+                          <button class="btn btn-primary btn-lg" type="submit">
+                              Publish Blog
+                          </button>
+                      </div>
+                  </form>
               </div>
-            </div>
+          </div>
           </div>
         </div>
       </div>
