@@ -209,7 +209,7 @@
               <div class="card">
                 <div class="card-body">
                   <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                       <form class="custom-mt-form">
                         <div class="form-group">
                           <label>Enrollment</label>
@@ -228,6 +228,18 @@
                           <input type="text" class="form-control" />
                         </div>
                         <div class="form-group">
+                          <label>email</label>
+                          <input type="email" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                          <label>Password</label>
+                          <input type="password" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                          <label>Mobile Number</label>
+                          <input type="number" class="form-control" />
+                        </div>
+                        <div class="form-group">
                           <label>Gender</label>
                           <select class="form-control select">
                             <option>Male</option>
@@ -235,12 +247,11 @@
                           </select>
                         </div>
                         <div class="form-group">
-                          <label>Department</label>
-                          <select class="form-control select">
-                            <option>FCAIT</option>
-                            <option>FOBA</option>
-                          </select>
+                          <label>Birth Date</label>
+                          <input class="form-control datetimepicker-input datetimepicker" type="date"
+                            data-toggle="datetimepicker" />
                         </div>
+
                         <div class="form-group">
                           <label>Address Line 1</label>
                           <input type="text" class="form-control" />
@@ -250,29 +261,46 @@
                           <input type="text" class="form-control" />
                         </div>
                         <div class="form-group">
+                          <label>City</label>
+                          <select class="form-control select" id="city">
+                            <option>India</option>
+                            <option>USA</option>
+                            <option>Canada</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label>State</label>
+                          <select class="form-control select" id="state">
+                            <option>India</option>
+                            <option>USA</option>
+                            <option>Canada</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label>Country</label>
+                          <select class="form-control select" id="country">
+                            <option>India</option>
+                            <option>USA</option>
+                            <option>Canada</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
                           <label>Pincode</label>
                           <input type="number" class="form-control" />
                         </div>
-                      </form>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                      <div class="form-group">
-                        <label>Mobile Number</label>
-                        <input type="number" class="form-control" />
-                      </div>
-                      <div class="form-group">
-                        <label>Birth Date</label>
-                        <input class="form-control datetimepicker-input datetimepicker" type="date"
-                          data-toggle="datetimepicker" />
-                      </div>
-                      <form class="custom-mt-form">
                         <div class="form-group">
-                          <label>email</label>
-                          <input type="email" class="form-control" />
+                          <label>Department</label>
+                          <select class="form-control select">
+                            <option>FCAIT</option>
+                            <option>FOBA</option>
+                          </select>
                         </div>
                         <div class="form-group">
-                          <label>Password</label>
-                          <input type="password" class="form-control" />
+                          <label>Course</label>
+                          <select class="form-control select">
+                            <option>IMSCIT</option>
+                            <option>BCA</option>
+                          </select>
                         </div>
                         <div class="form-group">
                           <label>Semster</label>
@@ -289,7 +317,6 @@
                             <option>10</option>
                           </select>
                         </div>
-
                         <div class="form-group">
                           <label>Divison</label>
                           <select class="form-control select">
@@ -299,27 +326,9 @@
                           </select>
                         </div>
                         <div class="form-group">
-                          <label>City</label>
-                          <input type="text" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                          <label>State</label>
-                          <input type="text" class="form-control" />
-                        </div>
-
-                      </form>
-                    </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                      <form class="custom-mt-form">
-                        <div class="form-group">
                           <label>Student Image</label>
                           <input type="file" name="pic" accept="image/*" class="form-control" />
                         </div>
-                      </form>
-                    </div>
-
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                      <form class="custom-mt-form">
                         <div class="form-group text-center custom-mt-form-group">
                           <button class="btn btn-primary mr-2" type="submit">
                             Submit
@@ -331,6 +340,7 @@
                       </form>
                     </div>
                   </div>
+
                 </div>
               </div>
             </div>
