@@ -11,6 +11,7 @@ def all_teachers(request):
     return render(request, 'all-teachers.html')
 def all_department(request):
     return render(request, 'all-department.html')
+
 def blog_details(request):
     return render(request, 'blog-details.html')
 def blog(request):
@@ -35,8 +36,7 @@ def sidebar(request):
     return render(request, 'sidebar.html')
 def add_subject(request):
     return render(request, 'add-subject.html')
-def add_department(request):
-    return render(request, 'add-department.html')
+
 def add_course(request):
     return render(request, 'add-course.html')
 def add_batch(request):
@@ -51,3 +51,18 @@ def timetable(request):
     return render(request, 'timetable.html')
 def show_timetable(request):
     return render(request, 'show_timetable.html')
+
+
+
+
+# Department 
+
+def add_department(request):
+    if request.method == 'POST':
+        department_name = request.POST.get('department_name')
+        department_start_date = request.POST.get('department_start_date')
+        print(department_name, department_start_date)
+        msg = 'Department added successfully'
+        return render(request, 'add-department.html', {'msg': msg})
+    else:
+        return render(request, 'add-department.html')
