@@ -59,7 +59,8 @@ def show_placement(request):
 
 
 
-
+def userlogin(request):
+    return render(request, 'login.html')
 # Department 
 
 def add_department(request):
