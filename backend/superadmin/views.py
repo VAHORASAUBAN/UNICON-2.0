@@ -51,6 +51,11 @@ def timetable(request):
     return render(request, 'timetable.html')
 def show_timetable(request):
     return render(request, 'show_timetable.html')
+def placement(request):
+    return render(request, 'placement.html')
+
+def show_placement(request):
+    return render(request, 'show_placement.html')
 
 
 
