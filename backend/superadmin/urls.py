@@ -28,5 +28,5 @@ urlpatterns = [
     path('timetable/', superadmin_views.timetable),
     path('show_timetable/', superadmin_views.show_timetable),
     path('', superadmin_views.userlogin),
-
-]
+    path('placement/', superadmin_views.placement),
+    path('show_placement/', superadmin_views.show_placement),
