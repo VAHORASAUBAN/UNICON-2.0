@@ -1,0 +1,2 @@
+C:/Users/mansu/UNICON-2.0/unicon/android/app/.cxx/Debug/143z4dun/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/mansu/UNICON-2.0/unicon/android/app/.cxx/Debug/143z4dun/x86_64/CMakeFiles/rebuild_cache.dir

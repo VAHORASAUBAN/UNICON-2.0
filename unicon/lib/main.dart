@@ -6,6 +6,8 @@ import 'package:unicon/features/screens/timetable_screen.dart';
 import 'package:unicon/shared/styles/colors.dart';
 import 'package:unicon/shared/styles/fonts.dart';
 import 'features/screens/Faculty/TimeTable/time_table.dart';
+import 'features/screens/student/Attendane_Report.dart';
+import 'features/screens/student/Subject/subject.dart';
 import 'features/screens/student/dashboard/DashboardScreen.dart';
 
 void main() {
@@ -29,6 +31,8 @@ class MyApp extends StatelessWidget {
         '/timetable': (context) =>  TimetableScreen(),
         '/scanner': (context) =>  ScannerScreen(),
         '/timetable': (context) => FacultyTimetableScreen(),
+        '/subject': (context) => SubjectPage(),
+
         /*'/timetable': (context) =>  _FacultyTimetableScreenState(),*/
 
 
