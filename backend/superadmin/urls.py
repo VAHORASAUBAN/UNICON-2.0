@@ -30,3 +30,4 @@ urlpatterns = [
     path('', superadmin_views.userlogin),
     path('placement/', superadmin_views.placement),
     path('show_placement/', superadmin_views.show_placement),
+]
