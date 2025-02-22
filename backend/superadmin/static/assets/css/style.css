@@ -1017,7 +1017,11 @@ textarea.form-control {
     display: block;
     line-height: 80px
 }
-
+.logo1{
+    height: 200px;
+    width: 200px;
+    margin-left: 30px;
+}
 .header .navbar-nav .badge {
     position: absolute;
     right: 7px;
