@@ -33,16 +33,3 @@ flutter:
     - assets/images/placement.png
     - assets/images/profile.png
 
-  fonts:
-
-    - family: SansSerifCollection
-      fonts:
-        - asset: assets/fonts/SansSerifCollection.ttf
-
-    - family: Arial
-      fonts:
-        - asset: assets/fonts/arial.ttf
-
-    - family: ArialBlack
-      fonts:
-        - asset: assets/fonts/arialblk.ttf

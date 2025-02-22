@@ -30,6 +30,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
           "Dashboard",
