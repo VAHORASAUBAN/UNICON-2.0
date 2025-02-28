@@ -59,7 +59,7 @@
 					</li>
 					<li>
 						<a href="/index/" class="mobile-logo d-md-block d-lg-none d-block">
-							<img src="{% static 'assets/img/logo1.png' %}" alt=""width="40" height="40" />
+							<img src="{% static 'assets/img/logo1.png' %}" alt="" width="40" height="40" />
 						</a>
 					</li>
 				</ul>
@@ -276,26 +276,165 @@
 				</div>
 
 
-				<div class="row staff-grid-row">
-					<div class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-						<div class="profile-widget">
-							<div class="profile-img">
-								<a href="/profile/"><img class="avatar" src="{% static 'assets/img/user.jpg' %}"
-										alt=""></a>
-							</div>
-							<div class="dropdown profile-action">
-								<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown"
-									aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
-								<div class="dropdown-menu dropdown-menu-right">
-									<a class="dropdown-item" href="/edit_teacher/"><i
-											class="fas fa-pencil-alt m-r-5"></i> Edit</a>
-									<a class="dropdown-item" href="#" data-toggle="modal"
-										data-target="#delete_employee"><i class="fas fa-trash-alt m-r-5"></i> Delete</a>
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="row align-items-center">
+									<div class="col-sm-6">
+										<div class="page-title">List</div>
+									</div>
+									<div class="col-sm-6 text-sm-right">
+										<div class="mt-sm-0 mt-2">
+											<button class="btn btn-outline-primary mr-2">
+												<img src="{% static 'assets/img/excel.png' %}" alt="" /><span
+													class="ml-2">Excel</span>
+											</button>
+											<button class="btn btn-outline-danger mr-2">
+												<img src="{% static 'assets/img/pdf.png' %}" alt="" height="18" /><span
+													class="ml-2">PDF</span>
+											</button>
+											<button class="btn btn-light" type="button" data-toggle="dropdown"
+												aria-haspopup="true" aria-expanded="false">
+												<i class="fas fa-ellipsis-h"></i>
+											</button>
+											<div class="dropdown-menu dropdown-menu-right">
+												<a class="dropdown-item" href="#">Action</a>
+												<div role="separator" class="dropdown-divider"></div>
+												<a class="dropdown-item" href="#">Another action</a>
+												<div role="separator" class="dropdown-divider"></div>
+												<a class="dropdown-item" href="#">Something else here</a>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
-							<h4 class="user-name m-t-10 m-b-0 text-ellipsis"><a href="/profile/">Ruth C. Gault</a>
-							</h4>
-							<div class="small text-muted">Maths</div>
+							<div class="card-body">
+								<div class="table-responsive">
+									<table class="table custom-table">
+										<thead class="thead-light">
+											<tr>
+												<th>Faculty ID</th>
+												<th>Name</th>
+												<th>Course</th>
+												<th>Division</th>
+												<th>Subject</th>
+												<th class="text-right">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<!-- Faculty 1 -->
+											<tr>
+												<td>FAC001</td>
+												<td>John Doe</td>
+												<td>IMSCIT</td>
+												<td>A</td>
+												<td>Data Structures</td>
+												<td class="text-right">
+													<a href="/edit_faculty/" class="btn btn-primary btn-sm mb-1">
+														<i class="far fa-edit"></i>
+													</a>
+													<button type="button" data-toggle="modal"
+														data-target="#delete_faculty"
+														class="btn btn-danger btn-sm mb-1">
+														<i class="far fa-trash-alt"></i>
+													</button>
+												</td>
+											</tr>
+											<!-- Faculty 2 -->
+											<tr>
+												<td>FAC002</td>
+												<td>Jane Smith</td>
+												<td>BBA</td>
+												<td>B</td>
+												<td>Algorithms</td>
+												<td class="text-right">
+													<a href="/edit_faculty/" class="btn btn-primary btn-sm mb-1">
+														<i class="far fa-edit"></i>
+													</a>
+													<button type="button" data-toggle="modal"
+														data-target="#delete_faculty"
+														class="btn btn-danger btn-sm mb-1">
+														<i class="far fa-trash-alt"></i>
+													</button>
+												</td>
+											</tr>
+											<!-- Faculty 3 -->
+											<tr>
+												<td>FAC003</td>
+												<td>Michael Johnson</td>
+												<td>MCA</td>
+												<td>D</td>
+												<td>Mathematics</td>
+												<td class="text-right">
+													<a href="/edit_faculty/" class="btn btn-primary btn-sm mb-1">
+														<i class="far fa-edit"></i>
+													</a>
+													<button type="button" data-toggle="modal"
+														data-target="#delete_faculty"
+														class="btn btn-danger btn-sm mb-1">
+														<i class="far fa-trash-alt"></i>
+													</button>
+												</td>
+											</tr>
+											<!-- Faculty 4 -->
+											<tr>
+												<td>FAC004</td>
+												<td>Sarah Brown</td>
+												<td>IMSCIT</td>
+												<td>A</td>
+												<td>Software Engineering</td>
+												<td class="text-right">
+													<a href="/edit_faculty/" class="btn btn-primary btn-sm mb-1">
+														<i class="far fa-edit"></i>
+													</a>
+													<button type="button" data-toggle="modal"
+														data-target="#delete_faculty"
+														class="btn btn-danger btn-sm mb-1">
+														<i class="far fa-trash-alt"></i>
+													</button>
+												</td>
+											</tr>
+											<!-- Faculty 5 -->
+											<tr>
+												<td>FAC005</td>
+												<td>Emily Davis</td>
+												<td>BCA</td>
+												<td>C</td>
+												<td>Cyber Security</td>
+												<td class="text-right">
+													<a href="/edit_faculty/" class="btn btn-primary btn-sm mb-1">
+														<i class="far fa-edit"></i>
+													</a>
+													<button type="button" data-toggle="modal"
+														data-target="#delete_faculty"
+														class="btn btn-danger btn-sm mb-1">
+														<i class="far fa-trash-alt"></i>
+													</button>
+												</td>
+											</tr>
+											<!-- Faculty 6 -->
+											<tr>
+												<td>FAC006</td>
+												<td>James Wilson</td>
+												<td>BCA</td>
+												<td>C</td>
+												<td>Operating Systems</td>
+												<td class="text-right">
+													<a href="/edit_faculty/" class="btn btn-primary btn-sm mb-1">
+														<i class="far fa-edit"></i>
+													</a>
+													<button type="button" data-toggle="modal"
+														data-target="#delete_faculty"
+														class="btn btn-danger btn-sm mb-1">
+														<i class="far fa-trash-alt"></i>
+													</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
