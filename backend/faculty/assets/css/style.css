@@ -1660,22 +1660,29 @@ label {
     /* !important */
 }
 
+.main-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
 .page-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    /* Enable vertical scrolling */
     left: 0;
     margin-left: 280px;
     padding-top: 70px;
     position: relative;
-    -webkit-transition: all .4s ease;
-    -moz-transition: all .4s ease;
-    transition: all .4s ease
+    transition: all .4s ease;
+    padding: 30px 10px 1px 15px;
+    /* Move padding from .content to .page-wrapper */
 }
 
+/* Remove the padding from .content */
 .page-wrapper>.content {
-    padding: 30px 10px 1px 15px
-}
-
-.main-wrapper {
-    height: 100%
+    padding: 0;
 }
 
 .account-page {

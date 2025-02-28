@@ -9,7 +9,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
 	<title>UNICON</title>
-	<link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/logo_unicon.png' %}" />
+	<link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/logo1.png' %}" />
 	<link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
 	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet" />
 
@@ -279,152 +279,167 @@
 				</div>
 				<div class="row">
 					<div class="col-lg-12">
-					  <div class="card">
-						<div class="card-header">
-						  <div class="row align-items-center">
-							<div class="col-sm-6">
-							  <div class="page-title">All Students</div>
-							</div>
-							<div class="col-sm-6 text-sm-right">
-							  <div class="mt-sm-0 mt-2">
-								<button class="btn btn-outline-primary mr-2">
-								  <img src="{% static 'assets/img/excel.png' %}" alt="" /><span class="ml-2">Excel</span>
-								</button>
-								<button class="btn btn-outline-danger mr-2">
-								  <img src="{% static 'assets/img/pdf.png' %}" alt="" height="18" /><span class="ml-2">PDF</span>
-								</button>
-								<button class="btn btn-light" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								  <i class="fas fa-ellipsis-h"></i>
-								</button>
-								<div class="dropdown-menu dropdown-menu-right">
-								  <a class="dropdown-item" href="#">Action</a>
-								  <div role="separator" class="dropdown-divider"></div>
-								  <a class="dropdown-item" href="#">Another action</a>
-								  <div role="separator" class="dropdown-divider"></div>
-								  <a class="dropdown-item" href="#">Something else here</a>
+						<div class="card">
+							<div class="card-header">
+								<div class="row align-items-center">
+									<div class="col-sm-6">
+										<div class="page-title">List</div>
+									</div>
+									<div class="col-sm-6 text-sm-right">
+										<div class="mt-sm-0 mt-2">
+											<button class="btn btn-outline-primary mr-2">
+												<img src="{% static 'assets/img/excel.png' %}" alt="" /><span
+													class="ml-2">Excel</span>
+											</button>
+											<button class="btn btn-outline-danger mr-2">
+												<img src="{% static 'assets/img/pdf.png' %}" alt="" height="18" /><span
+													class="ml-2">PDF</span>
+											</button>
+											<button class="btn btn-light" type="button" data-toggle="dropdown"
+												aria-haspopup="true" aria-expanded="false">
+												<i class="fas fa-ellipsis-h"></i>
+											</button>
+											<div class="dropdown-menu dropdown-menu-right">
+												<a class="dropdown-item" href="#">Action</a>
+												<div role="separator" class="dropdown-divider"></div>
+												<a class="dropdown-item" href="#">Another action</a>
+												<div role="separator" class="dropdown-divider"></div>
+												<a class="dropdown-item" href="#">Something else here</a>
+											</div>
+										</div>
+									</div>
 								</div>
-							  </div>
 							</div>
-						  </div>
+							<div class="card-body">
+								<div class="table-responsive">
+									<table class="table custom-table">
+										<thead class="thead-light">
+											<tr>
+												<th>Student ID</th>
+												<th>Name</th>
+												<th>Department</th>
+												<th>Course</th>
+												<th>Semester</th>
+												<th>Division</th>
+												<th class="text-right">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>202101619010180</td>
+												<td>Abrar</td>
+												<td>FCAIT</td>
+												<td>IMSCIT</td>
+												<td>8</td>
+												<td>A</td>
+												<td class="text-right">
+													<a href="/edit_student/" class="btn btn-primary btn-sm mb-1">
+														<i class="far fa-edit"></i>
+													</a>
+													<button type="submit" data-toggle="modal"
+														data-target="#delete_employee"
+														class="btn btn-danger btn-sm mb-1">
+														<i class="far fa-trash-alt"></i>
+													</button>
+												</td>
+											</tr>
+											<tr>
+												<td>202101619010181</td>
+												<td>Tofik</td>
+												<td>FOBA</td>
+												<td>BBA</td>
+												<td>8</td>
+												<td>B</td>
+												<td class="text-right">
+													<a href="/edit_student/" class="btn btn-primary btn-sm mb-1">
+														<i class="far fa-edit"></i>
+													</a>
+													<button type="submit" data-toggle="modal"
+														data-target="#delete_employee"
+														class="btn btn-danger btn-sm mb-1">
+														<i class="far fa-trash-alt"></i>
+													</button>
+												</td>
+											</tr>
+											<tr>
+												<td>202101619010182</td>
+												<td>Sauban</td>
+												<td>FCAIT</td>
+												<td>IMSCIT</td>
+												<td>8</td>
+												<td>A</td>
+												<td class="text-right">
+													<a href="/edit_student/" class="btn btn-primary btn-sm mb-1">
+														<i class="far fa-edit"></i>
+													</a>
+													<button type="submit" data-toggle="modal"
+														data-target="#delete_employee"
+														class="btn btn-danger btn-sm mb-1">
+														<i class="far fa-trash-alt"></i>
+													</button>
+												</td>
+											</tr>
+											<tr>
+												<td>202101619010183</td>
+												<td>Humed</td>
+												<td>FOBA</td>
+												<td>BBA</td>
+												<td>8</td>
+												<td>B</td>
+												<td class="text-right">
+													<a href="/edit_student/" class="btn btn-primary btn-sm mb-1">
+														<i class="far fa-edit"></i>
+													</a>
+													<button type="submit" data-toggle="modal"
+														data-target="#delete_employee"
+														class="btn btn-danger btn-sm mb-1">
+														<i class="far fa-trash-alt"></i>
+													</button>
+												</td>
+											</tr>
+											<tr>
+												<td>202101619010184</td>
+												<td>Mueab</td>
+												<td>FCAIT</td>
+												<td>BCA</td>
+												<td>8</td>
+												<td>C</td>
+												<td class="text-right">
+													<a href="/edit_student/" class="btn btn-primary btn-sm mb-1">
+														<i class="far fa-edit"></i>
+													</a>
+													<button type="submit" data-toggle="modal"
+														data-target="#delete_employee"
+														class="btn btn-danger btn-sm mb-1">
+														<i class="far fa-trash-alt"></i>
+													</button>
+												</td>
+											</tr>
+											<tr>
+												<td>202101619010185</td>
+												<td>Ayan</td>
+												<td>FCAIT</td>
+												<td>BCA</td>
+												<td>8</td>
+												<td>C</td>
+												<td class="text-right">
+													<a href="/edit_student/" class="btn btn-primary btn-sm mb-1">
+														<i class="far fa-edit"></i>
+													</a>
+													<button type="submit" data-toggle="modal"
+														data-target="#delete_employee"
+														class="btn btn-danger btn-sm mb-1">
+														<i class="far fa-trash-alt"></i>
+													</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
 						</div>
-						<div class="card-body">
-						  <div class="table-responsive">
-							<table class="table custom-table">
-							  <thead class="thead-light">
-								<tr>
-								  <th>Student ID</th>
-								  <th>Name</th>
-								  <th>Department</th>
-								  <th>Course</th>
-								  <th>Semester</th>
-								  <th>Division</th>
-								  <th class="text-right">Action</th>
-								</tr>
-							  </thead>
-							  <tbody>
-								<tr>
-								  <td>202101619010180</td>
-								  <td>Abrar</td>
-								  <td>FCAIT</td>
-								  <td>IMSCIT</td>
-								  <td>8</td>
-								  <td>A</td>
-								  <td class="text-right">
-									<a href="/edit_student/" class="btn btn-primary btn-sm mb-1">
-									  <i class="far fa-edit"></i>
-									</a>
-									<button type="submit" data-toggle="modal" data-target="#delete_employee" class="btn btn-danger btn-sm mb-1">
-									  <i class="far fa-trash-alt"></i>
-									</button>
-								  </td>
-								</tr>
-								<tr>
-								  <td>202101619010181</td>
-								  <td>Tofik</td>
-								  <td>FOBA</td>
-								  <td>BBA</td>
-								  <td>8</td>
-								  <td>B</td>
-								  <td class="text-right">
-									<a href="/edit_student/" class="btn btn-primary btn-sm mb-1">
-									  <i class="far fa-edit"></i>
-									</a>
-									<button type="submit" data-toggle="modal" data-target="#delete_employee" class="btn btn-danger btn-sm mb-1">
-									  <i class="far fa-trash-alt"></i>
-									</button>
-								  </td>
-								</tr>
-								<tr>
-								  <td>202101619010182</td>
-								  <td>Sauban</td>
-								  <td>FCAIT</td>
-								  <td>IMSCIT</td>
-								  <td>8</td>
-								  <td>A</td>
-								  <td class="text-right">
-									<a href="/edit_student/" class="btn btn-primary btn-sm mb-1">
-									  <i class="far fa-edit"></i>
-									</a>
-									<button type="submit" data-toggle="modal" data-target="#delete_employee" class="btn btn-danger btn-sm mb-1">
-									  <i class="far fa-trash-alt"></i>
-									</button>
-								  </td>
-								</tr>
-								<tr>
-								  <td>202101619010183</td>
-								  <td>Humed</td>
-								  <td>FOBA</td>
-								  <td>BBA</td>
-								  <td>8</td>
-								  <td>B</td>
-								  <td class="text-right">
-									<a href="/edit_student/" class="btn btn-primary btn-sm mb-1">
-									  <i class="far fa-edit"></i>
-									</a>
-									<button type="submit" data-toggle="modal" data-target="#delete_employee" class="btn btn-danger btn-sm mb-1">
-									  <i class="far fa-trash-alt"></i>
-									</button>
-								  </td>
-								</tr>
-								<tr>
-								  <td>202101619010184</td>
-								  <td>Mueab</td>
-								  <td>FCAIT</td>
-								  <td>BCA</td>
-								  <td>8</td>
-								  <td>C</td>
-								  <td class="text-right">
-									<a href="/edit_student/" class="btn btn-primary btn-sm mb-1">
-									  <i class="far fa-edit"></i>
-									</a>
-									<button type="submit" data-toggle="modal" data-target="#delete_employee" class="btn btn-danger btn-sm mb-1">
-									  <i class="far fa-trash-alt"></i>
-									</button>
-								  </td>
-								</tr>
-								<tr>
-								  <td>202101619010185</td>
-								  <td>Ayan</td>
-								  <td>FCAIT</td>
-								  <td>BCA</td>
-								  <td>8</td>
-								  <td>C</td>
-								  <td class="text-right">
-									<a href="/edit_student/" class="btn btn-primary btn-sm mb-1">
-									  <i class="far fa-edit"></i>
-									</a>
-									<button type="submit" data-toggle="modal" data-target="#delete_employee" class="btn btn-danger btn-sm mb-1">
-									  <i class="far fa-trash-alt"></i>
-									</button>
-								  </td>
-								</tr>
-							  </tbody>
-							</table>
-						  </div>
-						</div>
-					  </div>
 					</div>
-				  </div>
+				</div>
 				<div class="notification-box">
 					<div class="msg-sidebar notifications msg-noti">
 						<div class="topnav-dropdown-header">

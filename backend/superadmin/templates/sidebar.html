@@ -22,7 +22,7 @@
       <script src="{% static 'assets/js/respond.min.js' %}"></script>
     <![endif]-->
   <style>
-    .sidebar-menu .active-li > a {
+    .sidebar-menu .active-li>a {
       background-color: #004688 !important;
       color: #fff !important;
     }
@@ -46,7 +46,7 @@
                 style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i><span>Dashboard</span></a>
           </li>
           <li class="submenu">
-            <a href="#" data-menu="faculty"><i class="fa-solid fa-chalkboard-user"
+            <a href="#" data-menu="faculty"><i class="fa-solid fa-user-tie"
                 style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i>
               <span> Faculty</span> <span class="menu-arrow"></span></a>
             <ul class="list-unstyled" style="display: none">
@@ -76,7 +76,7 @@
           </li>
 
           <li class="submenu">
-            <a href="#" data-menu="course"><i class="fa-solid fa-book-open-reader"
+            <a href="#" data-menu="course"><i class="fa-solid fa-book"
                 style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i>
               <span> Course</span> <span class="menu-arrow"></span></a>
             <ul class="list-unstyled" style="display: none">
@@ -96,7 +96,7 @@
           </li>
 
           <li class="submenu">
-            <a href="#" data-menu="subject"><i class="fa-solid fa-book"
+            <a href="#" data-menu="subject"><i class="fa-solid fa-flask"
                 style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i>
               <span> Subject</span> <span class="menu-arrow"></span></a>
             <ul class="list-unstyled" style="display: none">
@@ -105,7 +105,7 @@
             </ul>
           </li>
           <li class="submenu">
-            <a href="#" data-menu="timetable"><i class="fa-solid fa-calendar-week"
+            <a href="#" data-menu="timetable"><i class="fa-solid fa-calendar-alt"
                 style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i>
               <span> Time Table</span> <span class="menu-arrow"></span></a>
             <ul class="list-unstyled" style="display: none">
@@ -114,7 +114,7 @@
             </ul>
           </li>
           <li class="submenu">
-            <a href="#" data-menu="Placement"><i class="fa-solid fa-calendar-week"
+            <a href="#" data-menu="Placement"><i class="fa-solid fa-briefcase"
                 style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i>
               <span> Placement</span> <span class="menu-arrow"></span></a>
             <ul class="list-unstyled" style="display: none">
@@ -124,9 +124,18 @@
           </li>
 
           <li>
-            <a href="/calendar/"><i class="fa-solid fa-calendar"
+            <a href="/calendar/"><i class="fa-solid fa-calendar-check"
                 style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i><span>
                 Events</span></a>
+          </li>
+          <li class="submenu">
+            <a href="#" data-menu="Placement"><i class="fa-solid fa-newspaper"
+                style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i>
+              <span> Blog</span> <span class="menu-arrow"></span></a>
+            <ul class="list-unstyled" style="display: none">
+              <li><a href="/blog_details/"><span>Show blog</span></a></li>
+              <li><a href="/add_blog/"><span>Add Blog</span></a></li>
+            </ul>
           </li>
         </ul>
       </div>
