@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coordinator Form</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f7fc;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        {% comment %} height: 100vh; {% endcomment %}
+      }
+
+      .form-container {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 600px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #4caf50;
+      }
+
+      label {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 5px;
+        display: block;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      input[type="date"],
+      input[type="number"],
+      select,
+      input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        box-sizing: border-box;
+        background-color: #f9f9f9;
+      }
+
+      input[type="text"]:focus,
+      input[type="email"]:focus,
+      input[type="password"]:focus,
+      input[type="number"]:focus,
+      select:focus,
+      input[type="file"]:focus {
+        border-color: #4caf50;
+        outline: none;
+        background-color: #fff;
+      }
+
+      button[type="submit"] {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        width: 100%;
+        transition: background-color 0.3s ease;
+      }
+
+      button[type="submit"]:hover {
+        background-color: #45a049;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group select {
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        font-size: 14px;
+      }
+
+      .form-group input[type="file"] {
+        padding: 5px;
+      }
+
+      .form-footer {
+        text-align: center;
+        margin-top: 20px;
+        color: #777;
+      }
+
+      .form-footer a {
+        color: #4caf50;
+        text-decoration: none;
+      }
+
+      .form-footer a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <h1>Coordinator Form</h1>
+      <form
+        method="POST"
+        enctype="multipart/form-data"
+        action="/add_coordinator/"
+      >
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            maxlength="150"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+
+        <div class="form-group">
+          <label for="first_name">First Name:</label>
+          <input
+            type="text"
+            id="first_name"
+            name="first_name"
+            maxlength="100"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="middle_name">Middle Name:</label>
+          <input
+            type="text"
+            id="middle_name"
+            name="middle_name"
+            maxlength="100"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="last_name">Last Name:</label>
+          <input type="text" id="last_name" name="last_name" maxlength="100" />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" />
+        </div>
+
+        <div class="form-group">
+          <label for="mobile_number">Mobile Number:</label>
+          <input type="number" id="mobile_number" name="mobile_number" />
+        </div>
+
+        <div class="form-group">
+          <label for="country">Gender:</label>
+          <select id="gender" name="gender">
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="birth_date">Birth Date:</label>
+          <input type="date" id="birth_date" name="birth_date" />
+        </div>
+
+        <div class="form-group">
+          <label for="address_line_1">Address Line 1:</label>
+          <input
+            type="text"
+            id="address_line_1"
+            name="address_line_1"
+            maxlength="100"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="address_line_2">Address Line 2:</label>
+          <input
+            type="text"
+            id="address_line_2"
+            name="address_line_2"
+            maxlength="100"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="country">Country:</label>
+          <select
+            class="form-select country"
+            aria-label="Select Country"
+            onchange="loadStates()"
+            name="country"
+          >
+            <option selected>Select Country</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="state">State:</label>
+          <select
+            class="form-select state"
+            aria-label="Select State"
+            onchange="loadCities()"
+            name="state"
+          >
+            <option selected>Select State</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="city">City:</label>
+          <select class="form-select city" aria-label="Select City" name="city">
+            <option selected>Select City</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="pincode">Pincode:</label>
+          <input type="number" id="pincode" name="pincode" />
+        </div>
+
+        <div class="form-group">
+          <label for="joining_date">Joining Date:</label>
+          <input type="date" id="joining_date" name="joining_date" />
+        </div>
+
+        <div class="form-group">
+          <label for="course">Course:</label>
+          <input type="text" id="course" name="course" maxlength="100" />
+        </div>
+
+        <div class="form-group">
+          <label for="department">Department:</label>
+          <input
+            type="text"
+            id="department"
+            name="department"
+            maxlength="100"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="designation">Designation:</label>
+          <input
+            type="text"
+            id="designation"
+            name="designation"
+            maxlength="100"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="achievements">Achievements:</label>
+          <input
+            type="text"
+            id="achievements"
+            name="achievements"
+            maxlength="100"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="qualification">Qualification:</label>
+          <input
+            type="text"
+            id="qualification"
+            name="qualification"
+            maxlength="100"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="coordinator_image">Profile Picture:</label>
+          <input type="file" id="coordinator_image" name="coordinator_image" />
+        </div>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+    <script>
+      var config = {
+        cUrl: "https://api.countrystatecity.in/v1/countries",
+        ckey: "S3lLdVBHeDZTR1RYWUU5M3IxdG1jUTZvYTRLYlQ3bWRXSWFOcWhTSw==",
+      };
+
+      var countrySelect = document.querySelector(".country"),
+        stateSelect = document.querySelector(".state"),
+        citySelect = document.querySelector(".city");
+
+      // Store country data globally
+      var countryData = [];
+      // Store state data globally for the selected country
+      var stateData = [];
+
+      function loadCountries() {
+        let apiEndPoint = config.cUrl;
+
+        fetch(apiEndPoint, { headers: { "X-CSCAPI-KEY": config.ckey } })
+          .then((Response) => Response.json())
+          .then((data) => {
+            // Store the country data globally
+            countryData = data;
+
+            // Check if data is an array
+            if (Array.isArray(data)) {
+              data.forEach((country) => {
+                const option = document.createElement("option");
+                option.value = country.name; // Store country name
+                option.textContent = country.name;
+                countrySelect.appendChild(option);
+              });
+            } else {
+              console.error("Received data is not an array:", data);
+            }
+          })
+          .catch((error) => console.error("Error loading countries:", error));
+
+        stateSelect.disabled = true;
+        citySelect.disabled = true;
+        stateSelect.style.pointerEvents = "none";
+        citySelect.style.pointerEvents = "none";
+      }
+
+      function loadStates() {
+        stateSelect.disabled = false;
+        citySelect.disabled = true;
+        stateSelect.style.pointerEvents = "auto";
+        citySelect.style.pointerEvents = "none";
+
+        const selectedCountryName = countrySelect.value;
+
+        // Find the selected country's ISO code from the global `countryData`
+        const selectedCountry = countryData.find(
+          (country) => country.name === selectedCountryName
+        );
+        const selectedCountryCode = selectedCountry ? selectedCountry.iso2 : "";
+
+        stateSelect.innerHTML = '<option value="">Select State</option>';
+        citySelect.innerHTML = '<option value="">Select City</option>';
+
+        if (!selectedCountryCode) {
+          console.error("Country code not found for:", selectedCountryName);
+          return;
+        }
+
+        fetch(`${config.cUrl}/${selectedCountryCode}/states`, {
+          headers: { "X-CSCAPI-KEY": config.ckey },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Store the state data globally for the selected country
+            stateData = data;
+
+            // Check if data is an array
+            if (Array.isArray(data)) {
+              data.forEach((state) => {
+                const option = document.createElement("option");
+                option.value = state.name; // Store state name
+                option.textContent = state.name;
+                stateSelect.appendChild(option);
+              });
+            } else {
+              console.error("Received data is not an array for states:", data);
+            }
+          })
+          .catch((error) => console.error("Error loading states:", error));
+      }
+
+      function loadCities() {
+        citySelect.disabled = false;
+        citySelect.style.pointerEvents = "auto";
+
+        const selectedCountryName = countrySelect.value;
+        const selectedStateName = stateSelect.value;
+
+        // Find the selected country's ISO code from the global `countryData`
+        const selectedCountry = countryData.find(
+          (country) => country.name === selectedCountryName
+        );
+        const selectedCountryCode = selectedCountry ? selectedCountry.iso2 : "";
+
+        // Find the selected state's ISO code from the global `stateData`
+        const selectedState = stateData.find(
+          (state) => state.name === selectedStateName
+        );
+        const selectedStateCode = selectedState ? selectedState.iso2 : "";
+
+        citySelect.innerHTML = '<option value="">Select City</option>';
+
+        if (!selectedStateCode) {
+          console.error("State code not found for:", selectedStateName);
+          return;
+        }
+
+        fetch(
+          `${config.cUrl}/${selectedCountryCode}/states/${selectedStateCode}/cities`,
+          { headers: { "X-CSCAPI-KEY": config.ckey } }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            // Check if data is an array
+            if (Array.isArray(data)) {
+              data.forEach((city) => {
+                const option = document.createElement("option");
+                option.value = city.name; // Store city name
+                option.textContent = city.name;
+                citySelect.appendChild(option);
+              });
+            } else {
+              console.error("Received data is not an array for cities:", data);
+            }
+          })
+          .catch((error) => console.error("Error loading cities:", error));
+      }
+
+      window.onload = loadCountries;
+    </script>
+  </body>
+</html>

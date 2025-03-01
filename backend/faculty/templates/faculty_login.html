@@ -10,7 +10,11 @@
     />
 
     {% comment %}
-   
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="{% static 'assets/img/favicon.png' %}"
+    />
     {% endcomment %}
     <link
       href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900"
@@ -43,7 +47,7 @@
                 /></a>
                 {% endcomment %}
               </div>
-              <form method="POST" action="/coordinator_login/">
+              <form method="POST" action="/faculty_login/">
                 {% csrf_token %}
                 <div class="form-group">
                   <label>Username or Email</label>

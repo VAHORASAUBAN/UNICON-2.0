@@ -1,5 +1,7 @@
 from django.urls import path
 from faculty import views as faculty_views
+app_name = 'faculty'  # Add this line
+
 urlpatterns = [
      path('faculty_my_profile/', faculty_views.faculty_my_profile),
     path('faculty_profile/', faculty_views.faculty_profile),
@@ -11,5 +13,6 @@ urlpatterns = [
     path('faculty_stud_edit/', faculty_views.faculty_stud_edit),
     path('faculty_attendence/', faculty_views.faculty_attendence),
     path('faculty_attendence_1/', faculty_views.faculty_attendence_1),
+    path('faculty_login/', faculty_views.faculty_login,name='faculty_login'),
     
 ]
