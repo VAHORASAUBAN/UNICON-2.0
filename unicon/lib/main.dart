@@ -9,6 +9,7 @@ import 'features/screens/Faculty/TimeTable/time_table.dart';
 import 'features/screens/student/Attendane_Report.dart';
 import 'features/screens/student/Subject/subject.dart';
 import 'features/screens/student/dashboard/DashboardScreen.dart';
+import 'features/screens/student/placement/PlacementScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,13 +26,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.indigo),
       initialRoute: '/',
       routes: {
-        '/dasboard': (context) => const DashboardScreen(),
+        '/dashboard': (context) => DashboardScreen(),
         '/': (context) => LoginScreen(),
         '/loginDetails': (context) => LoginDetailsScreen(userType: ' '),
         '/timetable': (context) =>  TimetableScreen(),
         '/scanner': (context) =>  ScannerScreen(),
         '/timetable': (context) => FacultyTimetableScreen(),
         '/subject': (context) => SubjectPage(),
+        '/placements': (context) => PlacementScreen(),
+
 
         /*'/timetable': (context) =>  _FacultyTimetableScreenState(),*/
 

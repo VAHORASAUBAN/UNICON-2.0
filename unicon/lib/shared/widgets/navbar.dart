@@ -29,8 +29,8 @@ class CustomNavBar extends StatelessWidget {
               label: 'Dashboard',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.notifications),
-              label: 'Updates',
+              icon: Icon(Icons.work_rounded),
+              label: 'Placement',
             ),
           ],
           selectedItemColor: const Color(0xFF0A3B87),
