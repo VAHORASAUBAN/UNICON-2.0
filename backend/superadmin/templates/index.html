@@ -2,6 +2,7 @@
 <html lang="en">
   {% load static %}
 
+<<<<<<< tofik
   <head>
     <meta charset="utf-8" />
     <title>UNICON</title>
@@ -9,6 +10,13 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=0"
     />
+=======
+<head>
+  <meta charset="utf-8" />
+  <title>UNICON</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+	<link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/logo1.png' %}" />
+>>>>>>> main
 
     <!-- Bootstrap CSS -->
     <link
@@ -46,6 +54,7 @@
               <div class="top-nav-search">
                 <a href="javascript:void(0);" class="responsive-search">
                   <i class="fa fa-search"></i>
+<<<<<<< tofik
                 </a>
                 <form action="">
                   <input
@@ -57,6 +66,27 @@
                     <i class="fa fa-search"></i>
                   </button>
                 </form>
+=======
+                </button>
+              </form>
+            </div>
+          </li>
+          <li>
+            <a href="/index/" class="mobile-logo d-md-block d-lg-none d-block">
+              <img src="{% static 'assets/img/logo1.png' %}" alt="" width="40" height="40" />
+            </a>
+          </li>
+        </ul>
+
+        <ul class="nav user-menu float-right">
+          <li class="nav-item dropdown d-none d-sm-block">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+              <i class="fa-solid fa-bell" style="color: #337AB7;"></i>
+            </a>
+            <div class="dropdown-menu notifications">
+              <div class="topnav-dropdown-header">
+                <span>Notifications</span>
+>>>>>>> main
               </div>
             </li>
             <li>

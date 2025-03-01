@@ -37,4 +37,5 @@ urlpatterns = [
     path('delete_department/<int:id>/', superadmin_views.delete_department),
     path('delete_teacher/<int:id>/', superadmin_views.delete_teacher),
     path('delete_student/<int:id>/', superadmin_views.delete_student),
+
 ]

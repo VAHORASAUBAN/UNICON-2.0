@@ -29,6 +29,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Dashboard"),
         backgroundColor: const Color(0xFF0A3B87),
@@ -40,7 +41,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
-      drawer: sidemenu(
+      drawer: SideMenu(
         onMenuTap: (route) {
           Navigator.pop(context); // Close drawer before navigating
           Navigator.pushNamed(context, route);
@@ -49,9 +50,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         userEmail: "johndoe@example.com",
       ),
       body: IndexedStack(
+
         index: _currentIndex, // Display content based on the selected tab
         children: [
           _buildDashboardContent(),
+
           Center(
             child: Text(
               "Dashboard Content",
