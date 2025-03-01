@@ -172,7 +172,7 @@
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="/profile/">My Profile</a>
                             <a class="dropdown-item" href="/edit_profile/">Edit Profile</a>
-                            <a class="dropdown-item" href="/login/">Logout</a>
+                            <a class="dropdown-item" href="/logout/">Logout</a>
                         </div>
                     </li>
                 </ul>
@@ -213,7 +213,8 @@
                 <div class="page-content">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                            <form class="custom-mt-form">
+                            <form class="custom-mt-form" method="POST" action="/add_department/">
+                                {% csrf_token %}
                                 <div class="form-group">
                                     <label>Name</label>
                                     <input type="text" name="department_name" class="form-control" />
