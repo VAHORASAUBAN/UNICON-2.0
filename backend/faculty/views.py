@@ -17,6 +17,8 @@ def faculty_dash(request):
     return render(request, 'faculty_dash.html')
 def faculty_all_student(request):
     return render(request, 'faculty_all-students.html')
+def faculty_login(request):
+    return render(request, 'faculty_login.html')
 
 def qr_code(request):
     subject = request.GET.get('subject')

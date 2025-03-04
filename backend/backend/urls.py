@@ -5,7 +5,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('superadmin.urls')),
-    path('',include('faculty.urls')),
+    path('faculty/', include('faculty.urls')),  
+    path('',include('addcoordinator.urls')),
 ]
 
 if settings.DEBUG:
