@@ -1,143 +1,121 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-void main() {
-  runApp(FacultyTimetableApp());
-}
-
-class FacultyTimetableApp extends StatelessWidget {
+class FacultyTimetableScreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Weekly Faculty Timetable',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: FacultyTimetableScreen(),
-    );
-  }
+  _FacultyTimetableScreenState createState() => _FacultyTimetableScreenState();
 }
 
-class FacultyTimetableScreen extends StatelessWidget {
-  final Map<String, List<Map<String, String>>> weeklyClasses = {
+class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
+  final List<String> days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  late String selectedDay;
+
+  final Map<String, List<Map<String, String>>> weeklySchedule = {
     "Monday": [
-      {"subject": "CNS", "division": "iMscIT-Sem 7 (Div B)", "time": "07:00 AM - 08:00 AM"},
-      {"subject": "ADS", "division": "iMscIT-Sem 7 (Div B)", "time": "08:00 AM - 09:00 AM"},
-      {"subject": "Machine Learning", "division": "iMscIT-Sem 7 (Div A)", "time": "09:00 AM - 10:00 AM"},
-      {"subject": "Blockchain", "division": "iMscIT-Sem 7 (Div B)", "time": "10:00 AM - 11:00 AM"},
+      {"subject": "Math", "time": "9:00 AM"},
+      {"subject": "Physics", "time": "11:00 AM"},
     ],
     "Tuesday": [
-      {"subject": "AI", "division": "iMscIT-Sem 7 (Div A)", "time": "07:00 AM - 08:00 AM"},
-      {"subject": "Data Science", "division": "iMscIT-Sem 7 (Div B)", "time": "08:00 AM - 09:00 AM"},
-      {"subject": "Cloud Computing", "division": "iMscIT-Sem 7 (Div A)", "time": "09:00 AM - 10:00 AM"},
+      {"subject": "Chemistry", "time": "10:00 AM"},
+      {"subject": "Biology", "time": "1:00 PM"},
     ],
     "Wednesday": [
-      {"subject": "Big Data", "division": "iMscIT-Sem 7 (Div B)", "time": "07:00 AM - 08:00 AM"},
-      {"subject": "Deep Learning", "division": "iMscIT-Sem 7 (Div A)", "time": "08:00 AM - 09:00 AM"},
-      {"subject": "Cyber Security", "division": "iMscIT-Sem 7 (Div B)", "time": "09:00 AM - 10:00 AM"},
+      {"subject": "English", "time": "9:00 AM"},
+      {"subject": "Computer Science", "time": "2:00 PM"},
     ],
     "Thursday": [
-      {"subject": "Internet of Things", "division": "iMscIT-Sem 7 (Div A)", "time": "07:00 AM - 08:00 AM"},
-      {"subject": "Data Analytics", "division": "iMscIT-Sem 7 (Div B)", "time": "08:00 AM - 09:00 AM"},
-      {"subject": "Software Engineering", "division": "iMscIT-Sem 7 (Div A)", "time": "09:00 AM - 10:00 AM"},
+      {"subject": "Math", "time": "10:00 AM"},
+      {"subject": "Physics", "time": "3:00 PM"},
     ],
     "Friday": [
-      {"subject": "DevOps", "division": "iMscIT-Sem 7 (Div A)", "time": "07:00 AM - 08:00 AM"},
-      {"subject": "Ethical Hacking", "division": "iMscIT-Sem 7 (Div B)", "time": "08:00 AM - 09:00 AM"},
-      {"subject": "Cloud Security", "division": "iMscIT-Sem 7 (Div A)", "time": "09:00 AM - 10:00 AM"},
+      {"subject": "History", "time": "11:00 AM"},
+      {"subject": "Economics", "time": "4:00 PM"},
     ],
     "Saturday": [
-      {"subject": "Database Management", "division": "iMscIT-Sem 7 (Div B)", "time": "07:00 AM - 08:00 AM"},
-      {"subject": "Full-Stack Development", "division": "iMscIT-Sem 7 (Div A)", "time": "08:00 AM - 09:00 AM"},
-      {"subject": "AI Ethics", "division": "iMscIT-Sem 7 (Div B)", "time": "09:00 AM - 10:00 AM"},
+      {"subject": "Physical Education", "time": "9:00 AM"},
     ],
-    "Sunday": [],
   };
+
+  @override
+  void initState() {
+    super.initState();
+    String today = DateFormat('EEEE').format(DateTime.now());
+    selectedDay = days.contains(today) ? today : "Monday";
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A3B87),
-        title: const Text(
-          "Weekly Timetable",
-          style: TextStyle(color: Colors.white),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white), // Back button color set to white
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: weeklyClasses.keys.map((day) {
-            List<Map<String, String>> classes = weeklyClasses[day]!;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  day,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF0A3B87)),
-                ),
-                const SizedBox(height: 8),
-                if (classes.isEmpty)
-                  Center(child: Text("No Classes", style: TextStyle(fontSize: 16, color: Colors.grey)))
-                else
-                  ...classes.map((classData) {
-                    return ClassCard(
-                      subject: classData["subject"]!,
-                      division: classData["division"]!,
-                      time: classData["time"]!,
-                    );
-                  }).toList(),
-                const SizedBox(height: 16),
-              ],
-            );
-          }).toList(),
-        ),
+      appBar: AppBar(title: Text("Weekly Timetable")),
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(10.0),
+            child: DropdownButtonFormField<String>(
+              value: selectedDay,
+              decoration: InputDecoration(
+                labelText: "Select a Day",
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              ),
+              onChanged: (newValue) {
+                setState(() {
+                  selectedDay = newValue!;
+                });
+              },
+              items: days.map((day) {
+                return DropdownMenuItem(
+                  value: day,
+                  child: Text(day),
+                );
+              }).toList(),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: weeklySchedule[selectedDay]?.length ?? 0,
+              itemBuilder: (context, index) {
+                var entry = weeklySchedule[selectedDay]![index];
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  padding: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade50,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 5,
+                        spreadRadius: 2,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        entry["subject"]!,
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue.shade700),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        "Time: ${entry["time"]!}",
+                        style: TextStyle(fontSize: 16, color: Colors.black87),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class ClassCard extends StatelessWidget {
-  final String subject;
-  final String division;
-  final String time;
-
-  const ClassCard({Key? key, required this.subject, required this.division, required this.time}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 3,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: const Color(0xFF0A3B87),
-              child: const Text("iM", style: TextStyle(color: Colors.white)),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(subject, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                  Text(division, style: const TextStyle(color: Colors.black)),
-                ],
-              ),
-            ),
-            Text(time, style: const TextStyle(fontSize: 14, color: Colors.grey)),
-          ],
-        ),
-      ),
-    );
-  }
+void main() {
+  runApp(MaterialApp(
+    theme: ThemeData(primarySwatch: Colors.blue),
+    home: FacultyTimetableScreen(),
+  ));
 }
