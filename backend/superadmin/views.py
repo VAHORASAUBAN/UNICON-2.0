@@ -1,14 +1,18 @@
 from django.shortcuts import render
 from addcoordinator.models import coordinator
-from django.contrib.auth.models import User,auth,make_password
+from django.contrib.auth.models import User, auth, make_password
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from .models import *
+import pandas as pd
+
 
 def front_page(request):
     return render(request, 'front_page.html')
+
+
 def add_blog(request):
     return render(request, 'add-blog.html')
 
@@ -16,72 +20,104 @@ def add_blog(request):
 def all_teachers(request):
     return render(request, 'all-teachers.html')
 
+
 def blog_details(request):
     return render(request, 'blog-details.html')
+
+
 def blog(request):
     return render(request, 'blog.html')
+
+
 def calendar(request):
     return render(request, 'calendar.html')
+
+
 def edit_blog(request):
     return render(request, 'edit-blog.html')
+
+
 def edit_profile(request):
     return render(request, 'edit-profile.html')
+
+
 def edit_student(request):
     return render(request, 'edit-student.html')
+
+
 def edit_teacher(request):
     return render(request, 'edit-teacher.html')
+
+
 def index(request):
     return render(request, 'index.html')
+
+
 def my_profile(request):
     return render(request, 'my-profile.html')
+
+
 @login_required
 def profile(request):
     # Get the logged-in user's coordinator details
     coordinator_data = coordinator.objects.get(user=request.user)
-    
+
     return render(request, 'profile.html', {'coordinator_data': coordinator_data})
+
 
 def sidebar(request):
     return render(request, 'sidebar.html')
+
+
 def add_subject(request):
     return render(request, 'add-subject.html')
 
 
 def add_batch(request):
     return render(request, 'add-batch.html')
+
+
 def all_batch(request):
     return render(request, 'all-batch.html')
 
+
 def all_subject(request):
     return render(request, 'all-subject.html')
+
+
 def timetable(request):
     return render(request, 'timetable.html')
+
+
 def show_timetable(request):
     return render(request, 'show_timetable.html')
+
+
 def placement(request):
     return render(request, 'placement.html')
+
 
 def show_placement(request):
     return render(request, 'show_placement.html')
 
 
-
-#login
+# login
 
 def coordinator_login(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
+
         # Fix the query to filter by the related User model's username field
         login_data = coordinator.objects.filter(user__username=username)
-        
+
         if login_data.exists():  # Check if the coordinator exists
-            coordinator_data = login_data[0]  # Get the first result (in case of multiple)
-            
+            # Get the first result (in case of multiple)
+            coordinator_data = login_data[0]
+
             # Authenticate the user using Django's built-in auth system
             user = auth.authenticate(username=username, password=password)
-            
+
             if user is not None:
                 auth.login(request, user)
                 # Pass only the coordinator_data, not the entire login_data queryset
@@ -95,20 +131,15 @@ def coordinator_login(request):
         return render(request, 'login.html')
 
 
-# def faculty_login(request):
-#     return redirect('faculty_login')
-
-
-
-
-#logout
+# logout
 def logout_view(request):
     # Log the user out
     logout(request)
-    
+
     # Redirect to the login page or any other page after logging out
     return render(request, 'login.html')
-# Department 
+# Department
+
 
 def add_department(request):
     if request.method == "POST":
@@ -124,10 +155,12 @@ def add_department(request):
     else:
         return render(request, 'add-department.html')
 
+
 def all_department(request):
     all_department = department.objects.all()
     print(all_department)
     return render(request, 'all-department.html', {'all_department': all_department})
+
 
 def delete_department(request, id):
     deleteDepartment = department.objects.get(id=id)
@@ -135,7 +168,7 @@ def delete_department(request, id):
     return redirect('/all_department')
 
 
-#Courses
+# Courses
 
 def add_course(request):
     all_department = department.objects.all()
@@ -148,17 +181,19 @@ def add_course(request):
 
         course = Course.objects.create(
             course_name=course_name,
-            course_total_semesters = course_total_semesters,
-            course_department = save_department,
+            course_total_semesters=course_total_semesters,
+            course_department=save_department,
         )
-        return render(request, 'add-course.html',{'all_department':all_department})
+        return render(request, 'add-course.html', {'all_department': all_department})
 
     else:
-        return render(request, 'add-course.html',{'all_department':all_department})
+        return render(request, 'add-course.html', {'all_department': all_department})
+
 
 def all_course(request):
     course = Course.objects.all()
-    return render(request, 'all-course.html',{'course' : course})
+    return render(request, 'all-course.html', {'course': course})
+
 
 def delete_course(request, id):
     deleteCourse = Course.objects.get(id=id)
@@ -166,12 +201,11 @@ def delete_course(request, id):
     return redirect('/all_course')
 
 
-
-#Student
+# Student
 def add_student(request):
     all_departments = department.objects.all()
     all_courses = Course.objects.all()
-    
+
     if request.method == "POST":
         enrollment = request.POST.get('enrollment')
         firstname = request.POST.get('firstname')
@@ -196,7 +230,7 @@ def add_student(request):
 
         student_department = department.objects.get(id=department_id)
         course = Course.objects.get(id=course_id)
-        
+
         student = Student.objects.create(
             enrollment=enrollment,
             firstname=firstname,
@@ -219,24 +253,25 @@ def add_student(request):
             division=division,
             student_image=student_image
         )
-        
+
         return redirect('add_student')
     else:
         context = {
             'all_departments': all_departments,
             'all_courses': all_courses,
         }
-        return render(request, 'add-student.html', context)    
+        return render(request, 'add-student.html', context)
+
 
 def all_students(request):
     all_students = Student.objects.all()
     all_departments = department.objects.all()
     all_courses = Course.objects.all()
     context = {
-            'all_departments': all_departments,
-            'all_courses': all_courses,
-            'all_students' : all_students
-        }
+        'all_departments': all_departments,
+        'all_courses': all_courses,
+        'all_students': all_students
+    }
     return render(request, 'all-students.html', context)
 
 
@@ -244,7 +279,7 @@ def edit_student(request, id):
     student = Student.objects.get(id=id)
     all_departments = department.objects.all()
     all_courses = Course.objects.all()
-    
+
     if request.method == "POST":
         student.enrollment = request.POST.get('enrollment')
         student.firstname = request.POST.get('firstname')
@@ -267,15 +302,16 @@ def edit_student(request, id):
         course_id = request.POST.get('course')
         student.semester = request.POST.get('semester')
         student.division = request.POST.get('division')
-        
+
         if department_id:
-            student.student_department = department.objects.get(id=department_id)
+            student.student_department = department.objects.get(
+                id=department_id)
         if course_id:
             student.course = Course.objects.get(id=course_id)
-        
+
         if 'student_image' in request.FILES:
             student.student_image = request.FILES['student_image']
-        
+
         student.save()
         return redirect('edit_student', id=student.id)
     else:
@@ -286,11 +322,12 @@ def edit_student(request, id):
         }
         return render(request, 'edit-student.html', context)
 
+
 def edit_student(request, id):
     student = Student.objects.get(id=id)
     all_departments = department.objects.all()
     all_courses = Course.objects.all()
-    
+
     if request.method == "POST":
         new_enrollment = request.POST.get('enrollment')
         new_firstname = request.POST.get('firstname')
@@ -311,7 +348,7 @@ def edit_student(request, id):
         new_course_id = request.POST.get('course')
         new_semester = request.POST.get('semester')
         new_division = request.POST.get('division')
-        
+
         student.enrollment = new_enrollment
         student.firstname = new_firstname
         student.middlename = new_middlename
@@ -330,15 +367,16 @@ def edit_student(request, id):
         student.pincode = new_pincode
         student.semester = new_semester
         student.division = new_division
-        
+
         if new_department_id:
-            student.student_department = department.objects.get(id=new_department_id)
+            student.student_department = department.objects.get(
+                id=new_department_id)
         if new_course_id:
             student.course = Course.objects.get(id=new_course_id)
-        
+
         if 'student_image' in request.FILES:
             student.student_image = request.FILES['student_image']
-        
+
         student.save()
         return redirect('/display')
 
@@ -348,19 +386,21 @@ def edit_student(request, id):
             'all_courses': all_courses,
             'all_students': student
         }
-    
+
         return render(request, 'edit-student.html', {'student': student})
+
 
 def delete_student(request, id):
     deleteStudent = Student.objects.get(id=id)
     deleteStudent.delete()
     return redirect('/all_students')
-#Teacher
+# Teacher
+
 
 def add_teacher(request):
     all_departments = department.objects.all()
     all_courses = Course.objects.all()
-    
+
     if request.method == "POST":
         faculty_id = request.POST.get('faculty_id')
         firstname = request.POST.get('firstname')
@@ -387,7 +427,7 @@ def add_teacher(request):
 
         teacher_department = department.objects.get(id=department_id)
         course = Course.objects.get(id=course_id)
-        
+
         teacher = Teacher.objects.create(
             faculty_id=faculty_id,
             firstname=firstname,
@@ -420,16 +460,18 @@ def add_teacher(request):
         }
         return render(request, 'add-teacher.html', context)
 
+
 def all_teachers(request):
     all_teachers = Teacher.objects.all()
     all_departments = department.objects.all()
     all_courses = Course.objects.all()
     context = {
-            'all_departments': all_departments,
-            'all_courses': all_courses,
-            'all_teachers' : all_teachers
-        }
+        'all_departments': all_departments,
+        'all_courses': all_courses,
+        'all_teachers': all_teachers
+    }
     return render(request, 'all-teachers.html', context)
+
 
 def delete_teacher(request, id):
     deleteTeacher = Teacher.objects.get(id=id)

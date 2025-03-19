@@ -34,7 +34,7 @@
     <div class="sidebar-inner slimscroll">
       <div id="sidebar-menu" class="sidebar-menu">
         <div class="header-left">
-          <a href="/faculty_dash/" class="logo">
+          <a href="/faculty/faculty_dash/" class="logo">
             <img style="margin-top: -30px;" src="{% static 'assets/img/logo_unicon.png' %}" width="150" height="150"
               alt="" />
           </a>
@@ -42,22 +42,22 @@
         <ul class="sidebar-ul">
           <li class="menu-title">Menu</li>
           <li>
-            <a href="/faculty_dash/"><i class="fa-solid fa-house"
+            <a href="/faculty/faculty_dash/"><i class="fa-solid fa-house"
                 style="font-size: 1.5em; color: #337AB7;margin-left: 0px;"></i><span>Dashboard</span></a>
           </li>
           
           <li>
-            <a href="/faculty_all_student/"><i class="fa-solid fa-user-graduate"
+            <a href="/faculty/faculty_all_student/"><i class="fa-solid fa-user-graduate"
                 style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i><span>
                 All Students</span></a>
           </li>
           <li>
-            <a href="/faculty_subject/"><i class="fa-solid fa-flask"
+            <a href="/faculty/faculty_subject/"><i class="fa-solid fa-flask"
                 style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i><span>
                 Subjects</span></a>
           </li>
           <li>
-            <a href="/faculty_attendence/"><i class="fa-solid fa-user-check"
+            <a href="/faculty/faculty_attendence/"><i class="fa-solid fa-user-check"
                 style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i><span>
                 Attendence</span></a>
           </li>
@@ -127,8 +127,8 @@
       });
 
       // By default, set the dashboard link as active
-      if (!activeMenu && currentPath === "/faculty_dash/") {
-        document.querySelector('a[href="/faculty_dash/"]').closest("li").classList.add("active-li");
+      if (!activeMenu && currentPath === "/faculty/faculty_dash/") {
+        document.querySelector('a[href="/faculty/faculty_dash/"]').closest("li").classList.add("active-li");
       }
     });
   </script>
