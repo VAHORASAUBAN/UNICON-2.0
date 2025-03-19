@@ -46,7 +46,7 @@
     </style>
     <script>
         function generateQRCode(subject, course, department, division, semester) {
-            const url = new URL(window.location.origin + '/qr_code/');
+            const url = new URL(window.location.origin + '/faculty/qr_code/');
             url.searchParams.append('subject', subject);
             url.searchParams.append('course', course);
             url.searchParams.append('department', department);
@@ -195,8 +195,8 @@
                             </span>
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/faculty_profile/">My Profile</a>
-                            <a class="dropdown-item" href="/login/">Logout</a>
+                            <a class="dropdown-item" href="/faculty/faculty_profile/">My Profile</a>
+                            <a class="dropdown-item" href="/faculty/login/">Logout</a>
                         </div>
                     </li>
                 </ul>
@@ -205,8 +205,8 @@
                         <i class="fas fa-ellipsis-v"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="/faculty_profile/">My Profile</a>
-                        <a class="dropdown-item" href="/login/">Logout</a>
+                        <a class="dropdown-item" href="/faculty/faculty_profile/">My Profile</a>
+                        <a class="dropdown-item" href="/faculty/login/">Logout</a>
                     </div>
                 </div>
             </div>
@@ -223,7 +223,7 @@
                         <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                             <ul class="breadcrumb float-right p-0 mb-0">
                                 <li class="breadcrumb-item">
-                                    <a href="/index/"><i class="fas fa-home"></i> Home</a>
+                                    <a href="/faculty/faculty_dash"><i class="fas fa-home"></i> Home</a>
                                 </li>
                             </ul>
                         </div>
