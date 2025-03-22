@@ -14,11 +14,11 @@ class LoginScreen extends StatelessWidget {
             child: Image.asset(
               'assets/images/library.png',
               fit: BoxFit.cover,
-              color: Colors.black.withOpacity(0.4),
+              color: Colors.black.withValues(),
               colorBlendMode: BlendMode.darken,
               errorBuilder: (context, error, stackTrace) {
                 return Container(
-                  color: Colors.black.withOpacity(0.4),
+                  color: Colors.black.withValues(),
                   child: const Center(
                     child:
                         Icon(Icons.broken_image, size: 50, color: Colors.grey),
@@ -33,11 +33,11 @@ class LoginScreen extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(20.0),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(),
                       blurRadius: 10,
                     ),
                   ],
@@ -50,7 +50,7 @@ class LoginScreen extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(50), // Circular logo
                       child: Image.asset(
-                        'assets/images/GLS.png',
+                        'assets/images/unicon_logo.png',
                         height: 100,
                         width: 100,
                         fit: BoxFit.contain,

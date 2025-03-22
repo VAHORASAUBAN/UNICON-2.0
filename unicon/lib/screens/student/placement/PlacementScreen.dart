@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../dashboard/DashboardScreen.dart';
 import '../sidemenu.dart';
-import '../../../../shared/widgets/navbar.dart';
+import '../../../../widgets/navbar.dart';
 import 'CompanyDetailsScreen.dart';
 
 class PlacementScreen extends StatefulWidget {

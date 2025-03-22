@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../features/screens/student/scanner/scanner_screen.dart';
+import '../screens/student/scanner/scanner_screen.dart';
 
-class FacultyNavBar extends StatelessWidget {
+
+class CustomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
   final VoidCallback onScannerTap; // Function for Scanner button
 
-  const FacultyNavBar({
+  const CustomNavBar({
+    super.key,
     required this.currentIndex,
     required this.onTap,
     required this.onScannerTap, // Pass function for scanner tap
@@ -28,8 +30,8 @@ class FacultyNavBar extends StatelessWidget {
               label: 'Dashboard',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.notifications),
-              label: 'Updates',
+              icon: Icon(Icons.work_rounded),
+              label: 'Placement',
             ),
           ],
           selectedItemColor: const Color(0xFF0A3B87),
@@ -45,12 +47,12 @@ class FacultyNavBar extends StatelessWidget {
           child: FloatingActionButton(
             backgroundColor: const Color(0xFF0A3B87),
             onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => const ScannerScreen()),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ScannerScreen()),
+              );
             },
-            child: const Icon(Icons.add, color: Colors.white), // Scanner icon
+            child: const Icon(Icons.qr_code_scanner, color: Colors.white), // Scanner icon
             shape: const CircleBorder(), // Circular shape
             elevation: 6, // Adds shadow effect
           ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:unicon/features/screens/Faculty/faculty_sidemenu.dart';
-import '../../../../shared/AttendancePieChart.dart';
-import '../../../../shared/widgets/faculty_navbar.dart';
-import 'package:unicon/shared/styles/colors.dart';
-import 'package:unicon/shared/styles/fonts.dart';
+import '../../../styles/colors.dart';
+import '../../../styles/fonts.dart';
+import '../../../widgets/AttendancePieChart.dart';
+
+
+import '../../../../widgets/faculty_navbar.dart';
+import '../faculty_sidemenu.dart';
 
 class FacultyDashboardScreen extends StatefulWidget {
   final String userName;
