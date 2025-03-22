@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:unicon/shared/styles/colors.dart';
+
+import 'colors.dart';
 
 class AppFonts {
   static const String arial = 'Arial';

@@ -1,3 +1,47 @@
-# Ignore Python bytecode files
-*.pyc
+
+
+# Byte-compiled / optimized / DLL files
 __pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env/
+env/
+
+# Django specific
+*.sqlite3
+db.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore environment configuration
+.env
+config.json
+
+
+# Node modules
+node_modules/
+package-lock.json
+yarn.lock
+
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# MacOS & Windows
+.DS_Store
+Thumbs.db
+
+
+#migrations
+migrations/
+*/migrations/*.py
+*/migrations/*.pyc

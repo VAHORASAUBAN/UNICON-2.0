@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:unicon/features/screens/LoginScreen.dart';
-import 'package:unicon/features/screens/LoginDetailsScreen.dart';
-import 'package:unicon/features/screens/student/scanner/scanner_screen.dart';
-import 'package:unicon/features/screens/timetable_screen.dart';
-import 'package:unicon/shared/styles/colors.dart';
-import 'package:unicon/shared/styles/fonts.dart';
-import 'features/screens/Faculty/TimeTable/time_table.dart';
-import 'features/screens/student/Attendane_Report.dart';
-import 'features/screens/student/Subject/subject.dart';
-import 'features/screens/student/dashboard/DashboardScreen.dart';
-import 'features/screens/student/placement/PlacementScreen.dart';
+import 'package:unicon/screens/LoginScreen.dart';
+import 'package:unicon/screens/LoginDetailsScreen.dart';
+import 'package:unicon/screens/student/AttendanceReport.dart';
+import 'package:unicon/screens/student/scanner/scanner_screen.dart';
+import 'package:unicon/screens/timetable_screen.dart';
+import 'screens/Faculty/TimeTable/time_table.dart';
+import 'screens/student/Subject/subject.dart';
+import 'screens/student/dashboard/DashboardScreen.dart';
+import 'screens/student/placement/PlacementScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,6 +32,7 @@ class MyApp extends StatelessWidget {
         '/timetable': (context) => FacultyTimetableScreen(),
         '/subject': (context) => SubjectPage(),
         '/placements': (context) => PlacementScreen(),
+        '/attendancereport': (context) => AttendanceReport(),
 
 
         /*'/timetable': (context) =>  _FacultyTimetableScreenState(),*/

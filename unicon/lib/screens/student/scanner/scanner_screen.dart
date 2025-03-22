@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -11,7 +12,9 @@ class ScannerScreen extends StatefulWidget {
 class _ScannerScreenState extends State<ScannerScreen> {
   final MobileScannerController _scannerController = MobileScannerController();
   bool isFlashOn = false;
+  bool isOtpMode = false; // Toggle between scanner and OTP mode
   String? scannedValue; // Store scanned QR code value
+  final TextEditingController _otpController = TextEditingController();
 
   void _handleScan(BarcodeCapture capture) {
     final List<Barcode> barcodes = capture.barcodes;
@@ -35,6 +38,18 @@ class _ScannerScreenState extends State<ScannerScreen> {
     }
   }
 
+  void _submitOtp() {
+    final String otp = _otpController.text.trim();
+    if (otp.isNotEmpty) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ScanSuccessScreen(scannedData: otp),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,39 +69,28 @@ class _ScannerScreenState extends State<ScannerScreen> {
               _scannerController.toggleTorch();
             },
           ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: MobileScanner(
-              controller: _scannerController,
-              onDetect: _handleScan,
+          IconButton(
+            icon: Icon(
+              isOtpMode ? Icons.qr_code : Icons.keyboard,
+              color: Colors.white,
             ),
+            onPressed: () {
+              setState(() {
+                isOtpMode = !isOtpMode;
+                scannedValue = null;
+                _otpController.clear();
+              });
+              if (!isOtpMode) {
+                _scannerController.start();
+              }
+            },
           ),
-          if (scannedValue != null)
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              width: double.infinity,
-              color: Colors.green,
-              child: Column(
-                children: [
-                  const Icon(Icons.check_circle, color: Colors.white, size: 40),
-                  const SizedBox(height: 10),
-                  Text(
-                    "Scanned Successfully!",
-                    style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "Value: $scannedValue",
-                    style: const TextStyle(color: Colors.white70, fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      body: isOtpMode ? _buildOtpInput() : _buildScanner(),
+      floatingActionButton: isOtpMode
+          ? null
+          : FloatingActionButton(
         backgroundColor: const Color(0xFF0A3B87),
         onPressed: () {
           setState(() {
@@ -100,9 +104,77 @@ class _ScannerScreenState extends State<ScannerScreen> {
     );
   }
 
+  Widget _buildScanner() {
+    return Column(
+      children: [
+        Expanded(
+          child: MobileScanner(
+            controller: _scannerController,
+            onDetect: _handleScan,
+          ),
+        ),
+        if (scannedValue != null)
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            width: double.infinity,
+            color: Colors.green,
+            child: Column(
+              children: [
+                const Icon(Icons.check_circle, color: Colors.white, size: 40),
+                const SizedBox(height: 10),
+                Text(
+                  "Scanned Successfully!",
+                  style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "Value: $scannedValue",
+                  style: const TextStyle(color: Colors.white70, fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildOtpInput() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            "Enter OTP",
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            controller: _otpController,
+            decoration: InputDecoration(
+              labelText: "OTP",
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            keyboardType: TextInputType.number,
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: _submitOtp,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            child: const Text("Submit", style: TextStyle(color: Colors.white, fontSize: 16)),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _scannerController.dispose();
+    _otpController.dispose();
     super.dispose();
   }
 }
@@ -125,7 +197,7 @@ class ScanSuccessScreen extends StatelessWidget {
               const Icon(Icons.verified, color: Colors.green, size: 80),
               const SizedBox(height: 20),
               const Text(
-                "Scanning Successful!",
+                "Attendance Successfully!",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
