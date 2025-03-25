@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from .models import coordinator
-from django.contrib.auth.models import User,auth,make_password
+from django.contrib.auth.models import User, auth, make_password
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+
+
 def add_coordinator(request):
     if request.method == "POST":
         username = request.POST.get('username')
@@ -58,4 +60,4 @@ def add_coordinator(request):
         addcoordinator.save()
         return HttpResponse("Coordinator Added Successfully")
     else:
-        return render(request, 'add_coordinator.html')
+        return render(request, 'addcoordinator/add_coordinator.html')

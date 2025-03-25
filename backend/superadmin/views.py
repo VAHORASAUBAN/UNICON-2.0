@@ -10,51 +10,55 @@ import pandas as pd
 
 
 def front_page(request):
-    return render(request, 'front_page.html')
+    return render(request, 'superadmin/front_page.html')
 
 
 def add_blog(request):
-    return render(request, 'add-blog.html')
+    return render(request, 'superadmin/add-blog.html')
 
 
 def all_teachers(request):
-    return render(request, 'all-teachers.html')
+    all_faculty = Teacher.objects.all()
+    context = {'all_faculty': all_faculty}
+    return render(request, 'superadmin/all-teachers.html', context)
 
 
 def blog_details(request):
-    return render(request, 'blog-details.html')
+    return render(request, 'superadmin/blog-details.html')
 
 
 def blog(request):
-    return render(request, 'blog.html')
+    return render(request, 'superadmin/blog.html')
 
 
 def calendar(request):
-    return render(request, 'calendar.html')
+    return render(request, 'superadmin/calendar.html')
 
 
 def edit_blog(request):
-    return render(request, 'edit-blog.html')
+    return render(request, 'superadmin/edit-blog.html')
 
 
 def edit_profile(request):
-    return render(request, 'edit-profile.html')
+    return render(request, 'superadmin/edit-profile.html')
 
 
-def edit_student(request):
-    return render(request, 'edit-student.html')
+# def edit_student(request, id):
+#     student_data = Student.objects.get(id=id)
+#     print(student_data)
+#     return render(request, 'superadmin/edit-student.html', {'student_data': student_data})
 
 
 def edit_teacher(request):
-    return render(request, 'edit-teacher.html')
+    return render(request, 'superadmin/edit-teacher.html')
 
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'superadmin/index.html')
 
 
 def my_profile(request):
-    return render(request, 'my-profile.html')
+    return render(request, 'superadmin/my-profile.html')
 
 
 @login_required
@@ -62,43 +66,43 @@ def profile(request):
     # Get the logged-in user's coordinator details
     coordinator_data = coordinator.objects.get(user=request.user)
 
-    return render(request, 'profile.html', {'coordinator_data': coordinator_data})
+    return render(request, 'superadmin/profile.html', {'coordinator_data': coordinator_data})
 
 
 def sidebar(request):
-    return render(request, 'sidebar.html')
+    return render(request, 'superadmin/sidebar.html')
 
 
 def add_subject(request):
-    return render(request, 'add-subject.html')
+    return render(request, 'superadmin/add-subject.html')
 
 
 def add_batch(request):
-    return render(request, 'add-batch.html')
+    return render(request, 'superadmin/add-batch.html')
 
 
 def all_batch(request):
-    return render(request, 'all-batch.html')
+    return render(request, 'superadmin/all-batch.html')
 
 
 def all_subject(request):
-    return render(request, 'all-subject.html')
+    return render(request, 'superadmin/all-subject.html')
 
 
 def timetable(request):
-    return render(request, 'timetable.html')
+    return render(request, 'superadmin/timetable.html')
 
 
 def show_timetable(request):
-    return render(request, 'show_timetable.html')
+    return render(request, 'superadmin/show_timetable.html')
 
 
 def placement(request):
-    return render(request, 'placement.html')
+    return render(request, 'superadmin/placement.html')
 
 
 def show_placement(request):
-    return render(request, 'show_placement.html')
+    return render(request, 'superadmin/show_placement.html')
 
 
 # login
@@ -121,14 +125,14 @@ def coordinator_login(request):
             if user is not None:
                 auth.login(request, user)
                 # Pass only the coordinator_data, not the entire login_data queryset
-                return render(request, 'index.html', {'coordinator_data': coordinator_data})
+                return render(request, 'superadmin/index.html', {'coordinator_data': coordinator_data})
             else:
                 return HttpResponse("Invalid Credentials")
         else:
             return HttpResponse("Invalid Credentials")
 
     else:
-        return render(request, 'login.html')
+        return render(request, 'superadmin/login.html')
 
 
 # logout
@@ -137,7 +141,7 @@ def logout_view(request):
     logout(request)
 
     # Redirect to the login page or any other page after logging out
-    return render(request, 'login.html')
+    return render(request, 'superadmin/login.html')
 # Department
 
 
@@ -150,16 +154,16 @@ def add_department(request):
             department_start_date=department_start_date
         )
         save_department.save()
-        return render(request, 'add-department.html')
+        return render(request, 'superadmin/add-department.html')
 
     else:
-        return render(request, 'add-department.html')
+        return render(request, 'superadmin/add-department.html')
 
 
 def all_department(request):
     all_department = department.objects.all()
     print(all_department)
-    return render(request, 'all-department.html', {'all_department': all_department})
+    return render(request, 'superadmin/all-department.html', {'all_department': all_department})
 
 
 def delete_department(request, id):
@@ -184,15 +188,15 @@ def add_course(request):
             course_total_semesters=course_total_semesters,
             course_department=save_department,
         )
-        return render(request, 'add-course.html', {'all_department': all_department})
+        return render(request, 'superadmin/add-course.html', {'all_department': all_department})
 
     else:
-        return render(request, 'add-course.html', {'all_department': all_department})
+        return render(request, 'superadmin/add-course.html', {'all_department': all_department})
 
 
 def all_course(request):
     course = Course.objects.all()
-    return render(request, 'all-course.html', {'course': course})
+    return render(request, 'superadmin/all-course.html', {'course': course})
 
 
 def delete_course(request, id):
@@ -260,7 +264,7 @@ def add_student(request):
             'all_departments': all_departments,
             'all_courses': all_courses,
         }
-        return render(request, 'add-student.html', context)
+        return render(request, 'superadmin/add-student.html', context)
 
 
 def all_students(request):
@@ -272,10 +276,11 @@ def all_students(request):
         'all_courses': all_courses,
         'all_students': all_students
     }
-    return render(request, 'all-students.html', context)
+    return render(request, 'superadmin/all-students.html', context)
 
 
 def edit_student(request, id):
+    print("HEllo")
     student = Student.objects.get(id=id)
     all_departments = department.objects.all()
     all_courses = Course.objects.all()
@@ -314,71 +319,6 @@ def edit_student(request, id):
 
         student.save()
         return redirect('edit_student', id=student.id)
-    else:
-        context = {
-            'all_departments': all_departments,
-            'all_courses': all_courses,
-            'all_students': student
-        }
-        return render(request, 'edit-student.html', context)
-
-
-def edit_student(request, id):
-    student = Student.objects.get(id=id)
-    all_departments = department.objects.all()
-    all_courses = Course.objects.all()
-
-    if request.method == "POST":
-        new_enrollment = request.POST.get('enrollment')
-        new_firstname = request.POST.get('firstname')
-        new_middlename = request.POST.get('middlename')
-        new_lastname = request.POST.get('lastname')
-        new_email = request.POST.get('email')
-        new_password = request.POST.get('password')
-        new_mobile_number = request.POST.get('mobile_number')
-        new_gender = request.POST.get('gender')
-        new_birth_date = request.POST.get('birth_date')
-        new_address_line_1 = request.POST.get('address_line_1')
-        new_address_line_2 = request.POST.get('address_line_2')
-        new_country = request.POST.get('country')
-        new_state = request.POST.get('state')
-        new_city = request.POST.get('city')
-        new_pincode = request.POST.get('pincode')
-        new_department_id = request.POST.get('student_department')
-        new_course_id = request.POST.get('course')
-        new_semester = request.POST.get('semester')
-        new_division = request.POST.get('division')
-
-        student.enrollment = new_enrollment
-        student.firstname = new_firstname
-        student.middlename = new_middlename
-        student.lastname = new_lastname
-        student.email = new_email
-        if new_password:
-            student.password = make_password(new_password)
-        student.mobile_number = new_mobile_number
-        student.gender = new_gender
-        student.birth_date = new_birth_date
-        student.address_line_1 = new_address_line_1
-        student.address_line_2 = new_address_line_2
-        student.country = new_country
-        student.state = new_state
-        student.city = new_city
-        student.pincode = new_pincode
-        student.semester = new_semester
-        student.division = new_division
-
-        if new_department_id:
-            student.student_department = department.objects.get(
-                id=new_department_id)
-        if new_course_id:
-            student.course = Course.objects.get(id=new_course_id)
-
-        if 'student_image' in request.FILES:
-            student.student_image = request.FILES['student_image']
-
-        student.save()
-        return redirect('/display')
 
     else:
         context = {
@@ -386,8 +326,74 @@ def edit_student(request, id):
             'all_courses': all_courses,
             'all_students': student
         }
+        return render(request, 'superadmin/edit-student.html', context)
 
-        return render(request, 'edit-student.html', {'student': student})
+
+# def edit_student(request, id):
+#     student = Student.objects.get(id=id)
+#     all_departments = department.objects.all()
+#     all_courses = Course.objects.all()
+
+#     if request.method == "POST":
+#         new_enrollment = request.POST.get('enrollment')
+#         new_firstname = request.POST.get('firstname')
+#         new_middlename = request.POST.get('middlename')
+#         new_lastname = request.POST.get('lastname')
+#         new_email = request.POST.get('email')
+#         new_password = request.POST.get('password')
+#         new_mobile_number = request.POST.get('mobile_number')
+#         new_gender = request.POST.get('gender')
+#         new_birth_date = request.POST.get('birth_date')
+#         new_address_line_1 = request.POST.get('address_line_1')
+#         new_address_line_2 = request.POST.get('address_line_2')
+#         new_country = request.POST.get('country')
+#         new_state = request.POST.get('state')
+#         new_city = request.POST.get('city')
+#         new_pincode = request.POST.get('pincode')
+#         new_department_id = request.POST.get('student_department')
+#         new_course_id = request.POST.get('course')
+#         new_semester = request.POST.get('semester')
+#         new_division = request.POST.get('division')
+
+#         student.enrollment = new_enrollment
+#         student.firstname = new_firstname
+#         student.middlename = new_middlename
+#         student.lastname = new_lastname
+#         student.email = new_email
+#         if new_password:
+#             student.password = make_password(new_password)
+#         student.mobile_number = new_mobile_number
+#         student.gender = new_gender
+#         student.birth_date = new_birth_date
+#         student.address_line_1 = new_address_line_1
+#         student.address_line_2 = new_address_line_2
+#         student.country = new_country
+#         student.state = new_state
+#         student.city = new_city
+#         student.pincode = new_pincode
+#         student.semester = new_semester
+#         student.division = new_division
+
+#         if new_department_id:
+#             student.student_department = department.objects.get(
+#                 id=new_department_id)
+#         if new_course_id:
+#             student.course = Course.objects.get(id=new_course_id)
+
+#         if 'student_image' in request.FILES:
+#             student.student_image = request.FILES['student_image']
+
+#         student.save()
+#         return redirect('/display')
+
+#     else:
+#         context = {
+#             'all_departments': all_departments,
+#             'all_courses': all_courses,
+#             'all_students': student
+#         }
+
+#         return render(request, 'superadmin/edit-student.html', {'student': student})
 
 
 def delete_student(request, id):
@@ -427,7 +433,6 @@ def add_teacher(request):
 
         teacher_department = department.objects.get(id=department_id)
         course = Course.objects.get(id=course_id)
-
         teacher = Teacher.objects.create(
             faculty_id=faculty_id,
             firstname=firstname,
@@ -458,7 +463,7 @@ def add_teacher(request):
             'all_departments': all_departments,
             'all_courses': all_courses,
         }
-        return render(request, 'add-teacher.html', context)
+        return render(request, 'superadmin/add-teacher.html', context)
 
 
 def all_teachers(request):
@@ -470,7 +475,7 @@ def all_teachers(request):
         'all_courses': all_courses,
         'all_teachers': all_teachers
     }
-    return render(request, 'all-teachers.html', context)
+    return render(request, 'superadmin/all-teachers.html', context)
 
 
 def delete_teacher(request, id):

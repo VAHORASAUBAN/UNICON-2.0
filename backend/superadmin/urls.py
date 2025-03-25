@@ -1,10 +1,10 @@
 from django.urls import path
 from superadmin import views as superadmin_views
 urlpatterns = [
-    path('', superadmin_views.front_page),
+    path('', superadmin_views.front_page, name='front_page'),
     path('add_blog/', superadmin_views.add_blog),
     path('add_student/', superadmin_views.add_student, name='add_student'),
-    path('add_teacher/', superadmin_views.add_teacher,name="add_teacher"),
+    path('add_teacher/', superadmin_views.add_teacher, name="add_teacher"),
     path('all_students/', superadmin_views.all_students),
     path('all_teachers/', superadmin_views.all_teachers),
     path('blog_details/', superadmin_views.blog_details),
@@ -12,7 +12,8 @@ urlpatterns = [
     path('calendar/', superadmin_views.calendar),
     path('edit_blog/', superadmin_views.edit_blog),
     path('edit_profile/', superadmin_views.edit_profile),
-    path('edit_student/<int:id>/', superadmin_views.edit_student),
+    path('edit_student/<int:id>/',
+         superadmin_views.edit_student, name='edit_student'),
     path('edit_teacher/', superadmin_views.edit_teacher),
     path('index/', superadmin_views.index),
     path('my_profile/', superadmin_views.my_profile),
