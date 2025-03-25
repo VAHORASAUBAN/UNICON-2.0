@@ -1,0 +1,39 @@
+{% load static  %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNICON</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/logo_unicon.png' %}" />
+  
+    <title>QR Code</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .qr-container {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="qr-container">
+        <h3>QR Code</h3>
+        <img src="{{ qr_code_url }}" alt="QR Code">
+        <p>{{ qr_data }}</p>
+    </div>
+</body>
+
+</html>
