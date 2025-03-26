@@ -15,6 +15,7 @@ class faculty_sidemenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Colors.white, // <-- Set white background for Drawer
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -24,7 +25,6 @@ class faculty_sidemenu extends StatelessWidget {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [Color(0xFF0A3B87), Color(0xFF004AAD)],
-                // Gradient effect
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -57,7 +57,7 @@ class faculty_sidemenu extends StatelessWidget {
 
                 // User Name & Email
                 Text(
-                  userName, // Dynamic Name
+                  userName,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -67,7 +67,7 @@ class faculty_sidemenu extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  userEmail, // Dynamic Email
+                  userEmail,
                   style: const TextStyle(
                     color: Colors.white70,
                     fontSize: 14,
@@ -80,10 +80,9 @@ class faculty_sidemenu extends StatelessWidget {
           // ==== Academics Section ====
           _buildSectionTitle("Academics"),
           _buildDrawerItem(
-              Icons.calendar_today, "Timetable", () => onMenuTap("/timetable")),
-          _buildDrawerItem(
-              Icons.calendar_month_rounded, "Attendance Report", () =>
-              onMenuTap("/attendance")),
+              Icons.groups, "All Students", () => onMenuTap("/allstudent")),
+          _buildDrawerItem(Icons.calendar_month_rounded, "Attendance Report",
+                  () => onMenuTap("/attendance")),
           const Divider(),
 
           // ==== Support Section ====
@@ -118,6 +117,7 @@ class faculty_sidemenu extends StatelessWidget {
   ListTile _buildDrawerItem(IconData icon, String title, VoidCallback onTap,
       {Color color = const Color(0xFF0A3B87)}) {
     return ListTile(
+      tileColor: Colors.white, // Optional: ensure item background is white
       leading: Icon(icon, color: color),
       title: Text(title, style: TextStyle(color: color)),
       onTap: onTap,
@@ -135,5 +135,4 @@ class faculty_sidemenu extends StatelessWidget {
       ),
     );
   }
-
 }

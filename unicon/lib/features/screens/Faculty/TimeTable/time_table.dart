@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 
 void main() {
@@ -140,4 +141,231 @@ class ClassCard extends StatelessWidget {
       ),
     );
   }
+}
+*/
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+class FacultyTimetableScreen extends StatefulWidget {
+  @override
+  _FacultyTimetableScreenState createState() => _FacultyTimetableScreenState();
+}
+
+class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
+  final List<String> days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  late String selectedDay;
+  late String displayedDate;
+
+  final String courseName = "IMSCIT";
+
+  final Map<String, List<Map<String, String>>> weeklySchedule = {
+    "Monday": [
+      {"subject": "ADS", "time": "9:00 AM", "division": "A"},
+      {"subject": "CNS", "time": "10:00 AM", "division": "B"},
+      {"subject": "MLP", "time": "11:00 AM", "division": "A"},
+      {"subject": "HPC", "time": "12:00 PM", "division": "B"},
+    ],
+    "Tuesday": [
+      {"subject": "Flutter", "time": "9:00 AM", "division": "B"},
+      {"subject": "ADS Practical", "time": "10:00 AM", "division": "A"},
+      {"subject": "CNS", "time": "11:00 AM", "division": "A"},
+      {"subject": "MLP", "time": "12:00 PM", "division": "B"},
+    ],
+    "Wednesday": [
+      {"subject": "HPC", "time": "9:00 AM", "division": "A"},
+      {"subject": "Flutter", "time": "10:00 AM", "division": "A"},
+      {"subject": "ADS", "time": "11:00 AM", "division": "B"},
+      {"subject": "MLP", "time": "12:00 PM", "division": "B"},
+    ],
+    "Thursday": [
+      {"subject": "ADS Practical", "time": "9:00 AM", "division": "B"},
+      {"subject": "CNS", "time": "10:00 AM", "division": "A"},
+      {"subject": "Flutter", "time": "11:00 AM", "division": "B"},
+      {"subject": "HPC", "time": "12:00 PM", "division": "A"},
+    ],
+    "Friday": [
+      {"subject": "ADS", "time": "9:00 AM", "division": "A"},
+      {"subject": "MLP", "time": "10:00 AM", "division": "B"},
+      {"subject": "CNS", "time": "11:00 AM", "division": "A"},
+      {"subject": "Flutter", "time": "12:00 PM", "division": "B"},
+    ],
+    "Saturday": [
+      {"subject": "HPC", "time": "9:00 AM", "division": "B"},
+      {"subject": "ADS Practical", "time": "10:00 AM", "division": "A"},
+      {"subject": "MLP", "time": "11:00 AM", "division": "B"},
+    ],
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    DateTime now = DateTime.now();
+    String today = DateFormat('EEEE').format(now);
+    selectedDay = days.contains(today) ? today : "Monday";
+    displayedDate = _getDateForSelectedDay(selectedDay);
+  }
+
+  String _getDateForSelectedDay(String dayName) {
+    final DateTime now = DateTime.now();
+    final int todayWeekday = now.weekday;
+    final int selectedWeekday = days.indexOf(dayName) + 1;
+    int daysDifference = selectedWeekday - todayWeekday;
+    if (daysDifference < 0) daysDifference += 7;
+    final DateTime selectedDate = now.add(Duration(days: daysDifference));
+    return DateFormat('yMMMMd').format(selectedDate);
+  }
+
+  String getEndTime(String startTime) {
+    final DateFormat formatter = DateFormat.jm();
+    final DateTime startDateTime = formatter.parse(startTime);
+    final DateTime endDateTime = startDateTime.add(Duration(hours: 1));
+    return formatter.format(endDateTime);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white, // White background
+      appBar: AppBar(
+        title: const Text(
+          "Faculty Timetable",
+          style: TextStyle(
+            fontSize: 24,
+            fontFamily: "Arial",
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: const Color(0xFF004AAD),
+        elevation: 4,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+            child: Text(
+              "Date for $selectedDay: $displayedDate",
+              style: const TextStyle(fontSize: 16, color: Colors.black87),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+            child: DropdownButtonFormField<String>(
+              value: selectedDay,
+              dropdownColor: Colors.white, // Dropdown background color white
+              decoration: InputDecoration(
+                labelText: "Select Day",
+                filled: true,
+                fillColor: Colors.white, // TextField box white
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              onChanged: (newValue) {
+                setState(() {
+                  selectedDay = newValue!;
+                  displayedDate = _getDateForSelectedDay(selectedDay);
+                });
+              },
+              items: days.map((day) {
+                return DropdownMenuItem(
+                  value: day,
+                  child: Text(
+                    day,
+                    style: const TextStyle(color: Colors.black), // Text in dropdown
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: weeklySchedule[selectedDay]?.length ?? 0,
+              itemBuilder: (context, index) {
+                var entry = weeklySchedule[selectedDay]![index];
+                String subject = entry["subject"]!;
+                String startTime = entry["time"]!;
+                String endTime = getEndTime(startTime);
+                String division = entry["division"]!;
+
+                return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 8,
+                        offset: Offset(2, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            subject,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue.shade900,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              const Icon(Icons.schedule, size: 18, color: Colors.grey),
+                              const SizedBox(width: 4),
+                              Text(
+                                "$startTime - $endTime",
+                                style: const TextStyle(fontSize: 14, color: Colors.black87),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          const Icon(Icons.group, size: 20, color: Colors.grey),
+                          const SizedBox(width: 6),
+                          Text(
+                            "Division: $division",
+                            style: const TextStyle(fontSize: 16, color: Colors.black87),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          const Icon(Icons.school, size: 20, color: Colors.grey),
+                          const SizedBox(width: 6),
+                          Text(
+                            "Course: $courseName",
+                            style: const TextStyle(fontSize: 16, color: Colors.black87),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    theme: ThemeData(fontFamily: 'Roboto', primarySwatch: Colors.blue),
+    debugShowCheckedModeBanner: false,
+    home: FacultyTimetableScreen(),
+  ));
 }
