@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:unicon/features/screens/LoginScreen.dart';
-import 'package:unicon/features/screens/LoginDetailsScreen.dart';
-import 'package:unicon/features/screens/student/scanner/scanner_screen.dart';
-import 'package:unicon/features/screens/timetable_screen.dart';
-import 'package:unicon/shared/styles/colors.dart';
-import 'package:unicon/shared/styles/fonts.dart';
-import 'features/screens/Faculty/Allstudent.dart';
-import 'features/screens/Faculty/TimeTable/time_table.dart';
-import 'features/screens/Faculty/dashboard/Otp/otp_generator_screen.dart';
-import 'features/screens/student/Attendane_Report.dart';
-import 'features/screens/student/Subject/subject.dart';
-import 'features/screens/student/dashboard/DashboardScreen.dart';
-
+import 'package:unicon/screens/LoginScreen.dart';
+import 'package:unicon/screens/LoginDetailsScreen.dart';
+import 'package:unicon/screens/student/AttendanceReport.dart';
+import 'package:unicon/screens/student/scanner/scanner_screen.dart';
+import 'package:unicon/screens/timetable_screen.dart';
+import 'screens/Faculty/TimeTable/time_table.dart';
+import 'screens/student/Subject/subject.dart';
+import 'screens/student/dashboard/DashboardScreen.dart';
+import 'screens/student/placement/PlacementScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +15,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,15 +24,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.indigo),
       initialRoute: '/',
       routes: {
+        '/dashboard': (context) => DashboardScreen(),
         '/': (context) => LoginScreen(),
-        '/dashboard': (context) => const DashboardScreen(),
         '/loginDetails': (context) => LoginDetailsScreen(userType: ' '),
-        '/studentTimetable': (context) => TimetableScreen(),
-        '/facultytimetable': (context) => FacultyTimetableScreen(),
-        '/allstudent':(context) => StudentListScreen(),
-        '/scanner': (context) => ScannerScreen(),
+        '/timetable': (context) =>  TimetableScreen(),
+        '/scanner': (context) =>  ScannerScreen(),
+        '/timetable': (context) => FacultyTimetableScreen(),
         '/subject': (context) => SubjectPage(),
-        '/otpGenerator': (context) => const OTPGeneratorScreen(),
+        '/placements': (context) => PlacementScreen(),
+        '/attendancereport': (context) => AttendanceReport(),
+
+
+        /*'/timetable': (context) =>  _FacultyTimetableScreenState(),*/
+
+
+
       },
     );
   }

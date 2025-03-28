@@ -10,9 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.17.0  # Added intl dependency
+  intl: ^0.17.0
   mobile_scanner: ^6.0.6
   fl_chart: ^0.63.0
+  http: ^0.13.5
+
 
 dev_dependencies:
   flutter_test:
@@ -23,13 +25,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/article.jpg
-    - assets/images/attendance.jpg
-    - assets/images/timetable.jpg
-    - assets/images/events.jpg
-    - assets/images/GLS.png
     - assets/images/library.png
-    - assets/images/mentor.jpg
-    - assets/images/placement.png
+    - assets/images/unicon_logo.png
+    - assets/images/GLS.png
     - assets/images/profile.png
-

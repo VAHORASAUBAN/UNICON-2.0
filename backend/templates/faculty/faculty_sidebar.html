@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>UNICON</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+
+  <!-- Replacing the local FontAwesome with the CDN link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+  <link rel="stylesheet" href="{% static 'assets/css/select2.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+  <!--[if lt IE 9]>
+      <script src="{% static 'assets/js/html5shiv.min.js' %}"></script>
+      <script src="{% static 'assets/js/respond.min.js' %}"></script>
+    <![endif]-->
+  <style>
+    .sidebar-menu .active-li > a {
+      background-color: #004688 !important;
+      color: #fff !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-inner slimscroll">
+      <div id="sidebar-menu" class="sidebar-menu">
+        <div class="header-left">
+          <a href="/faculty/faculty_dash/" class="logo">
+            <img style="margin-top: -30px;" src="{% static 'assets/img/logo_unicon.png' %}" width="150" height="150"
+              alt="" />
+          </a>
+        </div>
+        <ul class="sidebar-ul">
+          <li class="menu-title">Menu</li>
+          <li>
+            <a href="/faculty/faculty_dash/"><i class="fa-solid fa-house"
+                style="font-size: 1.5em; color: #337AB7;margin-left: 0px;"></i><span>Dashboard</span></a>
+          </li>
+          
+          <li>
+            <a href="/faculty/faculty_all_student/"><i class="fa-solid fa-user-graduate"
+                style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i><span>
+                All Students</span></a>
+          </li>
+          <li>
+            <a href="/faculty/faculty_subject/"><i class="fa-solid fa-flask"
+                style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i><span>
+                Subjects</span></a>
+          </li>
+          <li>
+            <a href="/faculty/faculty_attendence/"><i class="fa-solid fa-user-check"
+                style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i><span>
+                Attendence</span></a>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
+  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/jquery.slimscroll.js' %}"></script>
+  <script src="{% static 'assets/js/select2.min.js' %}"></script>
+  <script src="{% static 'assets/js/moment.min.js' %}"></script>
+  <script src="{% static 'assets/js/app.js' %}"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      let activeMenu = localStorage.getItem("activeMenu");
+
+      // Highlight the active submenu item based on the current URL
+      const currentPath = window.location.pathname;
+      document.querySelectorAll(".sidebar-ul a").forEach((link) => {
+        if (link.getAttribute("href") === currentPath) {
+          document.querySelectorAll(".sidebar-ul li").forEach((li) => {
+            li.classList.remove("active-li");
+          });
+          const parentSubmenu = link.closest(".submenu");
+          if (parentSubmenu) {
+            parentSubmenu.classList.add("active-li");
+          } else {
+            link.closest("li").classList.add("active-li");
+          }
+        }
+      });
+
+      // Open the last opened menu only if it was stored
+      if (activeMenu) {
+        let activeSubmenu = document.querySelector(`a[data-menu="${activeMenu}"]`);
+        if (activeSubmenu) {
+          let submenu = activeSubmenu.parentElement.querySelector("ul");
+          submenu.style.display = "block"; // Keep submenu open
+          activeSubmenu.classList.add("active"); // Highlight the active menu
+        }
+      }
+
+      // Click event to toggle menu storage
+      document.querySelectorAll(".submenu > a").forEach((menu) => {
+        menu.addEventListener("click", function (e) {
+          e.preventDefault(); // Prevent default anchor behavior
+
+          let submenu = this.parentElement.querySelector("ul");
+          let menuName = this.getAttribute("data-menu");
+
+          if (submenu.style.display === "block") {
+            submenu.style.display = "none"; // Close submenu
+            localStorage.removeItem("activeMenu"); // Remove from storage
+          } else {
+            // Close other submenus before opening a new one
+            document.querySelectorAll(".submenu ul").forEach((ul) => {
+              ul.style.display = "none";
+            });
+
+            submenu.style.display = "block"; // Open submenu
+            localStorage.setItem("activeMenu", menuName); // Store the last opened menu
+          }
+        });
+      });
+
+      // By default, set the dashboard link as active
+      if (!activeMenu && currentPath === "/faculty/faculty_dash/") {
+        document.querySelector('a[href="/faculty/faculty_dash/"]').closest("li").classList.add("active-li");
+      }
+    });
+  </script>
+</body>
+
+</html>

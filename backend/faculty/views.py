@@ -3,20 +3,50 @@ from django.http import HttpResponse, HttpResponseRedirect
 import qrcode
 import io
 import base64
+from superadmin.models import *
+from django.contrib.auth.hashers import check_password
 
 # for faculty
+
+
 def faculty_my_profile(request):
-    return render(request, 'faculty_my-profile.html')
+    return render(request, 'faculty/faculty_my-profile.html')
 # for faculty
+
+
 def faculty_profile(request):
-    return render(request, 'faculty_profile.html')
+    return render(request, 'faculty/faculty_profile.html')
 # for faculty
+
+
 def faculty_sidebar(request):
-    return render(request, 'faculty_sidebar.html')
+    return render(request, 'faculty/faculty_sidebar.html')
+
+
 def faculty_dash(request):
-    return render(request, 'faculty_dash.html')
+    return render(request, 'faculty/faculty_dash.html')
+
+
 def faculty_all_student(request):
-    return render(request, 'faculty_all-students.html')
+    return render(request, 'faculty/faculty_all-students.html')
+
+
+def faculty_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        try:
+            teacher = Teacher.objects.get(faculty_id=username)
+            if check_password(password, teacher.password):
+                return render(request, 'faculty/faculty_dash.html', {'teacher': teacher})
+            else:
+                return render(request, 'faculty/faculty_login.html', {'error': 'Invalid credentials. Please try again.'})
+        except Teacher.DoesNotExist:
+            return render(request, 'faculty/faculty_login.html', {'error': 'Teacher Does Not Exist.'})
+
+    return render(request, 'faculty/faculty_login.html')
+
 
 def qr_code(request):
     subject = request.GET.get('subject')
@@ -36,19 +66,24 @@ def qr_code(request):
         'qr_data': qr_data,
         'qr_code_url': f"data:image/png;base64,{img_str}"
     }
-    return render(request, 'qr_code.html', context)
+    return render(request, 'faculty/qr_code.html', context)
+
 
 def faculty_subject(request):
-    return render(request, 'faculty_subject.html')
+    return render(request, 'faculty/faculty_subject.html')
+
 
 def faculty_all_students(request):
-    return render(request, 'faculty_all-students.html')
+    return render(request, 'faculty/faculty_all-students.html')
+
 
 def faculty_stud_edit(request):
-    return render(request, 'faculty_stud_edit.html')
+    return render(request, 'faculty/faculty_stud_edit.html')
+
 
 def faculty_attendence(request):
-    return render(request, 'faculty_attendence.html')
+    return render(request, 'faculty/faculty_attendence.html')
+
 
 def faculty_attendence_1(request):
-    return render(request, 'faculty_attendence_1.html')
+    return render(request, 'faculty/faculty_attendence_1.html')
