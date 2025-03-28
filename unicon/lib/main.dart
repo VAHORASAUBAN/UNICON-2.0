@@ -33,12 +33,6 @@ class MyApp extends StatelessWidget {
         '/subject': (context) => SubjectPage(),
         '/placements': (context) => PlacementScreen(),
         '/attendancereport': (context) => AttendanceReport(),
-
-
-        /*'/timetable': (context) =>  _FacultyTimetableScreenState(),*/
-
-
-
       },
     );
   }
