@@ -61,7 +61,8 @@ class FacultyNavBar extends StatelessWidget {
 }
 */
 import 'package:flutter/material.dart';
-import 'package:unicon/features/screens/Faculty/TimeTable/time_table.dart'; // Import TimeTable screen
+
+import '../screens/Faculty/TimeTable/time_table.dart';
 
 class FacultyNavBar extends StatelessWidget {
   final int currentIndex;
