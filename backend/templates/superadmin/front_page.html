@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
     {% comment %} <link rel="stylesheet" href="{% static "assets/css/style.css" %}"> {% endcomment %}
     <style>
       * {
@@ -74,6 +75,21 @@
   </head>
   <body>
     <div class="container">
+      {% if error %}
+        <div class="alert alert-danger" role="alert">
+          {{ error }}
+        </div>
+      {% endif %}
+      {% if success %}
+        <div class="alert alert-success" role="alert">
+          {{ success }}
+        </div>
+      {% endif %}
+      {% if message %}
+        <div class="alert alert-info" role="alert">
+          {{ message }}
+        </div>
+      {% endif %}
       <a href="/coordinator_login/">Coordinator</a>
       <a href="/faculty/faculty_login">Faculty</a>
     </div>
