@@ -43,6 +43,16 @@
                 /></a>
                 {% endcomment %}
               </div>
+              {% if message %}
+              <div class="alert alert-danger" role="alert">
+                {{ message }}
+              </div>
+              {% endif %}
+              {% if error %}
+              <div class="alert alert-danger" role="alert">
+                {{ error }}
+              </div>
+              {% endif %}
               <form method="POST" action="/coordinator_login/">
                 {% csrf_token %}
                 <div class="form-group">

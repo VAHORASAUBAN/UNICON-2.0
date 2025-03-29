@@ -174,8 +174,8 @@
 							</span>
 						</a>
 						<div class="dropdown-menu">
-							<a class="dropdown-item" href="/faculty_profile/">My Profile</a>
-							<a class="dropdown-item" href="/login/">Logout</a>
+							<a class="dropdown-item" href="faculty/faculty_profile/">My Profile</a>
+							<a class="dropdown-item" href="{% url "faculty_logout_view" %}">Logout</a>
 						</div>
 					</li>
 				</ul>
@@ -184,8 +184,8 @@
 						<i class="fas fa-ellipsis-v"></i>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
-						<a class="dropdown-item" href="faculty_profile/">My Profile</a>
-						<a class="dropdown-item" href="/login/">Logout</a>
+						<a class="dropdown-item" href="faculty/faculty_profile/">My Profile</a>
+						<a class="dropdown-item" href="{% url "faculty_logout_view" %}">Logout</a>
 					</div>
 				</div>
 			</div>

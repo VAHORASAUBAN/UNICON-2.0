@@ -243,19 +243,16 @@
 												</tr>
 											</thead>
 											<tbody id="data-body">
+												{% for i in all_department %}
 												<!-- Initial Department List -->
-												<tr data-department="Computer Science">
-													<td>Computer Science</td>
+												<tr data-department="{{i.department_name}}">
+													<td>{{i.department_name}} </td>
 													<td class="text-right">
 														<button class="btn btn-primary btn-sm view-btn">View</button>
 													</td>
 												</tr>
-												<tr data-department="Mathematics">
-													<td>Mathematics</td>
-													<td class="text-right">
-														<button class="btn btn-primary btn-sm view-btn">View</button>
-													</td>
-												</tr>
+												{% endfor %}
+												
 											</tbody>
 										</table>
 									</div>

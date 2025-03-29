@@ -167,7 +167,7 @@
             </a>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="faculty/faculty_profile/">My Profile</a>
-              <a class="dropdown-item" href="/faculty/faculty_login/">Logout</a>
+              <a class="dropdown-item" href="{% url "faculty_logout_view" %}">Logout</a>
             </div>
           </li>
         </ul>
@@ -177,7 +177,7 @@
           </a>
           <div class="dropdown-menu dropdown-menu-right">
             <a class="dropdown-item" href="faculty/faculty_profile/">My Profile</a>
-            <a class="dropdown-item" href="faculty/faculty_login/">Logout</a>
+            <a class="dropdown-item" href="{% url "faculty_logout_view" %}">Logout</a>
           </div>
         </div>
       </div>
@@ -215,34 +215,42 @@
                   <div class="row">
                     <div class="col-md-5">
                       <div class="profile-info-left">
-                        <h3 class="user-name m-t-0">Jeffrey M. Wong</h3>
-                        <h5 class="company-role m-t-0 m-b-0">Preschool</h5>
-                        <small class="text-muted">H.O.D</small>
-                        <div class="staff-id">Employee ID : HOD-0001</div>
+                        <h3 class="user-name m-t-0">{{teacher.firstname}} {{teacher.lastname}}</h3>
+                        <h5 class="company-role m-t-0 m-b-0">{{teacher.department}}</h5>
+                        <small class="text-muted">{{teacher.designations}}</small>
+                        <div class="staff-id">Faculty ID:{{teacher.faculty_id}}</div>
                       </div>
                     </div>
                     <div class="col-md-7">
                       <ul class="personal-info">
                         <li>
                           <span class="title">Phone:</span>
-                          <span class="text"><a href="#">973-584-58700</a></span>
+                          <span class="text"><a href="#">{{teacher.mobile_number}}</a></span>
                         </li>
                         <li>
                           <span class="title">Email:</span>
-                          <span class="text"><a href="#"><span class="__cf_email__"
-                                data-cfemail="fe949b98989b8c879389919099be9b869f938e929bd09d9193">[email&#160;protected]</span></a></span>
+                          <span class="text"><a href="#"><span class="__cf_email__">
+                            {{teacher.email}}
+                          </span></a></span>
                         </li>
                         <li>
                           <span class="title">Birthday:</span>
-                          <span class="text">2nd August</span>
+                          <span class="text">
+                            {{teacher.birth_date}}
+                          </span>
                         </li>
                         <li>
                           <span class="title">Address:</span>
-                          <span class="text">5754 Airport Rd, Coosada, AL, 36020</span>
+                          <span class="text">
+                            {{teacher.address_line_1}}
+                            {{teacher.address_line_2}}
+                          </span>
                         </li>
                         <li>
                           <span class="title">Gender:</span>
-                          <span class="text">Male</span>
+                          <span class="text">
+                            {{teacher.gender}}
+                          </span>
                         </li>
                       </ul>
                     </div>

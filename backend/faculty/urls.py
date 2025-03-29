@@ -19,5 +19,7 @@ urlpatterns = [
     path('faculty_attendence_1/', faculty_views.faculty_attendence_1,
          name="faculty_attendence_1"),
     path('faculty_login/', faculty_views.faculty_login, name='faculty_login'),
+    path('faculty_logout_view/', faculty_views.faculty_logout_view,
+         name='faculty_logout_view'),
 
 ]
