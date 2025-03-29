@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 import qrcode
 import io
@@ -15,8 +15,27 @@ def faculty_my_profile(request):
 
 
 def faculty_profile(request):
-    return render(request, 'faculty/faculty_profile.html')
+    # Get the faculty_id from the session
+    faculty_id = request.session.get('faculty_id')
+
+    if faculty_id:
+        try:
+            # Retrieve the teacher's details using the faculty_id
+            teacher = Teacher.objects.get(faculty_id=faculty_id)
+            return render(request, 'faculty/faculty_profile.html', {'teacher': teacher})
+        except Teacher.DoesNotExist:
+            return render(request, 'faculty/faculty_profile.html', {'error': 'Teacher does not exist.'})
+    else:
+        # If the faculty_id is not in the session, redirect to the login page
+        return render(request, 'faculty/faculty_login.html', {'error': 'Please login to view your profile.'})
 # for faculty
+
+
+def faculty_logout_view(request):
+
+    request.session.flush()
+
+    return render(request, 'faculty/faculty_login.html', {'message': 'You have been logged out.'})
 
 
 def faculty_sidebar(request):
@@ -39,11 +58,14 @@ def faculty_login(request):
         try:
             teacher = Teacher.objects.get(faculty_id=username)
             if check_password(password, teacher.password):
+                # Store the faculty_id in the session
+                request.session['faculty_id'] = teacher.faculty_id
+                # Redirect to the faculty dashboard after login
                 return render(request, 'faculty/faculty_dash.html', {'teacher': teacher})
             else:
                 return render(request, 'faculty/faculty_login.html', {'error': 'Invalid credentials. Please try again.'})
         except Teacher.DoesNotExist:
-            return render(request, 'faculty/faculty_login.html', {'error': 'Teacher Does Not Exist.'})
+            return render(request, 'faculty/faculty_login.html', {'error': 'Teacher does not exist.'})
 
     return render(request, 'faculty/faculty_login.html')
 

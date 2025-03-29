@@ -31,12 +31,22 @@ urlpatterns = [
     path('show_timetable/', superadmin_views.show_timetable),
     path('coordinator_login/', superadmin_views.coordinator_login),
     # path('faculty_login/', superadmin_views.faculty_login),
-    path('placement/', superadmin_views.placement),
     path('show_placement/', superadmin_views.show_placement),
     path('logout/', superadmin_views.logout_view, name='logout'),
     path('delete_course/<int:id>/', superadmin_views.delete_course),
     path('delete_department/<int:id>/', superadmin_views.delete_department),
     path('delete_teacher/<int:id>/', superadmin_views.delete_teacher),
     path('delete_student/<int:id>/', superadmin_views.delete_student),
+    path('delete_subject/<int:id>/',
+         superadmin_views.delete_subject, name='delete_subject'),
+    path('faculty_individual_profile/<str:faculty_id>/',
+         superadmin_views.faculty_individual_profile, name='faculty_individual_profile'),
+    path('add_teachers_bulk/', superadmin_views.add_teachers_bulk,
+         name='add_teachers_bulk'),
+    path('add_students_bulk/', superadmin_views.add_students_bulk,
+         name='add_students_bulk'),
+    path("add_placement/", superadmin_views.add_placement, name="add_placement"),
+
+
 
 ]

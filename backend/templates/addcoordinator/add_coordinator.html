@@ -114,6 +114,9 @@
   <body>
     <div class="form-container">
       <h1>Coordinator Form</h1>
+      {% if message %}
+        <p>{{ message }}</p>
+      {% endif %}
       <form
         method="POST"
         enctype="multipart/form-data"
