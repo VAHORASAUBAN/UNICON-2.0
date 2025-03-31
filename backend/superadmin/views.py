@@ -12,6 +12,14 @@ from datetime import datetime
 from django.core.files import File
 import os
 import json
+from django.contrib.auth.hashers import check_password
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
+from .models import Student
+from .serializers import *
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 
 
 def front_page(request):
@@ -84,39 +92,60 @@ def add_subject(request):
 
 
 def add_batch(request):
-
     all_courses = Course.objects.all()
+
     if request.method == "POST":
-        batch_start_date = request.POST.get('batch_start_date')
-        batch_end_date = request.POST.get('batch_end_date')
-        course_id = request.POST.get('course')
+        try:
+            batch_start_date = request.POST.get('batch_start_date')
+            batch_end_date = request.POST.get('batch_end_date')
+            course_id = request.POST.get('course')
 
-        course = Course.objects.get(id=course_id)
+            if not (batch_start_date and batch_end_date and course_id):
+                messages.error(request, "Please fill all required fields.")
+                return render(request, 'superadmin/add-batch.html', {'all_courses': all_courses})
 
-        save_batch = Batch.objects.create(
-            batch_start_date=batch_start_date,
-            batch_end_date=batch_end_date,
-            course=course
-        )
-        save_batch.save()
-        return render(request, 'superadmin/add-batch.html', {'all_courses': all_courses})
+            course = Course.objects.get(id=course_id)
+
+            save_batch = Batch.objects.create(
+                batch_start_date=batch_start_date,
+                batch_end_date=batch_end_date,
+                course=course
+            )
+            save_batch.save()
+
+            messages.success(request, "Batch added successfully!")
+            return render(request, 'superadmin/add-batch.html', {'all_courses': all_courses})
+
+        except Course.DoesNotExist:
+            messages.error(request, "Invalid course selected.")
+        except Exception as e:
+            messages.error(request, f"Error adding batch: {str(e)}")
+
     return render(request, 'superadmin/add-batch.html', {'all_courses': all_courses})
 
 
 def all_batch(request):
-    all_batches = Batch.objects.all()
-    all_courses = Course.objects.all()
-    context = {
-        'all_batches': all_batches,
-        'all_courses': all_courses
-    }
-    return render(request, 'superadmin/all-batch.html', context)
+    try:
+        all_batches = Batch.objects.all()
+        all_courses = Course.objects.all()
+        context = {
+            'all_batches': all_batches,
+            'all_courses': all_courses
+        }
+        return render(request, 'superadmin/all-batch.html', context)
+
+    except Exception as e:
+        messages.error(request, f"An error occurred: {str(e)}")
+        return render(request, 'superadmin/all-batch.html', {'all_batches': [], 'all_courses': []})
 
 
 def all_subject(request):
-    all_subject = Subject.objects.all()
-
-    return render(request, 'superadmin/all-subject.html', {'all_subjects': all_subject})
+    try:
+        all_subjects = Subject.objects.all()
+        return render(request, 'superadmin/all-subject.html', {'all_subjects': all_subjects})
+    except Exception as e:
+        messages.error(request, f"Error fetching subjects: {str(e)}")
+        return render(request, 'superadmin/all-subject.html', {'all_subjects': []})
 
 
 def timetable(request):
@@ -135,43 +164,62 @@ def coordinator_login(request):
         try:
             coord = coordinator.objects.get(username=username)
             if check_password(password, coord.password):
-
                 request.session['username'] = coord.username
-
-                return render(request, 'superadmin/index.html')
+                messages.success(request, "Login successful!")
+                # Change to your actual dashboard URL name
+                return render(request, 'superadmin/index.html', {'username': username})
             else:
-                return render(request, 'superadmin/login.html', {'error': 'Invalid credentials. Please try again.'})
+                messages.error(
+                    request, "Invalid credentials. Please try again.")
         except coordinator.DoesNotExist:
-            return render(request, 'superadmin/login.html', {'error': 'Coordinator does not exist.'})
+            messages.error(request, "Coordinator does not exist.")
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
 
-    return render(request, 'superadmin/login.html')
+        # Change to your actual login URL name
+        return render(request, 'superadmin/login.html', {'error': 'Invalid credentials.'})
+    else:
+        return render(request, 'superadmin/login.html')
 
 
 def logout_view(request):
-
     request.session.flush()
-
-    return render(request, 'superadmin/login.html', {'message': 'You have been logged out.'})
+    messages.success(request, "You have been logged out successfully.")
+    return render(request, 'superadmin/login.html')
 
 
 def add_department(request):
     if request.method == "POST":
         department_name = request.POST.get('department_name')
         department_start_date = request.POST.get('department_start_date')
-        save_department = department(
-            department_name=department_name,
-            department_start_date=department_start_date
-        )
-        save_department.save()
-        return render(request, 'superadmin/add-department.html')
 
-    else:
-        return render(request, 'superadmin/add-department.html')
+        try:
+            if not department_name or not department_start_date:
+                messages.warning(request, "All fields are required.")
+                return render(request, 'superadmin/add-department.html')
+
+            save_department = department(
+                department_name=department_name,
+                department_start_date=department_start_date
+            )
+            save_department.save()
+            messages.success(request, "Department added successfully!")
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
+
+    return render(request, 'superadmin/add-department.html')
 
 
 def all_department(request):
-    all_department = department.objects.all()
-    print(all_department)
+    try:
+        all_department = department.objects.all()
+        if not all_department:
+            messages.warning(request, "No departments found.")
+    except Exception as e:
+        messages.error(
+            request, f"An error occurred while fetching departments: {str(e)}")
+        all_department = []
+
     return render(request, 'superadmin/all-department.html', {'all_department': all_department})
 
 
@@ -218,13 +266,17 @@ def add_student(request):
 
     if request.method == "POST":
         try:
-            enrollment = int(request.POST.get('enrollment')
-                             )
+            # Enrollment Validation
+            enrollment = request.POST.get('enrollment')
+            if not enrollment.isdigit():
+                raise ValueError("Enrollment number must be a valid number.")
+            enrollment = int(enrollment)
             if enrollment <= 0:
-                raise ValueError("Enrollment number must be positive")
+                raise ValueError("Enrollment number must be positive.")
 
+            # Extract Data
             firstname = request.POST.get('firstname')
-            middlename = request.POST.get('middlename')
+            middlename = request.POST.get('middlename', '')
             lastname = request.POST.get('lastname')
             email = request.POST.get('email')
             password = request.POST.get('password')
@@ -232,20 +284,22 @@ def add_student(request):
             gender = request.POST.get('gender')
             birth_date = request.POST.get('birth_date')
             address_line_1 = request.POST.get('address_line_1')
-            address_line_2 = request.POST.get('address_line_2')
+            address_line_2 = request.POST.get('address_line_2', '')
             country = request.POST.get('country')
             state = request.POST.get('state')
             city = request.POST.get('city')
             pincode = request.POST.get('pincode')
             department_id = request.POST.get('student_department')
             course_id = request.POST.get('course')
-            semester = int(request.POST.get('semester'))
+            semester = request.POST.get('semester')
             division = request.POST.get('division')
             student_image = request.FILES.get('student_image')
 
+            # Validate Foreign Keys
             student_department = department.objects.get(id=department_id)
             course = Course.objects.get(id=course_id)
 
+            # Create Student
             student = Student.objects.create(
                 enrollment=enrollment,
                 firstname=firstname,
@@ -264,25 +318,27 @@ def add_student(request):
                 pincode=pincode,
                 student_department=student_department,
                 course=course,
-                semester=semester,
+                semester=int(semester),
                 division=division,
                 student_image=student_image
             )
 
+            messages.success(request, "Student added successfully.")
             return redirect('add_student')
 
+        except department.DoesNotExist:
+            messages.error(request, "Selected department does not exist.")
+        except Course.DoesNotExist:
+            messages.error(request, "Selected course does not exist.")
         except ValueError as e:
-            return render(request, 'superadmin/add-student.html', {
-                'error': f'Error: {str(e)}',
-                'all_departments': all_departments,
-                'all_courses': all_courses
-            })
+            messages.error(request, str(e))
+        except Exception as e:
+            messages.error(request, f"An unexpected error occurred: {str(e)}")
 
-    else:
-        return render(request, 'superadmin/add-student.html', {
-            'all_departments': all_departments,
-            'all_courses': all_courses
-        })
+    return render(request, 'superadmin/add-student.html', {
+        'all_departments': all_departments,
+        'all_courses': all_courses
+    })
 
 
 def all_students(request):
@@ -358,62 +414,80 @@ def add_teacher(request):
     all_courses = Course.objects.all()
 
     if request.method == "POST":
-        faculty_id = request.POST.get('faculty_id')
-        firstname = request.POST.get('firstname')
-        middlename = request.POST.get('middlename')
-        lastname = request.POST.get('lastname')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        mobile_number = request.POST.get('mobile_number')
-        gender = request.POST.get('gender')
-        birth_date = request.POST.get('birth_date')
-        address_line_1 = request.POST.get('address_line_1')
-        address_line_2 = request.POST.get('address_line_2')
-        country = request.POST.get('country')
-        state = request.POST.get('state')
-        city = request.POST.get('city')
-        pincode = request.POST.get('pincode')
-        joining_date = request.POST.get('joining_date')
-        course_id = request.POST.get('course')
-        department_id = request.POST.get('department')
-        designations = request.POST.get('designations')
-        achievements = request.POST.get('achievements')
-        qualification = request.POST.get('qualification')
-        pic = request.FILES.get('pic')
+        try:
+            # Faculty ID Validation
+            faculty_id = request.POST.get('faculty_id')
+            if not faculty_id:
+                raise ValueError("Faculty ID is required.")
 
-        teacher_department = department.objects.get(id=department_id)
-        course = Course.objects.get(id=course_id)
-        teacher = Teacher.objects.create(
-            faculty_id=faculty_id,
-            firstname=firstname,
-            middlename=middlename,
-            lastname=lastname,
-            email=email,
-            password=make_password(password),
-            mobile_number=mobile_number,
-            gender=gender,
-            birth_date=birth_date,
-            address_line_1=address_line_1,
-            address_line_2=address_line_2,
-            country=country,
-            state=state,
-            city=city,
-            pincode=pincode,
-            joining_date=joining_date,
-            course=course,
-            department=teacher_department,
-            designations=designations,
-            achievements=achievements,
-            qualification=qualification,
-            pic=pic
-        )
-        return redirect('add_teacher')
-    else:
-        context = {
-            'all_departments': all_departments,
-            'all_courses': all_courses,
-        }
-        return render(request, 'superadmin/add-teacher.html', context)
+            firstname = request.POST.get('firstname')
+            middlename = request.POST.get('middlename', '')
+            lastname = request.POST.get('lastname')
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+            mobile_number = request.POST.get('mobile_number')
+            gender = request.POST.get('gender')
+            birth_date = request.POST.get('birth_date')
+            address_line_1 = request.POST.get('address_line_1')
+            address_line_2 = request.POST.get('address_line_2', '')
+            country = request.POST.get('country')
+            state = request.POST.get('state')
+            city = request.POST.get('city')
+            pincode = request.POST.get('pincode')
+            joining_date = request.POST.get('joining_date')
+            course_id = request.POST.get('course')
+            department_id = request.POST.get('department')
+            designations = request.POST.get('designations')
+            achievements = request.POST.get('achievements', '')
+            qualification = request.POST.get('qualification')
+            pic = request.FILES.get('pic')
+
+            # Validate Foreign Keys
+            teacher_department = department.objects.get(id=department_id)
+            course = Course.objects.get(id=course_id)
+
+            # Create Teacher
+            teacher = Teacher.objects.create(
+                faculty_id=faculty_id,
+                firstname=firstname,
+                middlename=middlename,
+                lastname=lastname,
+                email=email,
+                password=make_password(password),
+                mobile_number=mobile_number,
+                gender=gender,
+                birth_date=birth_date,
+                address_line_1=address_line_1,
+                address_line_2=address_line_2,
+                country=country,
+                state=state,
+                city=city,
+                pincode=pincode,
+                joining_date=joining_date,
+                course=course,
+                department=teacher_department,
+                designations=designations,
+                achievements=achievements,
+                qualification=qualification,
+                pic=pic
+            )
+
+            messages.success(request, "Teacher added successfully.")
+            return redirect('add_teacher')
+
+        except department.DoesNotExist:
+            messages.error(request, "Selected department does not exist.")
+        except Course.DoesNotExist:
+            messages.error(request, "Selected course does not exist.")
+        except ValueError as e:
+            messages.error(request, str(e))
+        except Exception as e:
+            messages.error(request, f"An unexpected error occurred: {str(e)}")
+
+    return render(request, 'superadmin/add-teacher.html', {
+        'all_departments': all_departments,
+        'all_courses': all_courses
+    })
 
 
 def all_teachers(request):
@@ -474,39 +548,38 @@ def add_teachers_bulk(request):
         IMAGE_UPLOAD_PATH = "media/teacher_images/"
         csv_file = request.FILES.get('csv_file')
 
-        if not csv_file.name.endswith('.csv'):
-            return render(request, 'superadmin/add_teachers_bulk.html', {
-                'error': 'Invalid format!',
-            })
+        # Validate File Type
+        if not csv_file or not csv_file.name.endswith('.csv'):
+            messages.error(
+                request, "Invalid file format! Please upload a CSV file.")
+            return redirect('add_teachers_bulk')
 
         try:
-
             data = pd.read_csv(csv_file).fillna('')
         except Exception as e:
-            return render(request, 'superadmin/add_teachers_bulk.html', {
-                'error': f'Error in reading CSV file: {str(e)}',
-            })
+            messages.error(request, f"Error reading CSV file: {str(e)}")
+            return redirect('add_teachers_bulk')
 
         teacher_objects = []
         image_files = []
 
         for index, row in data.iterrows():
             try:
-
+                # Validate Department & Course
                 teacher_department = department.objects.get(
                     id=row['department'])
                 course = Course.objects.get(id=row['course'])
 
+                # Handle Image File
                 pic_path = row['pic']
                 pic_file = None
                 if pic_path and os.path.exists(os.path.join(IMAGE_UPLOAD_PATH, pic_path)):
-
                     img_file = open(os.path.join(
                         IMAGE_UPLOAD_PATH, pic_path), 'rb')
                     pic_file = File(img_file, name=pic_path)
-
                     image_files.append(img_file)
 
+                # Create Teacher Object
                 teacher = Teacher(
                     faculty_id=row['faculty_id'],
                     firstname=row['firstname'],
@@ -534,10 +607,15 @@ def add_teachers_bulk(request):
                     teacher.pic.save(pic_path, pic_file)
 
                 teacher_objects.append(teacher)
+
+            except department.DoesNotExist:
+                messages.error(
+                    request, f"Row {index + 1}: Department ID {row['department']} does not exist.")
+            except Course.DoesNotExist:
+                messages.error(
+                    request, f"Row {index + 1}: Course ID {row['course']} does not exist.")
             except Exception as e:
-                return render(request, 'superadmin/add_teachers_bulk.html', {
-                    'error': f'Row {index + 1} error in processing: {str(e)}',
-                })
+                messages.error(request, f"Row {index + 1} error: {str(e)}")
 
         try:
             Teacher.objects.bulk_create(teacher_objects)
@@ -545,13 +623,12 @@ def add_teachers_bulk(request):
             for img_file in image_files:
                 img_file.close()
 
-            return render(request, 'superadmin/add_teachers_bulk.html', {
-                'success': 'Teachers have been added successfully!',
-            })
+            messages.success(request, "Teachers have been added successfully!")
         except Exception as e:
-            return render(request, 'superadmin/add_teachers_bulk.html', {
-                'error': f'Error saving teachers to the database: {str(e)}',
-            })
+            messages.error(
+                request, f"Error saving teachers to the database: {str(e)}")
+
+        return redirect('add_teachers_bulk')
 
     return render(request, 'superadmin/add_teachers_bulk.html')
 
@@ -559,33 +636,33 @@ def add_teachers_bulk(request):
 def add_students_bulk(request):
     if request.method == "POST":
         IMAGE_UPLOAD_PATH = "media/student_images/"
-
         csv_file = request.FILES.get('csv_file')
 
-        if not csv_file.name.endswith('.csv'):
-            return render(request, 'superadmin/add_students_bulk.html', {
-                'error': 'Invalid format!',
-            })
+        # Validate CSV File Type
+        if not csv_file or not csv_file.name.endswith('.csv'):
+            messages.error(
+                request, "Invalid file format! Please upload a CSV file.")
+            return redirect('add_students_bulk')
 
         try:
-
             data = pd.read_csv(csv_file).fillna('')
         except Exception as e:
-            return render(request, 'superadmin/add_students_bulk.html', {
-                'error': f'Error in reading CSV file: {str(e)}',
-            })
+            messages.error(request, f"Error reading CSV file: {str(e)}")
+            return redirect('add_students_bulk')
 
         student_objects = []
         image_files = []
 
         for index, row in data.iterrows():
             try:
+                # Validate Department & Course
                 student_department = department.objects.get(
                     id=row['student_department'])
                 course = Course.objects.get(id=row['course'])
 
                 birth_date = parse_date(row['birth_date'])
 
+                # Handle Image Upload
                 pic_path = row['student_image']
                 pic_file = None
                 if pic_path and os.path.exists(os.path.join(IMAGE_UPLOAD_PATH, pic_path)):
@@ -594,6 +671,7 @@ def add_students_bulk(request):
                     pic_file = File(img_file, name=pic_path)
                     image_files.append(img_file)
 
+                # Create Student Object
                 student = Student(
                     enrollment=row['enrollment'],
                     firstname=row['firstname'],
@@ -612,9 +690,7 @@ def add_students_bulk(request):
                     pincode=row['pincode'],
                     student_department=student_department,
                     course=course,
-
                     semester=row['semester'] if row['semester'] else '1',
-
                     division=row['division'] if row['division'] else 'A',
                 )
 
@@ -622,10 +698,16 @@ def add_students_bulk(request):
                     student.student_image.save(pic_path, pic_file)
 
                 student_objects.append(student)
+
+            except department.DoesNotExist:
+                messages.error(
+                    request, f"Row {index + 1}: Department ID {row['student_department']} does not exist.")
+            except Course.DoesNotExist:
+                messages.error(
+                    request, f"Row {index + 1}: Course ID {row['course']} does not exist.")
             except Exception as e:
-                return render(request, 'superadmin/add_students_bulk.html', {
-                    'error': f'Row {index + 1} error in processing: {str(e)}',
-                })
+                messages.error(
+                    request, f"Row {index + 1} error in processing: {str(e)}")
 
         try:
             Student.objects.bulk_create(student_objects)
@@ -633,13 +715,12 @@ def add_students_bulk(request):
             for img_file in image_files:
                 img_file.close()
 
-            return render(request, 'superadmin/add_students_bulk.html', {
-                'success': 'Students have been added successfully!',
-            })
+            messages.success(request, "Students have been added successfully!")
         except Exception as e:
-            return render(request, 'superadmin/add_students_bulk.html', {
-                'error': f'Error saving students to the database: {str(e)}',
-            })
+            messages.error(
+                request, f"Error saving students to the database: {str(e)}")
+
+        return redirect('add_students_bulk')
 
     return render(request, 'superadmin/add_students_bulk.html')
 
@@ -731,3 +812,88 @@ def show_placement(request):
     print("Placement Data:", all_placement)
 
     return render(request, 'superadmin/show_placement.html', {'all_placement': placement_json})
+
+
+def add_timetable(request):
+    all_subjects = Subject.objects.all()
+    print(all_subjects)
+    all_courses = Course.objects.all()
+    all_departments = department.objects.all()
+    all_batches = Batch.objects.all()
+    all_teachers = Teacher.objects.all()
+
+    if request.method == "POST":
+        timetable_subject_name = request.POST.get('timetable_subject_name')
+        faculty_name = request.POST.get('faculty_name')
+        day = request.POST.get('day')
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
+        course_id = request.POST.get('course')
+        timetable_department_id = request.POST.get('timetable_department')
+        print(all_subject)
+        batch = request.POST.get('batch')
+        course = Course.objects.get(id=course_id)
+        timetable_department = department.objects.get(
+            id=timetable_department_id)
+
+        timetable = Timetable.objects.create(
+            timetable_subject_name=Subject.objects.get(
+                id=timetable_subject_name),
+            faculty_name=Teacher.objects.get(id=faculty_name),
+            day=day,
+            start_time=start_time,
+            end_time=end_time,
+            course=course,
+            timetable_department=timetable_department
+        )
+
+        return render(request, 'superadmin/timetable.html', {
+            'all_subjects': all_subjects,
+            'all_departments': all_departments,
+            'all_batches': all_batches,
+            'all_courses': all_courses,
+            'success': 'Timetable added successfully!'
+        })
+
+    else:
+        context = {
+            'all_departments': all_departments,
+            'all_batches': all_batches,
+            'all_courses': all_courses,
+            'all_subjects': all_subjects,
+            'all_teachers': all_teachers
+        }
+        return render(request, 'superadmin/timetable.html', context)
+
+# Serializers Views
+
+
+@api_view(['POST'])
+def student_login(request):
+    email = request.data.get('email')
+    password = request.data.get('password')
+
+    try:
+        student = Student.objects.get(email=email)
+
+        if check_password(password, student.password):  # ✅ Password Match Check
+            refresh = RefreshToken.for_user(student)
+
+            return Response({
+                'message': 'Login successful',
+                'token': str(refresh.access_token),  # ✅ JWT Token
+                'student': StudentSerializer(student, context={'request': request}).data
+            })
+        else:
+            return Response({'error': 'Invalid password'}, status=400)
+
+    except Student.DoesNotExist:
+        return Response({'error': 'Student not found'}, status=404)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def student_profile(request):
+    student = request.user
+    serializer = StudentSerializer(student, context={'request': request})
+    return Response(serializer.data)

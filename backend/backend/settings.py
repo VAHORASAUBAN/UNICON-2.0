@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-06ne^yxx!xf-*ehnj!n=3le^wn#&%%qa@qo6_-7_*rwz#9en8x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -44,6 +44,11 @@ INSTALLED_APPS = [
     'addcoordinator',
 
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
 # Session Settings (Force Login Required)
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Store sessions in DB
 SESSION_COOKIE_AGE = 86400  # Session expires in 1 day

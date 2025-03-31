@@ -140,3 +140,47 @@ class Placement(models.Model):
 
     class Meta:
         db_table = "placements"
+
+
+class Timetable(models.Model):
+    TIME_CHOICES = [
+        ('07:30', '07:30 AM'),
+        ('08:30', '08:30 AM'),
+        ('09:30', '09:30 AM'),
+        ('10:30', '10:30 AM'),
+        ('11:30', '11:30 AM'),
+        ('12:30', '12:30 PM'),
+        ('13:30', '01:30 PM'),
+        ('14:30', '02:30 PM'),
+        ('15:30', '03:30 PM'),
+        ('16:30', '04:30 PM'),
+    ]
+
+    timetable_subject_name = models.ForeignKey(
+        Subject, on_delete=models.CASCADE)
+    faculty_name = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    day = models.CharField(
+        max_length=20,
+        choices=[
+            ('Monday', 'Monday'),
+            ('Tuesday', 'Tuesday'),
+            ('Wednesday', 'Wednesday'),
+            ('Thursday', 'Thursday'),
+            ('Friday', 'Friday'),
+            ('Saturday', 'Saturday'),
+        ]
+    )
+    start_time = models.CharField(max_length=5, choices=TIME_CHOICES)
+    end_time = models.CharField(max_length=5, choices=TIME_CHOICES)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    timetable_department = models.ForeignKey(
+        department, on_delete=models.CASCADE)
+    batch = models.ForeignKey(Batch, on_delete=models.CASCADE)
+    divsion = models.CharField(max_length=1, choices=[
+        ('A', 'A'),
+        ('B', 'B'),
+        ('C', 'C')
+    ])
+
+    def __str__(self):
+        return f"{self.timetable_subject_name} - {self.day} ({self.start_time} to {self.end_time})"
