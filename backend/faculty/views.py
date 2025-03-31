@@ -47,7 +47,9 @@ def faculty_dash(request):
 
 
 def faculty_all_student(request):
-    return render(request, 'faculty/faculty_all-students.html')
+    all_students = Student.objects.all()
+    print(all_students)
+    return render(request, 'faculty/faculty_all-students.html', {'all_students': all_students})
 
 
 def faculty_login(request):
@@ -66,8 +68,8 @@ def faculty_login(request):
                 return render(request, 'faculty/faculty_login.html', {'error': 'Invalid credentials. Please try again.'})
         except Teacher.DoesNotExist:
             return render(request, 'faculty/faculty_login.html', {'error': 'Teacher does not exist.'})
-
-    return render(request, 'faculty/faculty_login.html')
+    else:
+        return render(request, 'faculty/faculty_login.html')
 
 
 def qr_code(request):

@@ -166,7 +166,7 @@
 							</span>
 						</a>
 						<div class="dropdown-menu">
-							<a class="dropdown-item" href="faculty/faculty_profile/">My Profile</a>
+							<a class="dropdown-item" href="{% url "faculty_profile" %}">My Profile</a>
 							<a class="dropdown-item" href="{% url "faculty_logout_view" %}">Logout</a>
 						</div>
 					</li>
@@ -176,7 +176,7 @@
 						<i class="fas fa-ellipsis-v"></i>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
-						<a class="dropdown-item" href="faculty/faculty_profile/">My Profile</a>
+						<a class="dropdown-item" href="{% url "faculty_profile" %}">My Profile</a>
 						<a class="dropdown-item" href="{% url "faculty_logout_view" %}">Logout</a>
 					</div>
 				</div>
@@ -311,60 +311,17 @@
 								</tr>
 							  </thead>
 							  <tbody>
+								{% for i in all_students %}
 								<tr>
-								  <td>202101619010180</td>
-								  <td>Abrar</td>
-								  <td>FCAIT</td>
-								  <td>IMSCIT</td>
-								  <td>8</td>
-								  <td>A</td>
+								  <td>{{i.enrollment}}</td>
+								  <td>{{i.firstname}} {{i.lastname}}</td>
+								  <td>{{i.student_department}}</td>
+								  <td>{{i.course}}</td>
+								  <td>{{i.semester}}</td>
+								  <td>{{i.division}}</td>
 								 
 								</tr>
-								<tr>
-								  <td>202101619010181</td>
-								  <td>Tofik</td>
-								  <td>FOBA</td>
-								  <td>BBA</td>
-								  <td>8</td>
-								  <td>B</td>
-								 
-								</tr>
-								<tr>
-								  <td>202101619010182</td>
-								  <td>Sauban</td>
-								  <td>FCAIT</td>
-								  <td>IMSCIT</td>
-								  <td>8</td>
-								  <td>A</td>
-								 
-								</tr>
-								<tr>
-								  <td>202101619010183</td>
-								  <td>Humed</td>
-								  <td>FOBA</td>
-								  <td>BBA</td>
-								  <td>8</td>
-								  <td>B</td>
-								 
-								</tr>
-								<tr>
-								  <td>202101619010184</td>
-								  <td>Mueab</td>
-								  <td>FCAIT</td>
-								  <td>BCA</td>
-								  <td>8</td>
-								  <td>C</td>
-								 
-								</tr>
-								<tr>
-								  <td>202101619010185</td>
-								  <td>Ayan</td>
-								  <td>FCAIT</td>
-								  <td>BCA</td>
-								  <td>8</td>
-								  <td>C</td>
-								 
-								</tr>
+								{% endfor %}
 							  </tbody>
 							</table>
 						  </div>
