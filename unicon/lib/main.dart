@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:unicon/screens/Faculty/allstudents.dart';
+import 'package:unicon/screens/Faculty/dashboard/Otp/otp_generator_screen.dart';
 import 'package:unicon/screens/LoginScreen.dart';
 import 'package:unicon/screens/LoginDetailsScreen.dart';
 import 'package:unicon/screens/student/AttendanceReport.dart';
@@ -30,9 +32,11 @@ class MyApp extends StatelessWidget {
         '/timetable': (context) =>  TimetableScreen(),
         '/scanner': (context) =>  ScannerScreen(),
         '/timetable': (context) => FacultyTimetableScreen(),
+        '/allstudent': (context) => StudentListScreen(),
         '/subject': (context) => SubjectPage(),
         '/placements': (context) => PlacementScreen(),
         '/attendancereport': (context) => AttendanceReport(),
+        '/otpGenerator': (context) => const OTPGeneratorScreen(),
       },
     );
   }

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Students in Bulk</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .error {
+            color: red;
+            margin-bottom: 20px;
+        }
+        .info {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Add Students in Bulk</h1>
+    {% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="csv_file">Upload CSV file:</label>
+        <input type="file" name="csv_file" accept=".csv" required>
+        <button type="submit">Upload</button>
+    </form>
+    <div class="info">
+        <h2>CSV Format</h2>
+        <p>Please ensure your CSV file has the following headers:</p>
+        <ul>
+            <li><strong>enrollment</strong></li>
+            <li><strong>firstname</strong></li>
+            <li><strong>middlename</strong></li>
+            <li><strong>lastname</strong></li>
+            <li><strong>email</strong></li>
+            <li><strong>password</strong></li>
+            <li><strong>mobile_number</strong></li>
+            <li><strong>gender</strong></li>
+            <li><strong>birth_date</strong></li>
+            <li><strong>address_line_1</strong></li>
+            <li><strong>address_line_2</strong></li>
+            <li><strong>country</strong></li>
+            <li><strong>state</strong></li>
+            <li><strong>city</strong></li>
+            <li><strong>pincode</strong></li>
+            <li><strong>student_department</strong></li> <!-- Updated -->
+            <li><strong>course</strong></li> <!-- Updated -->
+            <li><strong>semester</strong></li>
+            <li><strong>division</strong></li>
+            <li><strong>student_image</strong></li> <!-- Updated -->
+        </ul>
+    </div>
+    
+</body>
+</html>

@@ -98,7 +98,7 @@ class FacultyNavBar extends StatelessWidget {
               label: 'Dashboard',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.schedule),
+              icon: Icon(Icons.calendar_month_rounded),
               label: 'TimeTable',
             ),
           ],

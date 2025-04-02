@@ -286,22 +286,25 @@
             </div>
             <div class="row staff-grid-row">
               <div class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
+                {% for i in all_subjects  %}
                 <div class="profile-widget position-relative">
                   <div class="user-info">
                     <div
                       class="large text-muted"
                       style="font-size: 24px; font-weight: bold"
                     >
-                      Maths
+                      {{ i.subject_name }}
                     </div>
                   </div>
                   <button
                     class="btn btn-danger btn-sm position-absolute"
                     style="top: 10px; right: 10px"
                   >
-                    <i class="fas fa-trash-alt"></i>
+                    <a href="{% url "delete_subject" i.id %}"> <i class="fas fa-trash-alt"></i> </a>
                   </button>
                 </div>
+                {% endfor %}
+                
               </div>
             </div>
             <div class="notification-box">

@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  dio: ^5.3.2
+  shared_preferences: ^2.2.2
   intl: ^0.17.0
   mobile_scanner: ^6.0.6
   fl_chart: ^0.63.0
