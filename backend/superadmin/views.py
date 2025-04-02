@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from .models import *
+from django.http import JsonResponse
+import io
+from rest_framework.parsers import JSONParser
 import pandas as pd
 from datetime import datetime
 from django.core.files import File
@@ -16,6 +19,8 @@ from django.contrib.auth.hashers import check_password
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.views.decorators.csrf import csrf_exempt
+
 from .models import Student
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated
@@ -61,7 +66,17 @@ def edit_teacher(request):
 
 
 def index(request):
-    return render(request, 'superadmin/index.html')
+    all_students = Student.objects.all()
+    all_teachers = Teacher.objects.all()
+    all_departments = department.objects.all()
+    all_courses = Course.objects.all()
+    context = {
+        'all_students': all_students,
+        'all_teachers': all_teachers,
+        'all_departments': all_departments,
+        'all_courses': all_courses
+    }
+    return render(request, 'superadmin/index.html', context)
 
 
 def my_profile(request):
@@ -868,32 +883,55 @@ def add_timetable(request):
 # Serializers Views
 
 
-@api_view(['POST'])
+# Disable CSRF for testing (consider better security in production)
+@csrf_exempt
 def student_login(request):
-    email = request.data.get('email')
-    password = request.data.get('password')
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        enrollment = data.get('enrollment')
+        password = data.get('password')
 
-    try:
-        student = Student.objects.get(email=email)
+        try:
+            student = Student.objects.get(enrollment=enrollment)
 
-        if check_password(password, student.password):  # ✅ Password Match Check
-            refresh = RefreshToken.for_user(student)
+            print(f"Received Password: {password}")  # Debug
+            print(f"Stored Hashed Password: {student.password}")  # Debug
 
-            return Response({
-                'message': 'Login successful',
-                'token': str(refresh.access_token),  # ✅ JWT Token
-                'student': StudentSerializer(student, context={'request': request}).data
-            })
-        else:
-            return Response({'error': 'Invalid password'}, status=400)
+            if check_password(password, student.password):  # Hashed password check
+                return JsonResponse({"message": "Login successful", "student_id": student.id})
+            else:
+                return JsonResponse({"error": "Invalid password"}, status=401)
+        except Student.DoesNotExist:
+            return JsonResponse({"error": "Student not found"}, status=404)
 
-    except Student.DoesNotExist:
-        return Response({'error': 'Student not found'}, status=404)
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def student_profile(request):
-    student = request.user
-    serializer = StudentSerializer(student, context={'request': request})
-    return Response(serializer.data)
+@csrf_exempt
+def student_profile(request, student_id):
+    if request.method == 'GET':
+        try:
+            student = Student.objects.get(id=student_id)
+            profile_data = {
+                "firstname": student.firstname,
+                "lastname": student.lastname,
+                "enrollment": student.enrollment,
+                "mobile_number": student.mobile_number,
+                "gender": student.gender,
+                "birth_date": student.birth_date,
+                "address": f"{student.address_line_1}, {student.city}, {student.state}, {student.country}",
+                "department": student.student_department.department_name,
+                "course": student.course.course_name,
+                "semester": student.semester,
+                "division": student.division,
+                "student_image": student.student_image.url if student.student_image else None,
+            }
+            return JsonResponse(profile_data)
+        except Student.DoesNotExist:
+            return JsonResponse({"error": "Student not found"}, status=404)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+def navbar(request):
+    return render(request, 'superadmin/navbar.html')

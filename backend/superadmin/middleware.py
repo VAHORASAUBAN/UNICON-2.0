@@ -9,7 +9,7 @@ class LoginRequiredMiddleware:
 
     def __call__(self, request):
         # These pages don't require login
-        allowed_paths = ["/coordinator_login/",
+        allowed_paths = ["/coordinator_login/", "/student/login/",
                          "/logout/", "/faculty/faculty_login/", "/admin/", "/faculty_logout_view/"]
 
         if not request.session.get("username") and request.path not in allowed_paths:

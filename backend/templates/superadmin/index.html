@@ -1,3 +1,4 @@
+{% extends "superadmin/navbar.html" %}
 <!DOCTYPE html>
 <html lang="en">
   {% load static %}
@@ -29,9 +30,9 @@
   </head>
 
   <body>
+    {% block body %}
     <div class="main-wrapper">
-      {% include "superadmin/header.html" %}
-            {% include 'superadmin/sidebar.html' %}
+      {% comment %} {% include "superadmin/navbar.html" %} {% endcomment %}
 
       <div class="page-wrapper">
         <div class="content container-fluid">
@@ -62,7 +63,7 @@
                 /></span>
                 <div class="dash-widget-info text-right">
                   <span>Students</span>
-                  <h3>60,000</h3>
+                  <h3> {{all_students | length}} </h3>
                 </div>
               </div>
             </div>
@@ -70,7 +71,7 @@
               <div class="dash-widget dash-widget5">
                 <div class="dash-widget-info text-left d-inline-block">
                   <span>Teachers</span>
-                  <h3>12,000</h3>
+                  <h3> {{all_teachers | length}} </h3>
                 </div>
                 <span class="float-right"
                   ><img
@@ -90,7 +91,7 @@
                 /></span>
                 <div class="dash-widget-info text-right">
                   <span>Department</span>
-                  <h3>7</h3>
+                  <h3>{{all_departments | length }}</h3>
                 </div>
               </div>
             </div>
@@ -98,7 +99,7 @@
               <div class="dash-widget dash-widget5">
                 <div class="dash-widget-info d-inline-block text-left">
                   <span>Courses</span>
-                  <h3>50</h3>
+                  <h3>{{all_courses | length}}</h3>
                 </div>
                 <span class="float-right"
                   ><img
@@ -590,6 +591,7 @@
     <script src="{% static 'assets/js/chart-data.js' %}"></script>
 
     <script src="assets/js/app.js"></script>
+    {% endblock body %}
   </body>
 
   <!-- Mirrored from dreamguystech.com/preadmin/html/school/light//index/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jun 2022 14:06:55 GMT -->
