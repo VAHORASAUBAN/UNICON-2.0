@@ -39,6 +39,7 @@ class Student(models.Model):
     middlename = models.CharField(max_length=50, null=True, blank=True)
     lastname = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
+    # Hashed password store ke liye
     password = models.CharField(max_length=128)
     mobile_number = models.CharField(max_length=15)
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES)
@@ -57,9 +58,14 @@ class Student(models.Model):
     student_image = models.ImageField(
         upload_to='student_images/', null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        """ Ensure password is always saved as a hash """
+        if not self.password.startswith('pbkdf2_sha256$'):  # Prevent double hashing
+            self.password = make_password(self.password)
+        super().save(*args, **kwargs)
 
-def __str__(self):
-    return f'{self.firstname} {self.lastname} ({self.enrollment})'
+    def __str__(self):
+        return f'{self.firstname} {self.lastname} ({self.enrollment})'
 
 
 class Teacher(models.Model):

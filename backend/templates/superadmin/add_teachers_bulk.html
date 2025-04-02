@@ -1,107 +1,89 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "superadmin/navbar.html" %}
+{% block body %}
+{% load static %}
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Teachers in Bulk</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 20px;
-            background-color: #f4f4f4;
+        body{
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
         }
-        h1 {
-            color: #333;
-        }
-        form {
-            background: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        input[type="file"] {
-            margin-bottom: 20px;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        .error {
-            color: red;
-            margin-bottom: 20px;
-        }
-        .info {
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #555;
-        }
+        .form{
+position: relative;
+width: 100%;
+height: 200px;
+border: 3px dashed grey;
+border-radius: 10px;    
+
+}
+.form div{
+width: 100%;
+height: 100%;
+text-align: center;
+line-height: 170px;
+color: black;
+font-family: Arial;
+position: absolute;
+top: 10%;
+z-index: -1;
+}
+.form input{
+position: relative;
+margin: 0;
+padding: 0;
+width: 100%;
+height: 100%;
+outline: none;
+opacity: 0;
+}
+.form button {
+    border-radius: 10px;
+    padding: 10px 20px;
+    background: #1950A3;
+    outline: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+}
+div img {
+    position: relative;
+    top: 5px;
+    left: -10px;
+}
+#fileName::before {
+    content: 'File Name:';
+}
+#fileName {
+    position: relative;
+    top: 10px;
+}
+
     </style>
 </head>
-<body>
-    <h1>Add Teachers in Bulk</h1>
-    {% if messages %}
-  {% for message in messages %}
-    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  {% endfor %}
-{% endif %}
 
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <label for="csv_file">Upload CSV file:</label>
-        <input type="file" name="csv_file" accept=".csv" required>
-        <button type="submit">Upload</button>
-    </form>
-    <div class="info">
-        <h2>CSV Format</h2>
-        <p>Please ensure your CSV file has the following headers:</p>
-        <ul>
-            <li><strong>faculty_id</strong></li>
-            <li><strong>firstname</strong></li>
-            <li><strong>middlename</strong></li>
-            <li><strong>lastname</strong></li>
-            <li><strong>email</strong></li>
-            <li><strong>password</strong></li>
-            <li><strong>mobile_number</strong></li>
-            <li><strong>gender</strong></li>
-            <li><strong>birth_date</strong></li>
-            <li><strong>address_line_1</strong></li>
-            <li><strong>address_line_2</strong></li>
-            <li><strong>country</strong></li>
-            <li><strong>state</strong></li>
-            <li><strong>city</strong></li>
-            <li><strong>pincode</strong></li>
-            <li><strong>joining_date</strong></li>
-            <li><strong>course</strong></li> <!-- Course ID -->
-            <li><strong>department</strong></li> <!-- Department ID -->
-            <li><strong>designations</strong></li>
-            <li><strong>achievements</strong></li>
-            <li><strong>qualification</strong></li>
-            <li><strong>pic</strong></li> <!-- Optional: Handle file uploads separately if needed -->
-        </ul>
-    </div>
+    <form action="">
+        <div class="form">
+            <input name="file" id="entry_value" ref="fileInput" type="file"  onchange="getFileName()">
+        <div>     
+    </form>   
+        <img src="{% static 'assets/img/upload.png' %}" alt="upload" width="7%" class="mx-2"/>
+                Upload your files here or 
+                <button class="btn bg-color-dblue btn-primary px-4 py-3">Browse</button>
+        </div>
+            <span id="fileName" class="text-primary ">
+            </span>
+        </div>
+        
 </body>
-</html>
+<script>
+    
+function getFileName()
+{
+    var x = document.getElementById('entry_value')
+    document.getElementById('fileName').innerHTML = x.value.split('\\').pop()
+}
+
+</script>
+{% endblock body %}

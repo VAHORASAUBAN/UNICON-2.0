@@ -1,104 +1,240 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Students in Bulk</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            color: #333;
-        }
-        form {
-            background: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        input[type="file"] {
-            margin-bottom: 20px;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        .error {
-            color: red;
-            margin-bottom: 20px;
-        }
-        .info {
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #555;
-        }
-    </style>
-</head>
-<body>
-    <h1>Add Students in Bulk</h1>
-    {% if messages %}
-  {% for message in messages %}
-    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  {% endfor %}
-{% endif %}
+{% extends "superadmin/navbar.html" %}
 
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <label for="csv_file">Upload CSV file:</label>
-        <input type="file" name="csv_file" accept=".csv" required>
-        <button type="submit">Upload</button>
-    </form>
-    <div class="info">
-        <h2>CSV Format</h2>
-        <p>Please ensure your CSV file has the following headers:</p>
-        <ul>
-            <li><strong>enrollment</strong></li>
-            <li><strong>firstname</strong></li>
-            <li><strong>middlename</strong></li>
-            <li><strong>lastname</strong></li>
-            <li><strong>email</strong></li>
-            <li><strong>password</strong></li>
-            <li><strong>mobile_number</strong></li>
-            <li><strong>gender</strong></li>
-            <li><strong>birth_date</strong></li>
-            <li><strong>address_line_1</strong></li>
-            <li><strong>address_line_2</strong></li>
-            <li><strong>country</strong></li>
-            <li><strong>state</strong></li>
-            <li><strong>city</strong></li>
-            <li><strong>pincode</strong></li>
-            <li><strong>student_department</strong></li> <!-- Updated -->
-            <li><strong>course</strong></li> <!-- Updated -->
-            <li><strong>semester</strong></li>
-            <li><strong>division</strong></li>
-            <li><strong>student_image</strong></li> <!-- Updated -->
-        </ul>
+{% block body %}
+  <head>
+    <style>
+      body {
+        font-family: 'Raleway', sans-serif, Helvetica, Arial;
+        color: #002652;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .container {
+        width: 75%;
+        margin-top: 700px;
+        text-align: center;
+      }
+
+      h1 {
+        color: #004688;
+        margin-bottom: 30px;
+      }
+
+      .upload-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+      }
+
+      .alert {
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        border: 1px solid #004788;
+        border-radius: 8px;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        text-align: left;
+        font-size: 16px;
+      }
+
+      th {
+        background-color: #004688;
+        color: #ffffff;
+      }
+
+      td {
+        background-color: #f9f9f9;
+      }
+
+      tr:nth-child(even) td {
+        background-color: #e9ecef;
+      }
+
+      tr:hover td {
+        background-color: #d6e9f8;
+      }
+
+      label {
+        font-size: 16px;
+        color: #004688;
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+
+      input[type="file"] {
+        padding: 8px;
+        border: 2px solid #004788;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        width: 100%;
+        max-width: 300px;
+      }
+
+      button {
+        background-color: #0066c4;
+        color: #ffffff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #337ab7;
+      }
+
+      .csv-format-info {
+        margin-top: 30px;
+        color: #002652;
+      }
+
+      .csv-format-info h2 {
+        font-size: 24px;
+        color: #004688;
+        margin-bottom: 15px;
+      }
+
+      .csv-format-info p {
+        font-size: 18px;
+        color: #004789;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Add Students in Bulk</h1>
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+      <div class="upload-section">
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <label for="csv_file">Upload CSV file:</label>
+          <input type="file" name="csv_file" accept=".csv" required>
+          <button type="submit">Upload</button>
+        </form>
+
+        <div class="csv-format-info">
+          <h2>CSV Format</h2>
+          <p>Please ensure your CSV file has the following headers:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>enrollment</strong></td>
+                <td>Unique enrollment number of the student</td>
+              </tr>
+              <tr>
+                <td><strong>firstname</strong></td>
+                <td>First name of the student</td>
+              </tr>
+              <tr>
+                <td><strong>middlename</strong></td>
+                <td>Middle name of the student (optional)</td>
+              </tr>
+              <tr>
+                <td><strong>lastname</strong></td>
+                <td>Last name of the student</td>
+              </tr>
+              <tr>
+                <td><strong>email</strong></td>
+                <td>Email address of the student</td>
+              </tr>
+              <tr>
+                <td><strong>password</strong></td>
+                <td>Password for student account</td>
+              </tr>
+              <td><strong>mobile_number</strong></td>
+              <td>Mobile number of the student</td>
+            </tr>
+            <tr>
+              <td><strong>gender</strong></td>
+              <td>Gender of the student</td>
+            </tr>
+            <tr>
+              <td><strong>birth_date</strong></td>
+              <td>Birthdate of the student</td>
+            </tr>
+            <tr>
+              <td><strong>address_line_1</strong></td>
+              <td>First line of the student's address</td>
+            </tr>
+            <tr>
+              <td><strong>address_line_2</strong></td>
+              <td>Second line of the student's address (optional)</td>
+            </tr>
+            <tr>
+              <td><strong>country</strong></td>
+              <td>Country of the student</td>
+            </tr>
+            <tr>
+              <td><strong>state</strong></td>
+              <td>State of the student</td>
+            </tr>
+            <tr>
+              <td><strong>city</strong></td>
+              <td>City of the student</td>
+            </tr>
+            <tr>
+              <td><strong>pincode</strong></td>
+              <td>Pincode of the student's location</td>
+            </tr>
+            <tr>
+              <td><strong>student_department</strong></td>
+              <td>Department the student belongs to (updated)</td>
+            </tr>
+            <tr>
+              <td><strong>course</strong></td>
+              <td>Course the student is enrolled in (updated)</td>
+            </tr>
+            <tr>
+              <td><strong>semester</strong></td>
+              <td>Current semester of the student</td>
+            </tr>
+            <tr>
+              <td><strong>division</strong></td>
+              <td>Division the student is placed in</td>
+            </tr>
+            <tr>
+              <td><strong>student_image</strong></td>
+              <td>Profile image of the student (updated)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    
+  </div>
 </body>
-</html>
+{% endblock %}
+
+ 

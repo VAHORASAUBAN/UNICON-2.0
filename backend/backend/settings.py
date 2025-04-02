@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'faculty',
     'rest_framework',
     'addcoordinator',
+    'corsheaders',
 
 ]
 REST_FRAMEWORK = {
@@ -64,7 +65,9 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "superadmin.middleware.LoginRequiredMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
 ]
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'backend.urls'
 

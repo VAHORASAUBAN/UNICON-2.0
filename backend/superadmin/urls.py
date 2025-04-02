@@ -1,7 +1,7 @@
 from django.urls import path
 from superadmin import views as superadmin_views
 urlpatterns = [
-    path('', superadmin_views.front_page, name='front_page'),
+    path('', superadmin_views.coordinator_login, name='coordinator_login'),
     path('add_blog/', superadmin_views.add_blog, name='add_blog'),
     path('add_student/', superadmin_views.add_student, name='add_student'),
     path('add_teacher/', superadmin_views.add_teacher, name="add_teacher"),
@@ -51,11 +51,12 @@ urlpatterns = [
     path('add_students_bulk/', superadmin_views.add_students_bulk,
          name='add_students_bulk'),
     path("add_placement/", superadmin_views.add_placement, name="add_placement"),
-
+    path("navbar/", superadmin_views.navbar, name="navbar"),
 
     # APIs
-    path('login/', superadmin_views.student_login),  # ✅ Login API
-    path('student_profile/', superadmin_views.student_profile),  # ✅ Profile API
+    path('student/login/', superadmin_views.student_login, name='student_login'),
+    path('student/profile/<int:student_id>/',
+         superadmin_views.student_profile, name='student_profile'),
 
 
 

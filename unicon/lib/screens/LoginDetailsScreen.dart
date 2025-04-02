@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:unicon/screens/student/dashboard/DashboardScreen.dart';
-
 import '../../../services/AuthService.dart';
 import '../../widgets/CircularButton.dart';
 import '../../widgets/RoundedTextField.dart';
 import 'Faculty/dashboard/faculty_dashboard_screen.dart';
-
 
 class LoginDetailsScreen extends StatefulWidget {
   final String userType;  // Receiving userType from the previous screen
@@ -24,14 +22,14 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
 
   // Handle Login Logic
   Future<void> _handleLogin() async {
-    String username = _usernameController.text.trim();
+    String enrollment = _usernameController.text.trim();
     String password = _passwordController.text.trim();
 
     setState(() {
       _isLoading = true;
     });
 
-    bool success = await AuthService.login(username, password, widget.userType);
+    bool success = await AuthService.login(enrollment, password, widget.userType);
 
     setState(() {
       _isLoading = false;
@@ -46,7 +44,7 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
       } else if (widget.userType == 'Faculty') {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => FacultyDashboardScreen(userName: 'Faculty',)),
+          MaterialPageRoute(builder: (context) => FacultyDashboardScreen(userName: 'Faculty')),
         );
       }
     } else {
@@ -72,7 +70,6 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
             height: double.infinity,
             color: const Color(0xFF0A3B87),
           ),
-
           Align(
             alignment: Alignment(0, 0.10),
             child: Column(
@@ -80,13 +77,13 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                 SizedBox(height: 20),
                 Image.asset(
                   "assets/images/unicon_logo.png",
-                  height: size.height * 0.3,                  fit: BoxFit.contain,
+                  height: size.height * 0.3,
+                  fit: BoxFit.contain,
                 ),
                 const SizedBox(height: 10),
               ],
             ),
           ),
-
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -109,7 +106,6 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Sign In Heading
                   const Text(
                     'Sign In',
                     style: TextStyle(
@@ -119,8 +115,6 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-
-                  // Subheading: Sign in to my account
                   const Text(
                     'Sign in to my account',
                     style: TextStyle(
@@ -129,50 +123,37 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-
-                  // Username Field
                   RoundedTextField(
-                    controller:
-                        _usernameController, // Pass the username controller
+                    controller: _usernameController,
                     color: Colors.grey,
                     icon: Icons.person,
-                    text: "Your Username",
+                    text: "Enrollment Number",
                     privacy: false,
                     suffixicon: null,
                     inputStyle: const TextStyle(color: Colors.black),
                   ),
-
-                  // Password Field
                   RoundedTextField(
                     color: Colors.grey,
                     icon: Icons.lock,
                     text: "Your Password",
-                    privacy:
-                        !_isPasswordVisible, // Control visibility based on state
+                    privacy: !_isPasswordVisible,
                     suffixicon: _isPasswordVisible
                         ? Icons.visibility
                         : Icons.visibility_off,
                     togglePasswordVisibility: () {
                       setState(() {
-                        _isPasswordVisible =
-                            !_isPasswordVisible; // Toggle visibility
+                        _isPasswordVisible = !_isPasswordVisible;
                       });
                     },
                     inputStyle: const TextStyle(color: Colors.black),
                     controller: _passwordController,
                   ),
-
-
                   const SizedBox(height: 20),
-
-                  // Forgot Password Link aligned to the left
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                        onPressed: () {
-                          // Handle forgot password action
-                        },
+                        onPressed: () {},
                         child: const Text(
                           'Forgot Password?',
                           style: TextStyle(
@@ -184,15 +165,14 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                       ),
                     ],
                   ),
-
                   _isLoading
                       ? const CircularProgressIndicator()
                       : CircularButton(
-                          text: "LOGIN",
-                          color: const Color(0xFF0A3B87),
-                          textColor: Colors.white,
-                          press: _handleLogin,
-                        ),
+                    text: "LOGIN",
+                    color: const Color(0xFF0A3B87),
+                    textColor: Colors.white,
+                    press: _handleLogin,
+                  ),
                   const SizedBox(height: 10),
                 ],
               ),
