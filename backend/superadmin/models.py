@@ -96,6 +96,9 @@ class Teacher(models.Model):
     qualification = models.CharField(max_length=255)
     pic = models.ImageField(upload_to='teacher_images/', null=True, blank=True)
 
+    def __str__(self):
+        return f'{self.firstname} {self.lastname} ({self.faculty_id})'
+
 
 class Batch(models.Model):
     batch_start_date = models.DateField()
