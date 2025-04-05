@@ -212,14 +212,6 @@
                     </div>
                 </div>
                 <div class="page-content">
-                    {% if messages %}
-                        {% for message in messages %}
-                    <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %} alert-dismissible fade show" role="alert">
-                            {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                        {% endfor %}
-                    {% endif %}
 
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
