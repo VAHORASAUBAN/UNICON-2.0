@@ -146,7 +146,8 @@ class _SubjectPageState extends State<SubjectPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text("Syllabus Structure"),
-        titleTextStyle: TextStyle(color: Colors.white, fontSize: baseFontSize + 2),
+        titleTextStyle:
+            TextStyle(color: Colors.white, fontSize: baseFontSize + 2),
         backgroundColor: const Color(0xFF0A3B87),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -175,8 +176,12 @@ class _SubjectPageState extends State<SubjectPage> {
                       child: Text(
                         "SEM $i",
                         style: TextStyle(
-                          color: selectedSemester == i ? Colors.white : Colors.white70,
-                          fontWeight: selectedSemester == i ? FontWeight.bold : FontWeight.normal,
+                          color: selectedSemester == i
+                              ? Colors.white
+                              : Colors.white70,
+                          fontWeight: selectedSemester == i
+                              ? FontWeight.bold
+                              : FontWeight.normal,
                           fontSize: baseFontSize,
                         ),
                       ),

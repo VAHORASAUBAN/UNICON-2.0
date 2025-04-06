@@ -1,8 +1,10 @@
+from django.http import HttpResponse
+from django.contrib import messages
+from django.contrib.auth.models import make_password
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User, auth, make_password
 from django.shortcuts import render
 from .models import coordinator
-from django.contrib.auth.models import make_password
-from django.contrib import messages
-from django.http import HttpResponse
 
 
 def add_coordinator(request):
@@ -54,6 +56,13 @@ def add_coordinator(request):
             qualification=qualification,
             coordinator_image=coordinator_image
         )
-        return render(request, 'addcoordinator/add_coordinator.html', {'message': 'Coordinator added successfully'})
-    else:
-        return render(request, 'addcoordinator/add_coordinator.html')
+
+
+<< << << < HEAD
+addcoordinator.save()
+return HttpResponse("Coordinator Added Successfully")
+== == == =
+return render(request, 'addcoordinator/add_coordinator.html', {'message': 'Coordinator added successfully'})
+>>>>>> > e25313a43fb3c2575daa984b9b60d8fb844562cb
+else:
+    return render(request, 'addcoordinator/add_coordinator.html')

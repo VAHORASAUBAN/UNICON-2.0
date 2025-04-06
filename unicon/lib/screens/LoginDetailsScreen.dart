@@ -6,7 +6,7 @@ import '../../widgets/RoundedTextField.dart';
 import 'Faculty/dashboard/faculty_dashboard_screen.dart';
 
 class LoginDetailsScreen extends StatefulWidget {
-  final String userType;  // Receiving userType from the previous screen
+  final String userType; // Receiving userType from the previous screen
 
   const LoginDetailsScreen({super.key, required this.userType});
 
@@ -29,7 +29,8 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
       _isLoading = true;
     });
 
-    bool success = await AuthService.login(enrollment, password, widget.userType);
+    bool success =
+        await AuthService.login(enrollment, password, widget.userType);
 
     setState(() {
       _isLoading = false;
@@ -44,7 +45,9 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
       } else if (widget.userType == 'Faculty') {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => FacultyDashboardScreen(userName: 'Faculty')),
+          MaterialPageRoute(
+              builder: (context) =>
+                  FacultyDashboardScreen(userName: 'Faculty')),
         );
       }
     } else {
@@ -168,11 +171,11 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                   _isLoading
                       ? const CircularProgressIndicator()
                       : CircularButton(
-                    text: "LOGIN",
-                    color: const Color(0xFF0A3B87),
-                    textColor: Colors.white,
-                    press: _handleLogin,
-                  ),
+                          text: "LOGIN",
+                          color: const Color(0xFF0A3B87),
+                          textColor: Colors.white,
+                          press: _handleLogin,
+                        ),
                   const SizedBox(height: 10),
                 ],
               ),
