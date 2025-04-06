@@ -152,14 +152,7 @@ class FacultyTimetableScreen extends StatefulWidget {
 }
 
 class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
-  final List<String> days = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday"
-  ];
+  final List<String> days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   late String selectedDay;
   late String displayedDate;
 
@@ -266,8 +259,7 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
                 labelText: "Select Day",
                 filled: true,
                 fillColor: Colors.white, // TextField box white
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               ),
               onChanged: (newValue) {
                 setState(() {
@@ -280,8 +272,7 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
                   value: day,
                   child: Text(
                     day,
-                    style: const TextStyle(
-                        color: Colors.black), // Text in dropdown
+                    style: const TextStyle(color: Colors.black), // Text in dropdown
                   ),
                 );
               }).toList(),
@@ -298,8 +289,7 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
                 String division = entry["division"]!;
 
                 return Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -328,13 +318,11 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
                           ),
                           Row(
                             children: [
-                              const Icon(Icons.schedule,
-                                  size: 18, color: Colors.grey),
+                              const Icon(Icons.schedule, size: 18, color: Colors.grey),
                               const SizedBox(width: 4),
                               Text(
                                 "$startTime - $endTime",
-                                style: const TextStyle(
-                                    fontSize: 14, color: Colors.black87),
+                                style: const TextStyle(fontSize: 14, color: Colors.black87),
                               ),
                             ],
                           ),
@@ -347,21 +335,18 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
                           const SizedBox(width: 6),
                           Text(
                             "Division: $division",
-                            style: const TextStyle(
-                                fontSize: 16, color: Colors.black87),
+                            style: const TextStyle(fontSize: 16, color: Colors.black87),
                           ),
                         ],
                       ),
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          const Icon(Icons.school,
-                              size: 20, color: Colors.grey),
+                          const Icon(Icons.school, size: 20, color: Colors.grey),
                           const SizedBox(width: 6),
                           Text(
                             "Course: $courseName",
-                            style: const TextStyle(
-                                fontSize: 16, color: Colors.black87),
+                            style: const TextStyle(fontSize: 16, color: Colors.black87),
                           ),
                         ],
                       ),
