@@ -327,8 +327,8 @@
             <div class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
               <div class="profile-widget">
                 <div class="profile-img">
-                  <a href="/profile/"
-                    ><img class="avatar" src="{{i.pic.url}}" alt=""
+                  <a href="/faculty_individual_profile/{{i.faculty_id}}"
+                    ><img class="avatar" src="{{ i.pic.url }}" alt="loading"
                   /></a>
                 </div>
                 <div class="dropdown profile-action">
@@ -350,9 +350,10 @@
                 </div>
 
                 <h4 class="user-name m-t-10 m-b-0 text-ellipsis">
-                  <a href="/profile/{{i.id}}">{{i.firstname}}</a>
+                  <a href="/faculty_individual_profile/{{i.faculty_id}}"
+                    >{{i.firstname}}</a>
                 </h4>
-                <div class="small text-muted">{{i.id}}</div>
+                <div class="small text-muted">{{i.faculty_id}}</div>
               </div>
             </div>
           </div>

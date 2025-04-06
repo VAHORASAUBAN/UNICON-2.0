@@ -221,45 +221,57 @@
                     </div>
                 </div> -->
                 <div class="row">
+                
                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                        <form class="custom-mt-form">
+                        <form class="custom-mt-form" method="POST" action="/add_subject/">
+                            {% csrf_token %}
                             <div class="form-group">
                                 <label>Subject Code</label>
-                                <input type="number" class="form-control" />
+                                <input type="number" name="subject_code" class="form-control" />
                             </div>
                             <div class="form-group">
                                 <label>Name</label>
-                                <input type="text" class="form-control" />
+                                <input type="text" name="subject_name" class="form-control" />
                             </div>
                             <div class="form-group form-focus select-focus">
-                                <select class="select form-control">
-                                    <option>FCAIT</option>
+                                <select class="select form-control" name="department">
+                                    {% for i in all_departments %}
+                                    <option value="{{i.id}}"> {{i.department_name}} </option>
+                                    {% endfor %}
                                 </select>
                                 <label class="focus-label">Department</label>
                             </div>
                             <div class="form-group form-focus select-focus">
-                                <select class="select form-control">
-                                    <option>2021-2024</option>
-                                    <option>2022-2025</option>
-                                    <option>2023-2026</option>
+                                <select class="select form-control" name="batch">
+                                    {% for i in all_batches %}
+                                    <option value="{{i.id}}"> {{i.batch_start_date}} {{i.batch_end_date}} </option>
+                                    {% endfor %}
+                                    
+                                    
                                 </select>
                                 <label class="focus-label">Batch</label>
                             </div>
                             <div class="form-group form-focus select-focus">
-                                <select class="select form-control">
+                                <select class="select form-control" name="semester">
                                     <option>1</option>
                                     <option>2</option>
                                     <option>3</option>
                                     <option>4</option>
                                     <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+
                                 </select>
                                 <label class="focus-label">Sem</label>
                             </div>
                             <div class="form-group form-focus select-focus">
-                                <select class="select form-control">
-                                    <option>IMSCIT</option>
-                                    <option>BCA</option>
-                                    <option>BCA(Hons)</option>
+                                <select class="select form-control" name="course"> 
+                                    {% for i in all_courses %}
+                                    <option value="{{i.id}}"> {{i.course_name}} </option>
+                                    {% endfor %}
                                 </select>
                                 <label class="focus-label">Course</label>
                             </div>

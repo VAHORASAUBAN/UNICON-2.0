@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 
 
@@ -52,6 +53,75 @@ class FacultyNavBar extends StatelessWidget {
             child: const Icon(Icons.add, color: Colors.white), // Scanner icon
             shape: const CircleBorder(), // Circular shape
             elevation: 6, // Adds shadow effect
+          ),
+        ),
+      ],
+    );
+  }
+}
+*/
+import 'package:flutter/material.dart';
+
+import '../screens/Faculty/TimeTable/time_table.dart';
+
+class FacultyNavBar extends StatelessWidget {
+  final int currentIndex;
+  final Function(int) onTap;
+  final VoidCallback onScannerTap;
+
+  const FacultyNavBar({
+    required this.currentIndex,
+    required this.onTap,
+    required this.onScannerTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        BottomNavigationBar(
+          currentIndex: currentIndex,
+          onTap: (index) {
+            if (index == 1) {
+              // If "TimeTable" is clicked
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FacultyTimetableScreen()),
+              );
+            } else {
+              onTap(index); // Keep other tabs working normally
+            }
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.dashboard),
+              label: 'Dashboard',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_month_rounded),
+              label: 'TimeTable',
+            ),
+          ],
+          selectedItemColor: const Color(0xFF0A3B87),
+          unselectedItemColor: Colors.grey,
+          backgroundColor: Colors.white,
+          type: BottomNavigationBarType.fixed,
+        ),
+
+        // Floating plus button in the center
+        Positioned(
+          top: -20,
+          left: MediaQuery.of(context).size.width / 2 - 30,
+          child: FloatingActionButton(
+            backgroundColor: const Color(0xFF0A3B87),
+            onPressed: () {
+              Navigator.pushNamed(context, '/otpGenerator');
+            },
+            shape: const CircleBorder(),
+            elevation: 6,
+            child: const Icon(Icons.add, color: Colors.white),
           ),
         ),
       ],

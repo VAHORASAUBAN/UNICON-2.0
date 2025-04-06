@@ -265,248 +265,143 @@
                   <div class="card-body">
                     <div class="row">
                       <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                        <form
-  class="custom-mt-form"
-  action="{% url "edit_student" all_students.id %}"
-  method="POST"
-  enctype="multipart/form-data">
-  {% csrf_token %}
-  
-  <div class="form-group">
-    <label>Enrollment</label>
-    <input
-      type="number"
-      class="form-control"
-      name="enrollment"  
-      value="{{all_students.enrollment}}"
-    />
-  </div>
-  
-  <div class="form-group">
-    <label>Firstname</label>
-    <input
-      type="text"
-      class="form-control"
-      name="firstname"  
-      value="{{all_students.firstname}}"
-    />
-  </div>
-  
-  <div class="form-group">
-    <label>Middlename</label>
-    <input
-      type="text"
-      class="form-control"
-      name="middlename"  
-      value="{{all_students.middlename}}"
-    />
-  </div>
-  
-  <div class="form-group">
-    <label>Lastname</label>
-    <input
-      type="text"
-      class="form-control"
-      name="lastname"  
-      value="{{all_students.lastname}}"
-    />
-  </div>
-  
-  <div class="form-group">
-    <label>Email</label>
-    <input
-      type="email"
-      class="form-control"
-      name="email"  
-      value="{{all_students.email}}"
-    />
-  </div>
-  
-  <div class="form-group">
-    <label>Password</label>
-    <input
-      type="password"
-      class="form-control"
-      name="password"  
-      readonly
-    />
-  </div>
-  
-  <div class="form-group">
-    <label>Mobile Number</label>
-    <input
-      type="number"
-      class="form-control"
-      name="mobile_number"  
-      value="{{all_students.mobile}}"
-    />
-  </div>
-  
-  <div class="form-group">
-    <label>Gender</label>
-    <select
-      class="form-control select"
-      name="gender"  
-      value="{{all_students.gender}}">
-      <option>Male</option>
-      <option>Female</option>
-    </select>
-  </div>
-  
-  <div class="form-group">
-    <label>Birth Date</label>
-    <input
-      class="form-control datetimepicker-input datetimepicker"
-      type="date"
-      name="birth_date"  
-      data-toggle="datetimepicker"
-      value="{{all_students.birth_date}}"
-    />
-  </div>
-
-  <div class="form-group">
-    <label>Address Line 1</label>
-    <input
-      type="text"
-      class="form-control"
-      name="address_line_1"  
-      value="{{all_students.address_line_1}}"
-    />
-  </div>
-  
-  <div class="form-group">
-    <label>Address Line 2</label>
-    <input
-      type="text"
-      class="form-control"
-      name="address_line_2"  
-      value="{{all_students.address_line_2}}"
-    />
-  </div>
-  
-  <div class="form-group">
-    <label>Country</label>
-    <select
-      class="form-control select form-select country"
-      name="country"  
-      aria-label="Default select example"
-      onchange="loadStates()"
-      value="{{all_students.country}}">
-      <option selected>Select Country</option>
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label>State</label>
-    <select
-      class="form-control select form-select state"
-      name="state"  
-      aria-label="Default select example"
-      onchange="loadCities()"
-      value="{{all_students.state}}">
-      <option selected>Select State</option>
-    </select>
-  </div>
-  
-  <div class="form-group">
-    <label>City</label>
-    <select
-      class="form-control select form-select city"
-      name="city"  
-      aria-label="Default select example"
-      value="{{all_students.city}}">
-      <option selected>Select City</option>
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label>Pincode</label>
-    <input
-      type="number"
-      class="form-control"
-      name="pincode"  
-      value="{{all_students.pincode}}"
-    />
-  </div>
-
-  <div class="form-group">
-    <label>Department</label>
-    <select
-      class="form-control select"
-      name="student_department"  
-      value="{{all_students.department}}">
-      {% for i in all_departments %}
-        <option value="{{ i.id }}">
-          {{ i.department_name}}
-        </option>
-      {% endfor %}
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label>Course</label>
-    <select
-      class="form-control select"
-      name="course"  
-      value="{{all_students.course}}">
-      {% for i in all_courses %}
-        <option value="{{ i.id }}">
-          {{ i.course_name }}
-        </option>
-      {% endfor %}
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label>Semester</label>
-    <select
-      class="form-control select"
-      name="semester"  
-      value="{{all_students.semester}}">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5</option>
-      <option>6</option>
-      <option>7</option>
-      <option>8</option>
-      <option>9</option>
-      <option>10</option>
-    </select>
-  </div>
-  
-  <div class="form-group">
-    <label>Division</label>
-    <select
-      class="form-control select"
-      name="division"  
-      value="{{all_students.division}}">
-      <option>A</option>
-      <option>B</option>
-      <option>C</option>
-    </select>
-  </div>
-  
-  <div class="form-group">
-    <label>Student Image</label>
-    <input
-      type="file"
-      name="student_image"  
-      accept="image/*"
-      class="form-control"
-    />
-  </div>
-
-  <div class="form-group text-center custom-mt-form-group">
-    <button class="btn btn-primary mr-2" type="submit">
-      Submit
-    </button>
-    <button class="btn btn-secondary" type="reset">
-      Cancel
-    </button>
-  </div>
-</form>
+                        <form class="custom-mt-form" action="{% url 'edit_student' all_students.id %}" method="POST" enctype="multipart/form-data">
+                          {% csrf_token %}
+                        
+                          <div class="form-group">
+                            <label>Enrollment</label>
+                            <input type="number" class="form-control" name="enrollment" value="{{ all_students.enrollment }}" />
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Firstname</label>
+                            <input type="text" class="form-control" name="firstname" value="{{ all_students.firstname }}" />
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Middlename</label>
+                            <input type="text" class="form-control" name="middlename" value="{{ all_students.middlename }}" />
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Lastname</label>
+                            <input type="text" class="form-control" name="lastname" value="{{ all_students.lastname }}" />
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" name="email" value="{{ all_students.email }}" />
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" class="form-control" name="password" placeholder="Enter new password (optional)" />
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Mobile Number</label>
+                            <input type="number" class="form-control" name="mobile_number" value="{{ all_students.mobile_number }}" />
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Gender</label>
+                            <select class="form-control select" name="gender">
+                              <option value="Male" {% if all_students.gender == "Male" %}selected{% endif %}>Male</option>
+                              <option value="Female" {% if all_students.gender == "Female" %}selected{% endif %}>Female</option>
+                            </select>
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Birth Date</label>
+                            <input type="date" class="form-control datetimepicker" name="birth_date" value="{{ all_students.birth_date|date:'Y-m-d' }}" />
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Address Line 1</label>
+                            <input type="text" class="form-control" name="address_line_1" value="{{ all_students.address_line_1 }}" />
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Address Line 2</label>
+                            <input type="text" class="form-control" name="address_line_2" value="{{ all_students.address_line_2 }}" />
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Country</label>
+                            <select class="form-control select form-select country" name="country">
+                              <option value="">Select Country</option>
+                              <option value="India" {% if all_students.country == "India" %}selected{% endif %}>India</option>
+                            </select>
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>State</label>
+                            <select class="form-control select form-select state" name="state">
+                              <option value="">Select State</option>
+                              <option value="Gujarat" {% if all_students.state == "Gujarat" %}selected{% endif %}>Gujarat</option>
+                            </select>
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>City</label>
+                            <select class="form-control select form-select city" name="city">
+                              <option value="">Select City</option>
+                              <option value="Ahmedabad" {% if all_students.city == "Ahmedabad" %}selected{% endif %}>Ahmedabad</option>
+                            </select>
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Pincode</label>
+                            <input type="number" class="form-control" name="pincode" value="{{ all_students.pincode }}" />
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Department</label>
+                            <select class="form-control select" name="student_department">
+                              {% for i in all_departments %}
+                                <option value="{{ i.id }}" {% if all_students.student_department.id == i.id %}selected{% endif %}>{{ i.department_name }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Course</label>
+                            <select class="form-control select" name="course">
+                              {% for i in all_courses %}
+                                <option value="{{ i.id }}" {% if all_students.course.id == i.id %}selected{% endif %}>{{ i.course_name }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Semester</label>
+                            <select class="form-control select" name="semester">
+                              {% for sem in "12345678910" %}
+                                <option value="{{ sem }}" {% if all_students.semester|stringformat:"s" == sem %}selected{% endif %}>{{ sem }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Division</label>
+                            <select class="form-control select" name="division">
+                              <option value="A" {% if all_students.division == "A" %}selected{% endif %}>A</option>
+                              <option value="B" {% if all_students.division == "B" %}selected{% endif %}>B</option>
+                              <option value="C" {% if all_students.division == "C" %}selected{% endif %}>C</option>
+                            </select>
+                          </div>
+                        
+                          <div class="form-group">
+                            <label>Student Image</label>
+                            <input type="file" name="student_image" accept="image/*" class="form-control" />
+                          </div>
+                        
+                          <div class="form-group text-center custom-mt-form-group">
+                            <button class="btn btn-primary mr-2" type="submit">Submit</button>
+                            <button class="btn btn-secondary" type="reset">Cancel</button>
+                          </div>
+                        </form>
+                        
 
                       </div>
                     </div>
@@ -517,7 +412,7 @@
           </div>
         </div>
         
-				<div class="msg-sidebar notifications msg-noti">
+				{% comment %} <div class="msg-sidebar notifications msg-noti">
 					<div class="topnav-dropdown-header">
 						<span>Messages</span>
 					</div>
@@ -736,8 +631,8 @@
 					<div class="topnav-dropdown-footer">
 						<a href="chat.html">See all messages</a>
 					</div>
-				</div>
-			</div> -->
+				</div> {% endcomment %}
+			</div> 
       </div>
     </div>
     <script>

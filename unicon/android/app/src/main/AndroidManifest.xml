@@ -15,8 +15,8 @@
         android:required="false" />
 
     <application
-        android:label="unicon"
-        android:icon="@mipmap/ic_launcher"
+        android:label="Unicon"
+        android:icon="@mipmap/unicon_logo"
         android:usesCleartextTraffic="true">
 
         <activity
