@@ -83,12 +83,10 @@ class FacultyNavBar extends StatelessWidget {
         BottomNavigationBar(
           currentIndex: currentIndex,
           onTap: (index) {
-            if (index == 1) {
-              // If "TimeTable" is clicked
+            if (index == 1) { // If "TimeTable" is clicked
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => FacultyTimetableScreen()),
+                MaterialPageRoute(builder: (context) => FacultyTimetableScreen()),
               );
             } else {
               onTap(index); // Keep other tabs working normally

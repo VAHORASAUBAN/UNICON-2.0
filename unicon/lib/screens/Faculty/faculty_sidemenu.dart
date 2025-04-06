@@ -82,7 +82,7 @@ class faculty_sidemenu extends StatelessWidget {
           _buildDrawerItem(
               Icons.groups, "All Students", () => onMenuTap("/allstudent")),
           _buildDrawerItem(Icons.calendar_month_rounded, "Attendance Report",
-              () => onMenuTap("/attendance")),
+                  () => onMenuTap("/attendance")),
           const Divider(),
 
           // ==== Support Section ====

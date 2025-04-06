@@ -3,14 +3,14 @@ import '../../../styles/colors.dart';
 import '../../../styles/fonts.dart';
 import '../../../widgets/AttendancePieChart.dart';
 
+
 import '../../../../widgets/faculty_navbar.dart';
 import '../faculty_sidemenu.dart';
 
 class FacultyDashboardScreen extends StatefulWidget {
   final String userName;
 
-  const FacultyDashboardScreen({Key? key, required this.userName})
-      : super(key: key);
+  const FacultyDashboardScreen({Key? key, required this.userName}) : super(key: key);
 
   @override
   _FacultyDashboardScreenState createState() => _FacultyDashboardScreenState();
