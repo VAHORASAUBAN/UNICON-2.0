@@ -4,6 +4,7 @@ import 'package:unicon/screens/Faculty/dashboard/Otp/otp_generator_screen.dart';
 import 'package:unicon/screens/LoginScreen.dart';
 import 'package:unicon/screens/LoginDetailsScreen.dart';
 import 'package:unicon/screens/student/AttendanceReport.dart';
+import 'package:unicon/screens/student/ProfileScreen.dart';
 import 'package:unicon/screens/student/scanner/scanner_screen.dart';
 import 'package:unicon/screens/timetable_screen.dart';
 import 'screens/Faculty/TimeTable/time_table.dart';
@@ -37,6 +38,8 @@ class MyApp extends StatelessWidget {
         '/placements': (context) => PlacementScreen(),
         '/attendancereport': (context) => AttendanceReport(),
         '/otpGenerator': (context) => const OTPGeneratorScreen(),
+        '/profile': (context) => ProfileScreen(),
+
       },
     );
   }
