@@ -1,29 +1,24 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from addcoordinator.models import coordinator
+
 from django.contrib.auth.models import User, auth, make_password
 from django.contrib.auth.hashers import check_password
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
-from django.http import HttpResponse
-from .models import *
+from django.http import HttpResponse, JsonResponse
+from .models import Teacher, Student, department, Course, Subject, Batch, Placement
+from rest_framework.parsers import JSONParser
 import pandas as pd
 from datetime import datetime
 from django.core.files import File
 import os
 import json
-from django.contrib.auth.hashers import check_password
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Student
+from django.views.decorators.csrf import csrf_exempt
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
-
-
-def front_page(request):
-    return render(request, 'superadmin/front_page.html')
 
 
 def add_blog(request):
@@ -61,7 +56,17 @@ def edit_teacher(request):
 
 
 def index(request):
-    return render(request, 'superadmin/index.html')
+    all_students = Student.objects.all()
+    all_teachers = Teacher.objects.all()
+    all_departments = department.objects.all()
+    all_courses = Course.objects.all()
+    context = {
+        'all_students': all_students,
+        'all_teachers': all_teachers,
+        'all_departments': all_departments,
+        'all_courses': all_courses
+    }
+    return render(request, 'superadmin/index.html', context)
 
 
 def my_profile(request):
@@ -156,29 +161,71 @@ def show_timetable(request):
     return render(request, 'superadmin/show_timetable.html')
 
 
-def coordinator_login(request):
+# def coordinator_login(request):
+#     if request.method == "POST":
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+
+#         try:
+#             coord = coordinator.objects.get(username=username)
+#             if check_password(password, coord.password):
+#                 request.session['username'] = coord.username
+#                 messages.success(request, "Login successful!")
+#                 # Change to your actual dashboard URL name
+#                 # return render(request, 'superadmin/index.html', {'username': username})
+#                 return redirect('index')
+#             else:
+#                 messages.error(
+#                     request, "Invalid credentials. Please try again.")
+#         except coordinator.DoesNotExist:
+#             messages.error(request, "Coordinator does not exist.")
+#         except Exception as e:
+#             messages.error(request, f"An error occurred: {str(e)}")
+
+#         # Change to your actual login URL name
+#         return render(request, 'superadmin/login.html', {'error': 'Invalid credentials.'})
+#     else:
+#         return render(request, 'superadmin/login.html')
+
+
+def login_view(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
+        role = request.POST.get('role')
 
         try:
-            coord = coordinator.objects.get(username=username)
-            if check_password(password, coord.password):
-                request.session['username'] = coord.username
-                messages.success(request, "Login successful!")
-                # Change to your actual dashboard URL name
-                return render(request, 'superadmin/index.html', {'username': username})
+            if role == "faculty":
+                user = Teacher.objects.get(faculty_id=username)
+                if check_password(password, user.password):
+                    request.session['faculty_id'] = user.faculty_id
+                    messages.success(request, "Login successful!")
+                    return redirect('/faculty_dash/')
+
+            if role == "coordinator":
+                user = coordinator.objects.get(username=username)
+                if check_password(password, user.password):
+                    request.session['username'] = user.username
+                    messages.success(request, "Login successful!")
+                    return redirect('index')  # Redirect to the main page
+                else:
+                    messages.error(
+                        request, "Invalid credentials. Please try again.")
+
             else:
-                messages.error(
-                    request, "Invalid credentials. Please try again.")
+                messages.error(request, "Invalid role selected.")
+
         except coordinator.DoesNotExist:
             messages.error(request, "Coordinator does not exist.")
+        except Teacher.DoesNotExist:
+            messages.error(request, "Teacher does not exist.")
         except Exception as e:
             messages.error(request, f"An error occurred: {str(e)}")
 
-        # Change to your actual login URL name
-        return render(request, 'superadmin/login.html', {'error': 'Invalid credentials.'})
+        # Always render login page after handling POST
+        return render(request, 'superadmin/login.html')
     else:
+        # For GET requests, render the login form
         return render(request, 'superadmin/login.html')
 
 
@@ -546,7 +593,7 @@ def parse_date(date_value):
 def add_teachers_bulk(request):
     if request.method == "POST":
         IMAGE_UPLOAD_PATH = "media/teacher_images/"
-        csv_file = request.FILES.get('csv_file')
+        csv_file = request.FILES.get('file')
 
         # Validate File Type
         if not csv_file or not csv_file.name.endswith('.csv'):
@@ -628,7 +675,9 @@ def add_teachers_bulk(request):
             messages.error(
                 request, f"Error saving teachers to the database: {str(e)}")
 
-        return redirect('add_teachers_bulk')
+        return render(request, 'superadmin/add_teachers_bulk.html', {
+            'success': "Teachers have been added successfully!"
+        })
 
     return render(request, 'superadmin/add_teachers_bulk.html')
 
@@ -868,32 +917,145 @@ def add_timetable(request):
 # Serializers Views
 
 
-@api_view(['POST'])
+# Disable CSRF for testing (consider better security in production)
+@csrf_exempt
 def student_login(request):
-    email = request.data.get('email')
-    password = request.data.get('password')
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        enrollment = data.get('enrollment')
+        password = data.get('password')
 
-    try:
-        student = Student.objects.get(email=email)
+        try:
+            student = Student.objects.get(enrollment=enrollment)
 
-        if check_password(password, student.password):  # ✅ Password Match Check
-            refresh = RefreshToken.for_user(student)
+            print(f"Received Password: {password}")  # Debug
+            print(f"Stored Hashed Password: {student.password}")  # Debug
 
-            return Response({
-                'message': 'Login successful',
-                'token': str(refresh.access_token),  # ✅ JWT Token
-                'student': StudentSerializer(student, context={'request': request}).data
-            })
-        else:
-            return Response({'error': 'Invalid password'}, status=400)
+            if check_password(password, student.password):  # Hashed password check
+                return JsonResponse({"message": "Login successful", "student_id": student.id})
+            else:
+                return JsonResponse({"error": "Invalid password"}, status=401)
+        except Student.DoesNotExist:
+            return JsonResponse({"error": "Student not found"}, status=404)
 
-    except Student.DoesNotExist:
-        return Response({'error': 'Student not found'}, status=404)
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def student_profile(request):
-    student = request.user
-    serializer = StudentSerializer(student, context={'request': request})
-    return Response(serializer.data)
+@csrf_exempt
+def student_profile(request, student_id):
+    if request.method == 'GET':
+        try:
+            student = Student.objects.get(id=student_id)
+            profile_data = {
+                "firstname": student.firstname,
+                "lastname": student.lastname,
+                "enrollment": student.enrollment,
+                "mobile_number": student.mobile_number,
+                "gender": student.gender,
+                "birth_date": student.birth_date,
+                "address": f"{student.address_line_1}, {student.city}, {student.state}, {student.country}",
+                "department": student.student_department.department_name,
+                "course": student.course.course_name,
+                "semester": student.semester,
+                "division": student.division,
+                "student_image": student.student_image.url if student.student_image else None,
+            }
+            return JsonResponse(profile_data)
+        except Student.DoesNotExist:
+            return JsonResponse({"error": "Student not found"}, status=404)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+def navbar(request):
+    return render(request, 'superadmin/navbar.html')
+
+
+# Faculty Views
+
+
+def faculty_my_profile(request):
+    return render(request, 'faculty/faculty_my-profile.html')
+# for faculty
+
+
+def faculty_profile(request):
+    # Get the faculty_id from the session
+    faculty_id = request.session.get('faculty_id')
+
+    if faculty_id:
+        try:
+            # Retrieve the teacher's details using the faculty_id
+            teacher = Teacher.objects.get(faculty_id=faculty_id)
+            return render(request, 'faculty/faculty_profile.html', {'teacher': teacher})
+        except Teacher.DoesNotExist:
+            return render(request, 'faculty/faculty_profile.html', {'error': 'Teacher does not exist.'})
+    else:
+        # If the faculty_id is not in the session, redirect to the login page
+        return render(request, 'faculty/faculty_login.html', {'error': 'Please login to view your profile.'})
+# for faculty
+
+
+def faculty_logout_view(request):
+
+    request.session.flush()
+
+    return redirect('/login_view/')
+
+
+def faculty_sidebar(request):
+    return render(request, 'faculty/faculty_sidebar.html')
+
+
+def faculty_dash(request):
+    # Get the faculty_id from the session
+    faculty_id = request.session.get('faculty_id')
+    return render(request, 'faculty/faculty_dash.html', {'faculty_id': faculty_id})
+
+
+def faculty_all_student(request):
+
+    all_students = Student.objects.all()
+    print(all_students)
+    return render(request, 'faculty/faculty_all-students.html', {'all_students': all_students})
+
+
+def qr_code(request):
+    subject = request.GET.get('subject')
+    course = request.GET.get('course')
+    department = request.GET.get('department')
+    division = request.GET.get('division')
+    semester = request.GET.get('semester')
+
+    qr_data = f"Subject: {subject}, Course: {course}, Department: {department}, Division: {division}, Semester: {semester}"
+    img = qrcode.make(qr_data)
+    buffer = io.BytesIO()
+    img.save(buffer, format='PNG')
+    buffer.seek(0)
+    img_str = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+    context = {
+        'qr_data': qr_data,
+        'qr_code_url': f"data:image/png;base64,{img_str}"
+    }
+    return render(request, 'faculty/qr_code.html', context)
+
+
+def faculty_subject(request):
+    return render(request, 'faculty/faculty_subject.html')
+
+
+def faculty_all_students(request):
+    return render(request, 'faculty/faculty_all-students.html')
+
+
+def faculty_stud_edit(request):
+    return render(request, 'faculty/faculty_stud_edit.html')
+
+
+def faculty_attendence(request):
+    return render(request, 'faculty/faculty_attendence.html')
+
+
+def faculty_attendence_1(request):
+    return render(request, 'faculty/faculty_attendence_1.html')

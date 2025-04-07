@@ -1,7 +1,8 @@
 from django.urls import path
 from superadmin import views as superadmin_views
 urlpatterns = [
-    path('', superadmin_views.front_page, name='front_page'),
+    path("", superadmin_views.login_view, name="login_view"),
+    path("login_view/", superadmin_views.login_view, name="login_view"),
     path('add_blog/', superadmin_views.add_blog, name='add_blog'),
     path('add_student/', superadmin_views.add_student, name='add_student'),
     path('add_teacher/', superadmin_views.add_teacher, name="add_teacher"),
@@ -29,8 +30,8 @@ urlpatterns = [
     path('all_subject/', superadmin_views.all_subject, name='all_subject'),
     path('add_timetable/', superadmin_views.add_timetable, name='add_timetable'),
     path('show_timetable/', superadmin_views.show_timetable, name='show_timetable'),
-    path('coordinator_login/', superadmin_views.coordinator_login,
-         name="coordinator_login"),
+    #     path('coordinator_login/', superadmin_views.coordinator_login,
+    #          name="coordinator_login"),
     # path('faculty_login/', superadmin_views.faculty_login),
     path('show_placement/', superadmin_views.show_placement, name='show_placement'),
     path('logout/', superadmin_views.logout_view, name='logout'),
@@ -51,11 +52,41 @@ urlpatterns = [
     path('add_students_bulk/', superadmin_views.add_students_bulk,
          name='add_students_bulk'),
     path("add_placement/", superadmin_views.add_placement, name="add_placement"),
+    path("navbar/", superadmin_views.navbar, name="navbar"),
+
+
+
+
+
+
+    # Faculty URLs
+    path('faculty_my_profile/', superadmin_views.faculty_my_profile,
+         name="faculty_my_profile"),
+    path('faculty_profile/', superadmin_views.faculty_profile,
+         name="faculty_profile"),
+    path('faculty_sidebar/', superadmin_views.faculty_sidebar,
+         name="faculty_sidebar"),
+    path('faculty_dash/', superadmin_views.faculty_dash, name="faculty_dash"),
+    path('qr_code/', superadmin_views.qr_code, name="qr_code"),
+    path('faculty_subject/', superadmin_views.faculty_subject,
+         name="faculty_subject"),
+    path('faculty_all_student/', superadmin_views.faculty_all_student,
+         name="faculty_all_student"),
+    path('faculty_stud_edit/', superadmin_views.faculty_stud_edit,
+         name="faculty_stud_edit"),
+    path('faculty_attendence/', superadmin_views.faculty_attendence,
+         name="faculty_attendence"),
+    path('faculty_attendence_1/', superadmin_views.faculty_attendence_1,
+         name="faculty_attendence_1"),
+    #     path('faculty_login/', superadmin_views.faculty_login, name='faculty_login'),
+    path('faculty_logout_view/', superadmin_views.faculty_logout_view,
+         name='faculty_logout_view'),
 
 
     # APIs
-    path('login/', superadmin_views.student_login),  # ✅ Login API
-    path('student_profile/', superadmin_views.student_profile),  # ✅ Profile API
+    path('student/login/', superadmin_views.student_login, name='student_login'),
+    path('student/profile/<int:student_id>/',
+         superadmin_views.student_profile, name='student_profile'),
 
 
 

@@ -39,9 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'superadmin',
-    'faculty',
     'rest_framework',
     'addcoordinator',
+    'corsheaders',
 
 ]
 REST_FRAMEWORK = {
@@ -54,7 +54,9 @@ SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Store sessions in DB
 SESSION_COOKIE_AGE = 86400  # Session expires in 1 day
 SESSION_SAVE_EVERY_REQUEST = True  # Update session expiry on every request
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Logout when browser closes
-LOGIN_URL = "/login/"  # Redirect unauthenticated users
+LOGIN_URL = "/login_view/"  # Redirect unauthenticated users
+
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -64,7 +66,9 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "superadmin.middleware.LoginRequiredMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
 ]
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'backend.urls'
 
