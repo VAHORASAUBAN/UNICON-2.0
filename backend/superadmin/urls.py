@@ -94,6 +94,8 @@ urlpatterns = [
     path('teacher/profile/', superadmin_views.teacher_profile,
          name='teacher_profile'),
     path('teacher/login/', superadmin_views.teacher_login, name='teacher_login'),
-    path('teacher/students/', superadmin_views.all_students_api,
-         name='all_students_api'),
+
+
+
+
 ]

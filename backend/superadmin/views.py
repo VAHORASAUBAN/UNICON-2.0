@@ -23,7 +23,20 @@ from datetime import datetime
 import os
 import io
 import json
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.views.decorators.csrf import csrf_exempt
+from .serializers import StudentSerializer, CourseSerializer, BatchSerializer, SubjectSerializer, PlacementSerializer, TeacherSerializer
+from rest_framework.permissions import IsAuthenticated
+from django.urls import reverse
+import io
+from rest_framework.parsers import JSONParser
+import json
 import traceback
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.hashers import check_password
 
 
 def add_blog(request):
@@ -1026,146 +1039,3 @@ def faculty_attendence(request):
 
 def faculty_attendence_1(request):
     return render(request, 'faculty/faculty_attendence_1.html')
-
-
-# Serializers Views
-
-
-# Disable CSRF for testing (consider better security in production)
-@csrf_exempt
-def student_login(request):
-    if request.method == 'POST':
-        try:
-            # Parse JSON body
-            data = json.loads(request.body)
-            print("Login request data:", data)
-
-            enrollment = data.get('enrollment')
-            password = data.get('password')
-
-            # Check for required fields
-            if not enrollment or not password:
-                return JsonResponse(
-                    {"error": "Enrollment and password are required"},
-                    status=400
-                )
-
-            # Try to find student
-            student = Student.objects.get(enrollment=enrollment)
-            print("Student found:", student)
-
-            # Validate password (must be hashed in DB)
-            if check_password(password, student.password):
-                return JsonResponse({
-                    "message": "Login successful",
-                    "student_id": student.id,
-                    "firstname": student.firstname,
-                }, status=200)
-            else:
-                return JsonResponse({"error": "Invalid password"}, status=401)
-
-        except Student.DoesNotExist:
-            return JsonResponse({"error": "Student not found"}, status=404)
-
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON format"}, status=400)
-
-        except Exception as e:
-            print("Unexpected error:", str(e))
-            print(traceback.format_exc())
-            return JsonResponse({"error": "Internal server error"}, status=500)
-
-    return JsonResponse({"error": "Invalid request method"}, status=400)
-
-
-@csrf_exempt
-def student_profile(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            student_id = data.get('student_id')
-
-            if not student_id:
-                return JsonResponse({"error": "Student ID is required"}, status=400)
-
-            student = Student.objects.get(id=student_id)
-            serializer = StudentProfileSerializer(
-                student, context={'request': request})
-            return JsonResponse(serializer.data, safe=False)
-
-        except Student.DoesNotExist:
-            return JsonResponse({"error": "Student not found"}, status=404)
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON"}, status=400)
-
-    return JsonResponse({"error": "Invalid request method"}, status=400)
-
-
-@csrf_exempt
-def teacher_profile(request):
-    if request.method == 'GET':
-        try:
-            json_data = request.body
-            stream = io.BytesIO(json_data)
-            python_data = JSONParser().parse(stream)
-            teacher_id = python_data.get('id', None)
-
-            if teacher_id is not None:
-                teacher = Teacher.objects.get(id=teacher_id)
-                serializer = TeacherSerializer(
-                    teacher, context={'request': request})
-                return JsonResponse(serializer.data, status=200)
-            else:
-                teachers = Teacher.objects.all()
-                serializer = TeacherSerializer(
-                    teachers, many=True, context={'request': request})
-                return JsonResponse(serializer.data, safe=False, status=200)
-
-        except Teacher.DoesNotExist:
-            return JsonResponse({'error': 'Teacher not found'}, status=404)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
-
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
-
-
-@csrf_exempt
-def teacher_login(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            faculty_id = data.get('faculty_id')
-            password = data.get('password')
-
-            if not faculty_id or not password:
-                return JsonResponse({"error": "faculty_id and password are required"}, status=400)
-
-            teacher = Teacher.objects.get(faculty_id=faculty_id)
-
-            if check_password(password, teacher.password):
-                return JsonResponse({
-                    "message": "Login successful",
-                    "faculty_id": teacher.faculty_id,
-                    "firstname": teacher.firstname
-                }, status=200)
-            else:
-                return JsonResponse({"error": "Invalid password"}, status=401)
-
-        except Teacher.DoesNotExist:
-            return JsonResponse({"error": "Teacher not found"}, status=404)
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON format"}, status=400)
-        except Exception as e:
-            print("Unexpected error:", str(e))
-            print(traceback.format_exc())
-            return JsonResponse({"error": "Internal server error"}, status=500)
-
-    return JsonResponse({"error": "Invalid request method"}, status=400)
-
-
-@api_view(['GET'])
-def all_students_api(request):
-    students = Student.objects.all()
-    serializer = StudentListSerializer(
-        students, many=True, context={'request': request})
-    return Response(serializer.data)
