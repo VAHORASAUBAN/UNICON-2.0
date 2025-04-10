@@ -10,7 +10,7 @@ class DepartmentSerializer(serializers.ModelSerializer):
 
 class CourseSerializer(serializers.ModelSerializer):
     course_department = DepartmentSerializer(read_only=True)
-    
+
     class Meta:
         model = Course
         fields = '__all__'
@@ -33,23 +33,6 @@ class StudentSerializer(serializers.ModelSerializer):
         return None
 
 
-class TeacherSerializer(serializers.ModelSerializer):
-    pic = serializers.SerializerMethodField()
-    department = DepartmentSerializer(read_only=True)
-    course = CourseSerializer(read_only=True)
-
-    class Meta:
-        model = Teacher
-        fields = '__all__'
-        extra_kwargs = {'password': {'write_only': True}}
-
-    def get_pic(self, obj):
-        request = self.context.get('request')
-        if obj.pic:
-            return request.build_absolute_uri(obj.pic.url)
-        return None
-
-
 class BatchSerializer(serializers.ModelSerializer):
     course = CourseSerializer(read_only=True)
 
@@ -66,6 +49,23 @@ class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
         fields = '__all__'
+
+
+class TeacherSerializer(serializers.ModelSerializer):
+    pic = serializers.SerializerMethodField()
+    department = DepartmentSerializer(read_only=True)
+    course = CourseSerializer(read_only=True)
+
+    class Meta:
+        model = Teacher
+        fields = '__all__'
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def get_pic(self, obj):
+        request = self.context.get('request')
+        if obj.pic:
+            return request.build_absolute_uri(obj.pic.url)
+        return None
 
 
 class PlacementSerializer(serializers.ModelSerializer):
@@ -99,3 +99,40 @@ class TimetableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Timetable
         fields = '__all__'
+
+
+class StudentProfileSerializer(serializers.ModelSerializer):
+    student_image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Student
+        fields = '__all__'
+
+    def get_student_image(self, obj):
+        request = self.context.get('request')
+        if obj.student_image:
+            return request.build_absolute_uri(obj.student_image.url)
+        return None
+
+
+class StudentListSerializer(serializers.ModelSerializer):
+    department_name = serializers.CharField(
+        source='student_department.department_name', read_only=True)
+    course_name = serializers.CharField(
+        source='course.course_name', read_only=True)
+    student_image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Student
+        fields = [
+            'id', 'enrollment', 'firstname', 'middlename', 'lastname', 'email',
+            'mobile_number', 'gender', 'birth_date', 'address_line_1', 'address_line_2',
+            'country', 'state', 'city', 'pincode', 'semester', 'division',
+            'student_image', 'department_name', 'course_name'
+        ]
+
+    def get_student_image(self, obj):
+        request = self.context.get('request')
+        if obj.student_image:
+            return request.build_absolute_uri(obj.student_image.url)
+        return None

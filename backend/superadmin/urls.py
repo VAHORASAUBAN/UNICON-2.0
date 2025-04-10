@@ -67,6 +67,7 @@ urlpatterns = [
     path('faculty_sidebar/', superadmin_views.faculty_sidebar,
          name="faculty_sidebar"),
     path('faculty_dash/', superadmin_views.faculty_dash, name="faculty_dash"),
+
     path('qr_code/', superadmin_views.qr_code, name="qr_code"),
     path('faculty_subject/', superadmin_views.faculty_subject,
          name="faculty_subject"),
@@ -84,12 +85,15 @@ urlpatterns = [
 
 
     # APIs
+
     path('student/login/', superadmin_views.student_login, name='student_login'),
-    path('student/profile/<int:student_id>/',
-         superadmin_views.student_profile, name='student_profile'),
+    path('student/profile/', superadmin_views.student_profile,
+         name='student_profile'),
 
 
-
-
-
+    path('teacher/profile/', superadmin_views.teacher_profile,
+         name='teacher_profile'),
+    path('teacher/login/', superadmin_views.teacher_login, name='teacher_login'),
+    path('teacher/students/', superadmin_views.all_students_api,
+         name='all_students_api'),
 ]

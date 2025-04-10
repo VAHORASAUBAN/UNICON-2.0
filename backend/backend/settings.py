@@ -50,13 +50,14 @@ REST_FRAMEWORK = {
     ),
 }
 # Session Settings (Force Login Required)
+# Session settings
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Store sessions in DB
 SESSION_COOKIE_AGE = 86400  # Session expires in 1 day
 SESSION_SAVE_EVERY_REQUEST = True  # Update session expiry on every request
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Logout when browser closes
 LOGIN_URL = "/login_view/"  # Redirect unauthenticated users
 
-
+# Middleware settings
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -65,11 +66,10 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "superadmin.middleware.LoginRequiredMiddleware",
+    # "superadmin.middleware.LoginRequiredMiddleware",
     'corsheaders.middleware.CorsMiddleware',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
-
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
@@ -107,7 +107,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'unicon',
                 'USER': 'root',
-                'PASSWORD': 'Admin@123',
+                'PASSWORD': 'shaikh786',
                 'HOST': 'localhost',
                 'PORT': '3306',
     }

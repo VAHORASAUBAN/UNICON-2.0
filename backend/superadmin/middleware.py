@@ -9,11 +9,11 @@ class LoginRequiredMiddleware:
 
     def __call__(self, request):
         # These pages don't require login
-        allowed_paths = ["/student/login/", "/admin/",
-                         "/login_view/", "/faculty_logout_view/",
-                         "/add_coordinator/"]
+        allowed_paths = ["/student/login/", "/admin/", "/add_coordinator/", "/",
+                         "/login_view/", "/faculty_logout_view/"]
 
-        if not request.session.get("username") and request.path not in allowed_paths:
+        # Check if the user is logged in as a coordinator or faculty
+        if not request.session.get("username") and not request.session.get("faculty_id") and request.path not in allowed_paths:
             # Redirect to login if not authenticated
             return render(request, "superadmin/login.html", {"error": "Please log in first."})
 

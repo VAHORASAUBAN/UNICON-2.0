@@ -1,24 +1,29 @@
 from django.shortcuts import render, redirect
-from addcoordinator.models import coordinator
-
-from django.contrib.auth.models import User, auth, make_password
-from django.contrib.auth.hashers import check_password
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import check_password
 from django.http import HttpResponse, JsonResponse
-from .models import Teacher, Student, department, Course, Subject, Batch, Placement
-from rest_framework.parsers import JSONParser
-import pandas as pd
-from datetime import datetime
-from django.core.files import File
-import os
-import json
+from django.urls import reverse
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import make_password
+
+from django.views.decorators.csrf import csrf_exempt
+
 from rest_framework.decorators import api_view
+from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.views.decorators.csrf import csrf_exempt
+
+from addcoordinator.models import coordinator
+from .models import Teacher, Student, department, Course, Subject, Batch, Placement
 from .serializers import *
-from rest_framework.permissions import IsAuthenticated
+
+import pandas as pd
+from datetime import datetime
+import os
+import io
+import json
+import traceback
 
 
 def add_blog(request):
@@ -41,6 +46,10 @@ def blog(request):
 
 def calendar(request):
     return render(request, 'superadmin/calendar.html')
+
+
+def faculty_dash(request):
+    return render(request, 'faculty/faculty_dash.html')
 
 
 def edit_blog(request):
@@ -98,35 +107,45 @@ def add_subject(request):
 
 def add_batch(request):
     all_courses = Course.objects.all()
-
     if request.method == "POST":
+        batch_start_date = request.POST.get('batch_start_date')
+        batch_end_date = request.POST.get('batch_end_date')
+        course_id = request.POST.get('course')
+
+        if not (batch_start_date and batch_end_date and course_id):
+            context = {
+                'add_batch_error': "Please fill all required fields.",
+                'all_courses': all_courses
+            }
+            return render(request, 'superadmin/add-batch.html', context)
+
         try:
-            batch_start_date = request.POST.get('batch_start_date')
-            batch_end_date = request.POST.get('batch_end_date')
-            course_id = request.POST.get('course')
-
-            if not (batch_start_date and batch_end_date and course_id):
-                messages.error(request, "Please fill all required fields.")
-                return render(request, 'superadmin/add-batch.html', {'all_courses': all_courses})
-
             course = Course.objects.get(id=course_id)
 
-            save_batch = Batch.objects.create(
+            # Prevent duplicate batch
+            if Batch.objects.filter(course=course, batch_start_date=batch_start_date, batch_end_date=batch_end_date).exists():
+                context = {
+                    'add_batch_error': "This batch already exists.",
+                    'all_courses': all_courses
+                }
+                return render(request, 'superadmin/add-batch.html', context)
+
+            # Create batch
+            Batch.objects.create(
                 batch_start_date=batch_start_date,
                 batch_end_date=batch_end_date,
                 course=course
             )
-            save_batch.save()
-
-            messages.success(request, "Batch added successfully!")
-            return render(request, 'superadmin/add-batch.html', {'all_courses': all_courses})
-
-        except Course.DoesNotExist:
-            messages.error(request, "Invalid course selected.")
+            return redirect('add_batch_success')  # Use POST-Redirect-GET
         except Exception as e:
-            messages.error(request, f"Error adding batch: {str(e)}")
-
-    return render(request, 'superadmin/add-batch.html', {'all_courses': all_courses})
+            context = {
+                'add_batch_error': f"Error adding batch: {str(e)}",
+                'all_courses': all_courses
+            }
+            return render(request, 'superadmin/add-batch.html', context)
+    else:
+        context = {'all_courses': all_courses}
+        return render(request, 'superadmin/add-batch.html', context)
 
 
 def all_batch(request):
@@ -187,7 +206,6 @@ def show_timetable(request):
 #     else:
 #         return render(request, 'superadmin/login.html')
 
-
 def login_view(request):
     if request.method == "POST":
         username = request.POST.get('username')
@@ -199,7 +217,10 @@ def login_view(request):
                 user = Teacher.objects.get(faculty_id=username)
                 if check_password(password, user.password):
                     request.session['faculty_id'] = user.faculty_id
+                    print(f"Logged in as: {user.faculty_id}")
                     messages.success(request, "Login successful!")
+                    # Use redirect with reverse
+                    # Redirect to the main page
                     return redirect('/faculty_dash/')
 
             if role == "coordinator":
@@ -914,58 +935,6 @@ def add_timetable(request):
         }
         return render(request, 'superadmin/timetable.html', context)
 
-# Serializers Views
-
-
-# Disable CSRF for testing (consider better security in production)
-@csrf_exempt
-def student_login(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        enrollment = data.get('enrollment')
-        password = data.get('password')
-
-        try:
-            student = Student.objects.get(enrollment=enrollment)
-
-            print(f"Received Password: {password}")  # Debug
-            print(f"Stored Hashed Password: {student.password}")  # Debug
-
-            if check_password(password, student.password):  # Hashed password check
-                return JsonResponse({"message": "Login successful", "student_id": student.id})
-            else:
-                return JsonResponse({"error": "Invalid password"}, status=401)
-        except Student.DoesNotExist:
-            return JsonResponse({"error": "Student not found"}, status=404)
-
-    return JsonResponse({"error": "Invalid request"}, status=400)
-
-
-@csrf_exempt
-def student_profile(request, student_id):
-    if request.method == 'GET':
-        try:
-            student = Student.objects.get(id=student_id)
-            profile_data = {
-                "firstname": student.firstname,
-                "lastname": student.lastname,
-                "enrollment": student.enrollment,
-                "mobile_number": student.mobile_number,
-                "gender": student.gender,
-                "birth_date": student.birth_date,
-                "address": f"{student.address_line_1}, {student.city}, {student.state}, {student.country}",
-                "department": student.student_department.department_name,
-                "course": student.course.course_name,
-                "semester": student.semester,
-                "division": student.division,
-                "student_image": student.student_image.url if student.student_image else None,
-            }
-            return JsonResponse(profile_data)
-        except Student.DoesNotExist:
-            return JsonResponse({"error": "Student not found"}, status=404)
-
-    return JsonResponse({"error": "Invalid request"}, status=400)
-
 
 def navbar(request):
     return render(request, 'superadmin/navbar.html')
@@ -1008,9 +977,7 @@ def faculty_sidebar(request):
 
 
 def faculty_dash(request):
-    # Get the faculty_id from the session
-    faculty_id = request.session.get('faculty_id')
-    return render(request, 'faculty/faculty_dash.html', {'faculty_id': faculty_id})
+    return render(request, 'faculty/faculty_dash.html')
 
 
 def faculty_all_student(request):
@@ -1059,3 +1026,146 @@ def faculty_attendence(request):
 
 def faculty_attendence_1(request):
     return render(request, 'faculty/faculty_attendence_1.html')
+
+
+# Serializers Views
+
+
+# Disable CSRF for testing (consider better security in production)
+@csrf_exempt
+def student_login(request):
+    if request.method == 'POST':
+        try:
+            # Parse JSON body
+            data = json.loads(request.body)
+            print("Login request data:", data)
+
+            enrollment = data.get('enrollment')
+            password = data.get('password')
+
+            # Check for required fields
+            if not enrollment or not password:
+                return JsonResponse(
+                    {"error": "Enrollment and password are required"},
+                    status=400
+                )
+
+            # Try to find student
+            student = Student.objects.get(enrollment=enrollment)
+            print("Student found:", student)
+
+            # Validate password (must be hashed in DB)
+            if check_password(password, student.password):
+                return JsonResponse({
+                    "message": "Login successful",
+                    "student_id": student.id,
+                    "firstname": student.firstname,
+                }, status=200)
+            else:
+                return JsonResponse({"error": "Invalid password"}, status=401)
+
+        except Student.DoesNotExist:
+            return JsonResponse({"error": "Student not found"}, status=404)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON format"}, status=400)
+
+        except Exception as e:
+            print("Unexpected error:", str(e))
+            print(traceback.format_exc())
+            return JsonResponse({"error": "Internal server error"}, status=500)
+
+    return JsonResponse({"error": "Invalid request method"}, status=400)
+
+
+@csrf_exempt
+def student_profile(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            student_id = data.get('student_id')
+
+            if not student_id:
+                return JsonResponse({"error": "Student ID is required"}, status=400)
+
+            student = Student.objects.get(id=student_id)
+            serializer = StudentProfileSerializer(
+                student, context={'request': request})
+            return JsonResponse(serializer.data, safe=False)
+
+        except Student.DoesNotExist:
+            return JsonResponse({"error": "Student not found"}, status=404)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
+
+    return JsonResponse({"error": "Invalid request method"}, status=400)
+
+
+@csrf_exempt
+def teacher_profile(request):
+    if request.method == 'GET':
+        try:
+            json_data = request.body
+            stream = io.BytesIO(json_data)
+            python_data = JSONParser().parse(stream)
+            teacher_id = python_data.get('id', None)
+
+            if teacher_id is not None:
+                teacher = Teacher.objects.get(id=teacher_id)
+                serializer = TeacherSerializer(
+                    teacher, context={'request': request})
+                return JsonResponse(serializer.data, status=200)
+            else:
+                teachers = Teacher.objects.all()
+                serializer = TeacherSerializer(
+                    teachers, many=True, context={'request': request})
+                return JsonResponse(serializer.data, safe=False, status=200)
+
+        except Teacher.DoesNotExist:
+            return JsonResponse({'error': 'Teacher not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
+@csrf_exempt
+def teacher_login(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            faculty_id = data.get('faculty_id')
+            password = data.get('password')
+
+            if not faculty_id or not password:
+                return JsonResponse({"error": "faculty_id and password are required"}, status=400)
+
+            teacher = Teacher.objects.get(faculty_id=faculty_id)
+
+            if check_password(password, teacher.password):
+                return JsonResponse({
+                    "message": "Login successful",
+                    "faculty_id": teacher.faculty_id,
+                    "firstname": teacher.firstname
+                }, status=200)
+            else:
+                return JsonResponse({"error": "Invalid password"}, status=401)
+
+        except Teacher.DoesNotExist:
+            return JsonResponse({"error": "Teacher not found"}, status=404)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON format"}, status=400)
+        except Exception as e:
+            print("Unexpected error:", str(e))
+            print(traceback.format_exc())
+            return JsonResponse({"error": "Internal server error"}, status=500)
+
+    return JsonResponse({"error": "Invalid request method"}, status=400)
+
+
+@api_view(['GET'])
+def all_students_api(request):
+    students = Student.objects.all()
+    serializer = StudentListSerializer(
+        students, many=True, context={'request': request})
+    return Response(serializer.data)
