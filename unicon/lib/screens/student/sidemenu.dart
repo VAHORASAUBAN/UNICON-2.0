@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'ProfileScreen.dart';
+
 class SideMenu extends StatelessWidget {
   final String userName;
   final String userEmail;
@@ -32,28 +34,40 @@ class SideMenu extends StatelessWidget {
                 ),
               ),
               child: Column(
+
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 20),
-
-                  // Profile Picture with Border & Shadow
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 3),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
+                                  // Profile Picture with Border & Shadow
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context); // Close the drawer
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileScreen(),
                         ),
-                      ],
-                    ),
-                    child: const CircleAvatar(
-                      radius: 35,
-                      backgroundImage: AssetImage('assets/images/profile.png'),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 3),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 8,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: const CircleAvatar(
+                        radius: 35,
+                        backgroundImage: AssetImage('assets/images/profile.png'),
+                      ),
                     ),
                   ),
+
 
                   const SizedBox(height: 12),
 
