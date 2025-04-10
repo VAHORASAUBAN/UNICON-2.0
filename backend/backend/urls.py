@@ -7,7 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('superadmin.urls')),
     path('', include('addcoordinator.urls')),
-    path('api/', include('superadmin.api_urls')),  # API endpoints
+    # path('api/', include('superadmin.api_urls')),  # API endpoints
 ]
 
 if settings.DEBUG:
