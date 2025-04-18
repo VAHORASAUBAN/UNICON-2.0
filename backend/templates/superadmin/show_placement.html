@@ -296,6 +296,7 @@
     </div>
     <script>
         const companies = {{ all_placement|safe }};
+        
     
         $(document).ready(function () {
             const companyCards = $("#company-cards");
@@ -313,6 +314,8 @@
                                 <p class="text-muted mb-1"><strong>Location:</strong> <span class="text-dark">${company.placement_company_location}</span></p>
                                 <p class="text-muted mb-3"><strong>Salary:</strong> <span class="text-dark">${company.placement_company_package}</span></p>
                                 <button class="btn btn-primary btn-sm px-4 shadow-sm" data-toggle="modal" data-target="#companyDetailsModal" onclick="showDetails(${index})">More Details</button>
+                                <a class="btn btn-primary btn-sm px-4 shadow-sm" href="/edit_placement/${company.id}/">Edit</a>
+                                <a class="btn btn-danger btn-sm px-4 shadow-sm" href="/delete_placement/${company.id}/">Delete</a>
                             </div>
                         </div>
                     </div>

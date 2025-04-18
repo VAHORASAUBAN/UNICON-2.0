@@ -265,26 +265,43 @@
                 >
               </div>
             </div>
-            <div class="row filter-row">
-              <div class="col-sm-6 col-md-4">
-                <div class="form-group form-focus">
-                  <input type="text" class="form-control floating" />
-                  <label class="focus-label">course ID</label>
+            <form method="get" action="{% url 'all_course' %}">
+              <div class="row filter-row">
+                <div class="col-sm-6 col-md-4">
+                  <div class="form-group form-focus">
+                    <input type="text" name="name" class="form-control floating" value="{{ request.GET.name }}">
+                    <label class="focus-label">Course Name</label>
+                  </div>
+                </div>
+            
+                <div class="col-sm-6 col-md-4">
+                  <div class="form-group form-focus select-focus">
+                    <select name="department" class="select form-control">
+                      <option value="">All Departments</option>
+                      {% for dept in all_departments %}
+                        <option value="{{ dept.id }}" {% if request.GET.department == dept.id|stringformat:"s" %}selected{% endif %}>
+                          {{ dept.department_name }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                    <label class="focus-label">Department</label>
+                  </div>
+                </div>
+            
+                <div class="col-sm-6 col-md-2">
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-search rounded btn-block mb-3">Search</button>
+                  </div>
+                </div>
+            
+                <div class="col-sm-6 col-md-2">
+                  <div class="form-group">
+                    <a href="{% url 'all_course' %}" class="btn btn-secondary rounded btn-block mb-3">Clear Filter</a>
+                  </div>
                 </div>
               </div>
-              <div class="col-sm-6 col-md-4">
-                <div class="form-group form-focus">
-                  <input type="text" class="form-control floating" />
-                  <label class="focus-label">course Name</label>
-                </div>
-              </div>
-
-              <div class="col-sm-6 col-md-4">
-                <a href="#" class="btn btn-search rounded btn-block mb-3">
-                  search
-                </a>
-              </div>
-            </div>
+            </form>
+            
             {% for i in course %}
             <div class="row staff-grid-row">
               <div class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">

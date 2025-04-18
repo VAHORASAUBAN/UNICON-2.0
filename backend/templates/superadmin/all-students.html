@@ -1,6 +1,7 @@
+{% load static %}
+{% load custom_tags %}
 <!DOCTYPE html>
 <html lang="en">
-  {% load static %}
 
   <head>
     <meta charset="utf-8" />
@@ -264,70 +265,74 @@
               >
             </div>
           </div>
-          <div class="row filter-row d-flex align-items-center">
-            <div class="col-md-2">
-              <div class="form-group form-focus">
-                <input type="text" class="form-control floating" />
-                <label class="focus-label">Student ID</label>
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="form-group form-focus select-focus">
-                <select class="select form-control">
-                  <option>FCAIT</option>
-                  <option>FOBA</option>
-                </select>
-                <label class="focus-label">Department</label>
-              </div>
-            </div>
-
-            <div class="col-md-2">
-              <div class="form-group form-focus select-focus">
-                <select class="select form-control">
-                  <option>MSCIT</option>
-                  <option>BCA</option>
-                  <option>MCA</option>
-                  <option>BCA (Hons)</option>
-                </select>
-                <label class="focus-label">Course</label>
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="form-group form-focus select-focus">
-                <select class="select form-control">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                  <option>6</option>
-                  <option>7</option>
-                  <option>8</option>
-                  <option>9</option>
-                  <option>10</option>
-                </select>
-                <label class="focus-label">Sem</label>
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="form-group form-focus select-focus">
-                <select class="select form-control">
-                  <option>A</option>
-                  <option>B</option>
-                  <option>C</option>
-                  <option>D</option>
-                </select>
-                <label class="focus-label">Division</label>
-              </div>
-            </div>
 
 
-            <div class="col-md-2">
-              <div class="form-group">
-                <a href="#" class="btn btn-search rounded btn-block">Search</a>
+          <form method="get" action="{% url 'all_students' %}">
+            <div class="row filter-row d-flex align-items-center">
+              <div class="col-md-2">
+                <div class="form-group form-focus">
+                  <input type="text" name="student_id" class="form-control floating" value="{{ request.GET.student_id }}">
+                  <label class="focus-label">Student ID</label>
+                </div>
               </div>
+          
+              <div class="col-md-2">
+                <div class="form-group form-focus select-focus">
+                  <select class="select form-control" name="department">
+                    <option value="">Select Department</option>
+                    {% for dept in all_departments %}
+                      <option value="{{ dept.department_name }}" {% if request.GET.department == dept.department_name %}selected{% endif %}>{{ dept.department_name }}</option>
+                    {% endfor %}
+                  </select>
+                  <label class="focus-label">Department</label>
+                </div>
+              </div>
+          
+              <div class="col-md-2">
+                <div class="form-group form-focus select-focus">
+                  <select class="select form-control" name="course">
+                    <option value="">Select Course</option>
+                    {% for course in all_courses %}
+                      <option value="{{ course.course_name }}" {% if request.GET.course == course.course_name %}selected{% endif %}>{{ course.course_name }}</option>
+                    {% endfor %}
+                  </select>
+                  <label class="focus-label">Course</label>
+                </div>
+              </div>
+          
+              <div class="col-md-2">
+                <div class="form-group form-focus select-focus">
+                  <select class="select form-control" name="semester">
+                    <option value="">Select Semester</option>
+                      {% for i in 1|to:10 %}
+                        <option value="{{ i }}">{{ i }}</option>
+                      {% endfor %}
+                  </select>
+                  <label class="focus-label">Sem</label>
+                </div>
+              </div>
+          
+              <div class="col-md-2">
+                <div class="form-group form-focus select-focus">
+                  <select class="select form-control" name="division">
+                    <option value="">Select Division</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                  </select>
+                  <label class="focus-label">Division</label>
+                </div>
+              </div>
+          
+              <div class="col-md-2">
+                <div class="form-group">
+                  <button type="submit" class="btn btn-search rounded btn-block">Search</button>
+                </div>
+              </div>
+              <a href="{% url "all_students" %}">Clear Filter</a>
             </div>
-          </div>
+          </form>
+          
           <div class="row">
             <div class="col-lg-12">
               <div class="card">
@@ -351,7 +356,7 @@
                             height="18"
                           /><span class="ml-2">PDF</span>
                         </button>
-                        <button
+                        {% comment %} <button
                           class="btn btn-light"
                           type="button"
                           data-toggle="dropdown"
@@ -359,8 +364,8 @@
                           aria-expanded="false"
                         >
                           <i class="fas fa-ellipsis-h"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
+                        </button> {% endcomment %}
+                        {% comment %} <div class="dropdown-menu dropdown-menu-right">
                           <a class="dropdown-item" href="#">Action</a>
                           <div role="separator" class="dropdown-divider"></div>
                           <a class="dropdown-item" href="#">Another action</a>
@@ -368,7 +373,7 @@
                           <a class="dropdown-item" href="#"
                             >Something else here</a
                           >
-                        </div>
+                        </div> {% endcomment %}
                       </div>
                     </div>
                   </div>
@@ -388,12 +393,12 @@
                         </tr>
                       </thead>
                       <tbody>
-                        {% for i in all_students %} {% for j in all_courses %}
+                        {% for i in all_students %} 
                         <tr>
                           <td>{{i.enrollment}}</td>
                           <td>{{i.firstname}}</td>
                           <td>{{i.student_department}}</td>
-                          <td>{{j.course_name}}</td>
+                          <td>{{i.course.course_name}}</td>
                           <td>{{i.semester}}</td>
                           <td>{{i.division}}</td>
                           <td class="text-right">
@@ -413,7 +418,7 @@
                             </button>
                           </td>
                         </tr>
-                        {% endfor %} {% endfor %}
+                        {% endfor %} 
                       </tbody>
                     </table>
                   </div>

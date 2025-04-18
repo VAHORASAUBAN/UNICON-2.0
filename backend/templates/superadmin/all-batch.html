@@ -50,6 +50,7 @@
 								<button class="btn" type="submit">
 									<i class="fa fa-search"></i>
 								</button>
+								
 							</form>
 						</div>
 					</li>
@@ -212,28 +213,52 @@
 								class="fas fa-plus"></i> Add batch</a>
 					</div>
 				</div>
-				<div class="row filter-row">
-					<div class="col-sm-6 col-md-4">
+				<form method="get" action="{% url 'all_batch' %}">
+					<div class="row filter-row">
+					  <div class="col-sm-6 col-md-3">
 						<div class="form-group form-focus">
-							<input type="text" class="form-control floating">
-							<label class="focus-label">Batch ID</label>
+						  <input type="number" name="start_year" class="form-control floating" value="{{ request.GET.start_year }}">
+						  <label class="focus-label">Start Year</label>
 						</div>
-					</div>
-					<div class="col-sm-6 col-md-4">
+					  </div>
+				  
+					  <div class="col-sm-6 col-md-3">
 						<div class="form-group form-focus">
-							<input type="text" class="form-control floating">
-							<label class="focus-label">Batch Year</label>
+						  <input type="number" name="end_year" class="form-control floating" value="{{ request.GET.end_year }}">
+						  <label class="focus-label">End Year</label>
 						</div>
+					  </div>
+				  
+					  <div class="col-sm-6 col-md-3">
+						<div class="form-group form-focus select-focus">
+						  <select name="course" class="select form-control">
+							<option value="">All Courses</option>
+							{% for course in all_courses %}
+							  <option value="{{ course.id }}" {% if request.GET.course == course.id|stringformat:"s" %}selected{% endif %}>
+								{{ course.course_name }}
+							  </option>
+							{% endfor %}
+						  </select>
+						  <label class="focus-label">Course</label>
+						</div>
+					  </div>
+				  
+					  <div class="col-sm-6 col-md-1">
+						<div class="form-group">
+						  <button type="submit" class="btn btn-search rounded btn-block mb-3">Search</button>
+						</div>
+					  </div>
+				  
+					  <div class="col-sm-6 col-md-2">
+						<div class="form-group">
+						  <a href="{% url 'all_batch' %}" class="btn btn-secondary rounded btn-block mb-3">Clear Filter</a>
+						</div>
+					  </div>
 					</div>
+				  </form>
+				  
 
-					<div class="col-sm-6 col-md-4">
-						<a href="#" class="btn btn-search rounded btn-block mb-3"> search </a>
-					</div>
-				</div>
 				<div class="row">
-			
-					
-				
 					<div class="col-lg-12">
 						<div class="card">
 							<div class="card-header">
@@ -253,21 +278,23 @@
 											</tr>
 										</thead>
 										<tbody>
-											{% for i in all_batches %}
-											{% for j  in all_courses %}
-											<tr>
-												<td>{{i.batch_start_date}}</td>
-												<td>{{i.batch_end_date}}</td>
-												<td>{{j.course_name}}</td>
-												<td class="text-right">
-													<a href="#"
-														class="btn btn-primary btn-sm mb-1">
-														<i class="far fa-eye"></i>
-													</a>
-												</td>
-											</tr>
-											{% endfor %}
-											{% endfor %}
+											{% for batch in all_batches %}
+    <tr>
+        <td>{{ batch.batch_start_year }}</td>
+        <td>{{ batch.batch_end_year }}</td>
+        <td>{{ batch.course.course_name }}</td>  <!-- Assuming the batch has a ForeignKey to Course -->
+        <td class="text-right">
+            <a href="#" class="btn btn-primary btn-sm mb-1">
+                <i class="far fa-eye"></i>
+            </a>
+            <a href="/delete_batch/{{ batch.id }}" class="btn btn-primary btn-sm mb-1"> 
+                <i class="fas fa-trash-alt"></i>
+            </a>
+        </td>
+    </tr>
+{% endfor %}
+
+											
 										</tbody>
 									</table>
 								</div>

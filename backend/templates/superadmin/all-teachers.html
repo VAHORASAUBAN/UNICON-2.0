@@ -265,63 +265,62 @@
               >
             </div>
           </div>
-          <div class="row filter-row d-flex align-items-center">
-            <div class="col-md-2">
-              <div class="form-group form-focus">
-                <input type="text" class="form-control floating" />
-                <label class="focus-label">Faculty ID</label>
-              </div>
-            </div>
+          <form method="get" action="{% url 'all_teachers' %}">
 
-            <div class="col-md-2">
-              <div class="form-group form-focus select-focus">
-                <select class="select form-control">
-                  {% for i in all_faculty %}
-                  <option value="{{ i.id }}">{{ i.firstname }}</option>
-                  {% endfor %}
-                </select>
-                <label class="focus-label">Course</label>
+            <div class="row filter-row d-flex align-items-center">
+              <div class="col-md-2">
+                <div class="form-group form-focus">
+                  <input type="text" class="form-control floating" name="faculty_id" value="{{ request.GET.faculty_id }}">
+                  <label class="focus-label">Faculty ID</label>
+                </div>
               </div>
-            </div>
-
-            <div class="col-md-2">
-              <div class="form-group form-focus select-focus">
-                <select class="select form-control">
-                  <option>A</option>
-                  <option>B</option>
-                  <option>C</option>
-                </select>
-                <label class="focus-label">Division</label>
+          
+              <div class="col-md-2">
+                <div class="form-group form-focus select-focus">
+                  <select class="select form-control" name="course">
+                    <option value="">All Courses</option>
+                    {% for course in all_courses %}
+                    <option value="{{ course.id }}" {% if request.GET.course == course.id|stringformat:"s" %}selected{% endif %}>
+                      {{ course.course_name }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                  <label class="focus-label">Course</label>
+                </div>
               </div>
-            </div>
-
-            <div class="col-md-2">
-              <div class="form-group form-focus">
-                <input type="text" class="form-control floating" />
-                <label class="focus-label">Faculty Name</label>
+          
+              <div class="col-md-2">
+                <div class="form-group form-focus select-focus">
+                  <select class="select form-control" name="department">
+                    <option value="">All Departments</option>
+                    {% for dept in all_departments %}
+                    <option value="{{ dept.id }}" {% if request.GET.department == dept.id|stringformat:"s" %}selected{% endif %}>
+                      {{ dept.department_name }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                  <label class="focus-label">Department</label>
+                </div>
               </div>
-            </div>
-
-            <div class="col-md-2">
-              <div class="form-group form-focus select-focus">
-                <select class="select form-control">
-                  <option>CNS</option>
-                  <option>MLP</option>
-                  <option>HPC</option>
-                  <option>ADS</option>
-                  <option>Flutter</option>
-                </select>
-                <label class="focus-label">Subject</label>
+          
+              <div class="col-md-2">
+                <div class="form-group form-focus">
+                  <input type="text" class="form-control floating" name="faculty_name" value="{{ request.GET.faculty_name }}">
+                  <label class="focus-label">Faculty Name</label>
+                </div>
               </div>
-            </div>
-
-            <div class="col-md-2">
-              <div class="form-group">
-                <a href="#" class="btn btn-search rounded btn-block">Search</a>
+          
+              <div class="col-md-2">
+                <div class="form-group">
+                  <button type="submit" class="btn btn-search rounded btn-block">Search</button>
+                </div>
               </div>
+                  <a href="{% url "all_teachers" %}">Clear Filter</a>
+                
+              
             </div>
-          </div>
-
+          </form>
+          
           {% for i in all_teachers %}
           <div class="row staff-grid-row">
             <div class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
@@ -340,7 +339,7 @@
                     ><i class="fas fa-ellipsis-v"></i
                   ></a>
                   <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="/edit_teacher/"
+                    <a class="dropdown-item" href="/edit_teacher/{{i.faculty_id}}"
                       ><i class="fas fa-pencil-alt m-r-5"></i> Edit</a
                     >
                     <a class="dropdown-item" href="/delete_teacher/{{i.id}}"
@@ -358,7 +357,7 @@
             </div>
           </div>
           {% endfor %}
-          <div class="notification-box">
+          {% comment %} <div class="notification-box">
             <div class="msg-sidebar notifications msg-noti">
               <div class="topnav-dropdown-header">
                 <span>Messages</span>
@@ -607,7 +606,7 @@
                 <a href="chat">See all messages</a>
               </div>
             </div>
-          </div>
+          </div> {% endcomment %}
         </div>
       </div>
 
