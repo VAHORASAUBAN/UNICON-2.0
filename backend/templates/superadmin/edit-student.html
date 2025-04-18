@@ -265,32 +265,32 @@
                   <div class="card-body">
                     <div class="row">
                       <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                        <form class="custom-mt-form" action="{% url 'edit_student' all_students.id %}" method="POST" enctype="multipart/form-data">
+                        <form class="custom-mt-form" action="{% url 'edit_student' student.id %}" method="post" enctype="multipart/form-data">
                           {% csrf_token %}
                         
                           <div class="form-group">
                             <label>Enrollment</label>
-                            <input type="number" class="form-control" name="enrollment" value="{{ all_students.enrollment }}" />
+                            <input type="number" class="form-control" name="enrollment" value="{{ student.enrollment }}" />
                           </div>
                         
                           <div class="form-group">
                             <label>Firstname</label>
-                            <input type="text" class="form-control" name="firstname" value="{{ all_students.firstname }}" />
+                            <input type="text" class="form-control" name="firstname" value="{{ student.firstname }}" />
                           </div>
                         
                           <div class="form-group">
                             <label>Middlename</label>
-                            <input type="text" class="form-control" name="middlename" value="{{ all_students.middlename }}" />
+                            <input type="text" class="form-control" name="middlename" value="{{ student.middlename }}" />
                           </div>
                         
                           <div class="form-group">
                             <label>Lastname</label>
-                            <input type="text" class="form-control" name="lastname" value="{{ all_students.lastname }}" />
+                            <input type="text" class="form-control" name="lastname" value="{{ student.lastname }}" />
                           </div>
                         
                           <div class="form-group">
                             <label>Email</label>
-                            <input type="email" class="form-control" name="email" value="{{ all_students.email }}" />
+                            <input type="email" class="form-control" name="email" value="{{ student.email }}" />
                           </div>
                         
                           <div class="form-group">
@@ -300,66 +300,77 @@
                         
                           <div class="form-group">
                             <label>Mobile Number</label>
-                            <input type="number" class="form-control" name="mobile_number" value="{{ all_students.mobile_number }}" />
+                            <input type="number" class="form-control" name="mobile_number" value="{{ student.mobile_number }}" />
                           </div>
                         
                           <div class="form-group">
                             <label>Gender</label>
                             <select class="form-control select" name="gender">
-                              <option value="Male" {% if all_students.gender == "Male" %}selected{% endif %}>Male</option>
-                              <option value="Female" {% if all_students.gender == "Female" %}selected{% endif %}>Female</option>
+                              <option value="Male" {% if student.gender == "Male" %}selected{% endif %}>Male</option>
+                              <option value="Female" {% if student.gender == "Female" %}selected{% endif %}>Female</option>
                             </select>
                           </div>
                         
                           <div class="form-group">
                             <label>Birth Date</label>
-                            <input type="date" class="form-control datetimepicker" name="birth_date" value="{{ all_students.birth_date|date:'Y-m-d' }}" />
+                            <input type="date" class="form-control datetimepicker" name="birth_date" value="{{ student.birth_date|date:'Y-m-d' }}" />
                           </div>
                         
                           <div class="form-group">
                             <label>Address Line 1</label>
-                            <input type="text" class="form-control" name="address_line_1" value="{{ all_students.address_line_1 }}" />
+                            <input type="text" class="form-control" name="address_line_1" value="{{ student.address_line_1 }}" />
                           </div>
                         
                           <div class="form-group">
                             <label>Address Line 2</label>
-                            <input type="text" class="form-control" name="address_line_2" value="{{ all_students.address_line_2 }}" />
+                            <input type="text" class="form-control" name="address_line_2" value="{{ student.address_line_2 }}" />
                           </div>
                         
-                          <div class="form-group">
-                            <label>Country</label>
-                            <select class="form-control select form-select country" name="country">
-                              <option value="">Select Country</option>
-                              <option value="India" {% if all_students.country == "India" %}selected{% endif %}>India</option>
-                            </select>
-                          </div>
-                        
+                          <!-- Country -->
+                            <div class="form-group">
+                              <label>Country</label>
+                              <select
+                                class="form-control select form-select country"
+                                aria-label="Default select example"
+                                name="country"
+                                onchange="loadStates()">
+                                <option value="{{ student.country }}" selected>{{ student.country }}</option>
+                                <!-- More country options can be added via JS or here -->
+                              </select>
+                            </div>
+
+                          <!-- State -->
                           <div class="form-group">
                             <label>State</label>
-                            <select class="form-control select form-select state" name="state">
-                              <option value="">Select State</option>
-                              <option value="Gujarat" {% if all_students.state == "Gujarat" %}selected{% endif %}>Gujarat</option>
+                            <select
+                              class="form-control select form-select state"
+                              aria-label="Default select example"
+                              name="state"
+                              onchange="loadCities()">
+                              <option value="{{ student.state }}" selected>{{ student.state }}</option>
+                              <!-- More state options will be populated via JS -->
                             </select>
                           </div>
-                        
-                          <div class="form-group">
-                            <label>City</label>
-                            <select class="form-control select form-select city" name="city">
-                              <option value="">Select City</option>
-                              <option value="Ahmedabad" {% if all_students.city == "Ahmedabad" %}selected{% endif %}>Ahmedabad</option>
-                            </select>
-                          </div>
-                        
+
+                            <!-- City -->
+                            <div class="form-group">
+                              <label>City</label>
+                              <select class="form-control select form-select city" name="city">
+                                <option value="{{ student.city }}" selected>{{ student.city }}</option>
+                                <!-- More city options will be populated via JS -->
+                              </select>
+                            </div>
+
                           <div class="form-group">
                             <label>Pincode</label>
-                            <input type="number" class="form-control" name="pincode" value="{{ all_students.pincode }}" />
+                            <input type="number" class="form-control" name="pincode" value="{{ student.pincode }}" />
                           </div>
                         
                           <div class="form-group">
                             <label>Department</label>
                             <select class="form-control select" name="student_department">
                               {% for i in all_departments %}
-                                <option value="{{ i.id }}" {% if all_students.student_department.id == i.id %}selected{% endif %}>{{ i.department_name }}</option>
+                                <option value="{{ i.id }}" {% if student.student_department.id == i.id %}selected{% endif %}>{{ i.department_name }}</option>
                               {% endfor %}
                             </select>
                           </div>
@@ -368,7 +379,7 @@
                             <label>Course</label>
                             <select class="form-control select" name="course">
                               {% for i in all_courses %}
-                                <option value="{{ i.id }}" {% if all_students.course.id == i.id %}selected{% endif %}>{{ i.course_name }}</option>
+                                <option value="{{ i.id }}" {% if student.course.id == i.id %}selected{% endif %}>{{ i.course_name }}</option>
                               {% endfor %}
                             </select>
                           </div>
@@ -377,7 +388,7 @@
                             <label>Semester</label>
                             <select class="form-control select" name="semester">
                               {% for sem in "12345678910" %}
-                                <option value="{{ sem }}" {% if all_students.semester|stringformat:"s" == sem %}selected{% endif %}>{{ sem }}</option>
+                                <option value="{{ sem }}" {% if student.semester|stringformat:"s" == sem %}selected{% endif %}>{{ sem }}</option>
                               {% endfor %}
                             </select>
                           </div>
@@ -385,12 +396,17 @@
                           <div class="form-group">
                             <label>Division</label>
                             <select class="form-control select" name="division">
-                              <option value="A" {% if all_students.division == "A" %}selected{% endif %}>A</option>
-                              <option value="B" {% if all_students.division == "B" %}selected{% endif %}>B</option>
-                              <option value="C" {% if all_students.division == "C" %}selected{% endif %}>C</option>
+                              <option value="A" {% if student.division == "A" %}selected{% endif %}>A</option>
+                              <option value="B" {% if student.division == "B" %}selected{% endif %}>B</option>
+                              <option value="C" {% if student.division == "C" %}selected{% endif %}>C</option>
                             </select>
                           </div>
-                        
+                          
+                          
+                          <div class="form-group">
+                            <label>Student Image</label>
+                            <img src="{{student.student_image.url}}" alt="loading..." srcset="" height="100px" width="100px" class="rounded-circle" />
+                          </div>
                           <div class="form-group">
                             <label>Student Image</label>
                             <input type="file" name="student_image" accept="image/*" class="form-control" />

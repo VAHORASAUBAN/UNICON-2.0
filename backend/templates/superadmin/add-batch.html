@@ -225,27 +225,40 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                            <form class="custom-mt-form" method="post" action="{% url "add_batch" %}">
+                                            <form class="custom-mt-form" method="post" action="{% url 'add_batch' %}">
                                                 {% csrf_token %}
+                                                
                                                 <div class="form-group">
                                                     <label>Start-Year</label>
-                                                    <input type="date" name="batch_start_date" class="form-control" />
+                                                    <select class="form-control" name="batch_start_year" id="batch_start_year" required>
+                                                        <!-- Year options will be dynamically added by JavaScript -->
+                                                    </select>
                                                 </div>
+                                            
                                                 <div class="form-group">
                                                     <label>End-Year</label>
-                                                    <input type="date" name="batch_end_date" class="form-control" />
+                                                    <select class="form-control" name="batch_end_year" id="batch_end_year" required>
+                                                        <!-- Year options will be dynamically added by JavaScript -->
+                                                    </select>
                                                 </div>
+                                            
                                                 <div class="form-group">
                                                     <label>Course</label>
                                                     <select class="form-control select" name="course">
                                                         <option value="">-- Select --</option>
                                                         {% for course in all_courses %}
-                                                          <option value="{{ course.id }}">{{ course.course_name }}</option>
+                                                            <option value="{{ course.id }}">{{ course.course_name }}</option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>
-                                               
-                                                  <div class="form-group text-center custom-mt-form-group">
+                                            
+                                                {% if error_message %}
+                                                    <div class="form-group text-center" style="color: red;">
+                                                        <strong>{{ error_message }}</strong>
+                                                    </div>
+                                                {% endif %}
+                                            
+                                                <div class="form-group text-center custom-mt-form-group">
                                                     <button class="btn btn-primary mr-2" type="submit">
                                                         Submit
                                                     </button>
@@ -254,6 +267,7 @@
                                                     </button>
                                                 </div>
                                             </form>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -267,15 +281,45 @@
 
     </div>
     <script>
-        setTimeout(function() {
-            let alerts = document.querySelectorAll('.alert');
-            alerts.forEach(function(alert) {
-                let bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            });
-        }, 5000);
-    </script>
+        // JavaScript to dynamically generate year options for the start and end years (1990 to 2099)
+        function generateYearOptions() {
+            const startYearSelect = document.getElementById('batch_start_year');
+            const endYearSelect = document.getElementById('batch_end_year');
+            
+            const startYear = 1990;  // Start year
+            const endYear = 2099;    // End year
+            
+            // Generate year options from 1990 to 2099
+            for (let year = startYear; year <= endYear; year++) {
+                const startOption = document.createElement("option");
+                startOption.value = year;
+                startOption.textContent = year;
+                startYearSelect.appendChild(startOption);
+                
+                const endOption = document.createElement("option");
+                endOption.value = year;
+                endOption.textContent = year;
+                endYearSelect.appendChild(endOption);
+            }
+        }
     
+        // Validate that the start year is less than the end year before submitting
+        document.querySelector('.custom-mt-form').addEventListener('submit', function(event) {
+            const startYear = document.getElementById('batch_start_year').value;
+            const endYear = document.getElementById('batch_end_year').value;
+    
+            // Compare start year and end year
+            if (startYear && endYear) {
+                if (parseInt(startYear) >= parseInt(endYear)) {
+                    event.preventDefault(); // Prevent form submission
+                    alert('Start year must be before the end year');
+                }
+            }
+        });
+    
+        // Run the function when the page loads to generate the year options
+        window.onload = generateYearOptions;
+    </script>
 </body>
 
 </html>

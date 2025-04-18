@@ -1,10 +1,20 @@
-from django.shortcuts import render, redirect
+# Assuming the function is imported from your utils
+from .models import Timetable
+from .models import Course, department, Batch, Subject
+from django.core.files.storage import FileSystemStorage
+from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
+from django.core.files import File
+from collections import defaultdict
+from django.contrib.auth.decorators import login_required
+
+from collections import OrderedDict
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -30,10 +40,10 @@ def add_blog(request):
     return render(request, 'superadmin/add-blog.html')
 
 
-def all_teachers(request):
-    all_faculty = Teacher.objects.all()
-    context = {'all_faculty': all_faculty}
-    return render(request, 'superadmin/all-teachers.html', context)
+# def all_teachers(request):
+#     all_faculty = Teacher.objects.all()
+#     context = {'all_faculty': all_faculty}
+#     return render(request, 'superadmin/all-teachers.html', context)
 
 
 def blog_details(request):
@@ -60,8 +70,67 @@ def edit_profile(request):
     return render(request, 'superadmin/edit-profile.html')
 
 
-def edit_teacher(request):
-    return render(request, 'superadmin/edit-teacher.html')
+def edit_teacher(request, faculty_id):
+
+    all_departments = department.objects.all()
+    all_courses = Course.objects.all()
+    teacher = Teacher.objects.get(faculty_id=faculty_id)
+    context = {
+        'all_departments': all_departments,
+        'all_courses': all_courses,
+        'teacher': teacher
+    }
+
+    if request.method == "POST":
+        # teacher.faculty_id = request.POST.get('faculty_id')
+        teacher.firstname = request.POST.get('firstname')
+        teacher.middlename = request.POST.get('middlename', '')
+        teacher.lastname = request.POST.get('lastname')
+        teacher.email = request.POST.get('email')
+        new_password = request.POST.get('password')
+        if new_password:
+            teacher.password = make_password(new_password)
+        teacher.mobile_number = request.POST.get('mobile_number')
+        teacher.gender = request.POST.get('gender')
+        teacher.birth_date = request.POST.get('birth_date')
+        teacher.address_line_1 = request.POST.get('address_line_1')
+        teacher.address_line_2 = request.POST.get('address_line_2', '')
+        country = request.POST.get('country')
+        if country:
+            teacher.country = country
+        else:
+            print("No country provided!")
+
+        state = request.POST.get('state')
+        if state:
+            teacher.state = state
+        else:
+            print("No state provided!")
+
+        city = request.POST.get('city')
+        if city:
+            teacher.city = city
+        else:
+            print("No city provided!")
+
+        teacher.pincode = request.POST.get('pincode')
+        teacher.joining_date = request.POST.get('joining_date')
+        department_id = request.POST.get('department')
+        course_id = request.POST.get('course')
+        teacher.designations = request.POST.get('designations')
+        teacher.achievements = request.POST.get('achievements', '')
+        teacher.qualification = request.POST.get('qualification')
+        if department_id:
+            teacher.department = department.objects.get(id=department_id)
+
+        if course_id:
+            teacher.course = Course.objects.get(id=course_id)
+        if 'pic' in request.FILES:
+            teacher.pic = request.FILES['pic']
+        teacher.save()
+        return redirect(f'/edit_teacher/{teacher.faculty_id}?success=1')
+
+    return render(request, 'superadmin/edit-teacher.html', context)
 
 
 def index(request):
@@ -105,56 +174,91 @@ def add_subject(request):
     return render(request, 'superadmin/add-subject.html')
 
 
+def edit_subject(request, id):
+    subject = Subject.objects.get(id=id)
+    all_courses = Course.objects.all()
+    all_batches = Batch.objects.all()
+    all_departments = department.objects.all()
+    context = {
+        'subject': subject,
+        'all_courses': all_courses,
+        'all_batches': all_batches,
+        'all_departments': all_departments
+    }
+
+    if request.method == "POST":
+        subject.subject_code = request.POST.get('subject_code')
+        subject.subject_name = request.POST.get('subject_name')
+        department_id = request.POST.get('department')
+        course_id = request.POST.get('course')
+        batch_id = request.POST.get('batch')
+        subject.semester = request.POST.get('semester')
+        if department_id:
+            subject.subject_department = department.objects.get(
+                id=department_id)
+        if course_id:
+            subject.subject_course = Course.objects.get(id=course_id)
+
+        if batch_id:
+            subject.subject_batch = Batch.objects.get(id=batch_id)
+
+        subject.save()
+        return redirect(f'/edit_subject/{subject.id}?success=1')
+    return render(request, 'superadmin/edit-subject.html', context)
+
+
+@login_required
 def add_batch(request):
     all_courses = Course.objects.all()
+
     if request.method == "POST":
-        batch_start_date = request.POST.get('batch_start_date')
-        batch_end_date = request.POST.get('batch_end_date')
+        batch_start_year = request.POST.get('batch_start_year')
+        batch_end_year = request.POST.get('batch_end_year')
         course_id = request.POST.get('course')
 
-        if not (batch_start_date and batch_end_date and course_id):
+        if not (batch_start_year and batch_end_year and course_id):
             context = {
                 'add_batch_error': "Please fill all required fields.",
                 'all_courses': all_courses
             }
             return render(request, 'superadmin/add-batch.html', context)
-
-        try:
-            course = Course.objects.get(id=course_id)
-
-            # Prevent duplicate batch
-            if Batch.objects.filter(course=course, batch_start_date=batch_start_date, batch_end_date=batch_end_date).exists():
-                context = {
-                    'add_batch_error': "This batch already exists.",
-                    'all_courses': all_courses
-                }
-                return render(request, 'superadmin/add-batch.html', context)
-
-            # Create batch
+        else:
             Batch.objects.create(
-                batch_start_date=batch_start_date,
-                batch_end_date=batch_end_date,
-                course=course
+                batch_start_year=batch_start_year,
+                batch_end_year=batch_end_year,
+                course=Course.objects.get(id=course_id)
             )
-            return redirect('add_batch_success')  # Use POST-Redirect-GET
-        except Exception as e:
-            context = {
-                'add_batch_error': f"Error adding batch: {str(e)}",
-                'all_courses': all_courses
-            }
-            return render(request, 'superadmin/add-batch.html', context)
+            return redirect('all_batch')  # Use POST-Redirect-GET
     else:
         context = {'all_courses': all_courses}
         return render(request, 'superadmin/add-batch.html', context)
+
+
+def delete_batch(request, id):
+    delete_batch_id = Batch.objects.get(id=id)
+    delete_batch_id.delete()
+    return redirect('/all_batch')
 
 
 def all_batch(request):
     try:
         all_batches = Batch.objects.all()
         all_courses = Course.objects.all()
+
+        start_year = request.GET.get('start_year')
+        end_year = request.GET.get('end_year')
+        course_id = request.GET.get('course')
+
+        if start_year:
+            all_batches = all_batches.filter(batch_start_year=start_year)
+        if end_year:
+            all_batches = all_batches.filter(batch_end_year=end_year)
+        if course_id:
+            all_batches = all_batches.filter(course__id=course_id)
+
         context = {
             'all_batches': all_batches,
-            'all_courses': all_courses
+            'all_courses': all_courses,
         }
         return render(request, 'superadmin/all-batch.html', context)
 
@@ -166,7 +270,36 @@ def all_batch(request):
 def all_subject(request):
     try:
         all_subjects = Subject.objects.all()
-        return render(request, 'superadmin/all-subject.html', {'all_subjects': all_subjects})
+
+        # Get filter values
+        subject_id = request.GET.get('subject_id')
+        subject_name = request.GET.get('subject_name')
+        department_id = request.GET.get('department')
+        course_id = request.GET.get('course')
+        batch_id = request.GET.get('batch')
+
+        if subject_id:
+            all_subjects = all_subjects.filter(
+                subject_code__icontains=subject_id)
+        if subject_name:
+            all_subjects = all_subjects.filter(
+                subject_name__icontains=subject_name)
+        if department_id:
+            all_subjects = all_subjects.filter(
+                subject_department__id=department_id)
+        if course_id:
+            all_subjects = all_subjects.filter(subject_course__id=course_id)
+        if batch_id:
+            all_subjects = all_subjects.filter(subject_batch__id=batch_id)
+
+        context = {
+            'all_subjects': all_subjects,
+            'all_departments': department.objects.all(),
+            'all_courses': Course.objects.all(),
+            'all_batches': Batch.objects.all(),
+        }
+        return render(request, 'superadmin/all-subject.html', context)
+
     except Exception as e:
         messages.error(request, f"Error fetching subjects: {str(e)}")
         return render(request, 'superadmin/all-subject.html', {'all_subjects': []})
@@ -176,35 +309,159 @@ def timetable(request):
     return render(request, 'superadmin/timetable.html')
 
 
+def format_time_to_am_pm(time_str):
+    """Helper function to format time in 'HH:MM' format to 'H:MM AM/PM' format."""
+    time_obj = datetime.strptime(time_str, '%H:%M')
+    return time_obj.strftime('%I:%M %p')
+
+# def parse_time_string(time_str):
+#     try:
+#         return datetime.strptime(time_str.strip(), "%I.%M %p").time()
+#     except ValueError:
+#         return None
+
+
+def parse_time_string(time_str):
+    """Convert '7.30 AM' to datetime.time object"""
+    formats = ["%I.%M %p", "%I:%M %p"]  # Handle both dot and colon
+    for fmt in formats:
+        try:
+            return datetime.strptime(time_str.strip(), fmt).time()
+        except ValueError:
+            continue
+    return None
+
+# before filter
+
+
+# def show_timetable(request):
+#     days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+#     # Fixed time slots in 12hr format
+#     time_slots = OrderedDict([
+#         ("7:30 AM - 8:25 AM", (parse_time_string("7.30 AM"), parse_time_string("8.25 AM"))),
+#         ("8:25 AM - 9:20 AM", (parse_time_string("8.25 AM"), parse_time_string("9.20 AM"))),
+#         ("9:30 AM - 10:25 AM", (parse_time_string("9.30 AM"),
+#          parse_time_string("10.25 AM"))),
+#         ("10:25 AM - 11:20 AM",
+#          (parse_time_string("10.25 AM"), parse_time_string("11.20 AM"))),
+#         ("11:30 AM - 12:25 PM",
+#          (parse_time_string("11.30 AM"), parse_time_string("12.25 PM"))),
+#         ("12:25 PM - 1:20 PM",
+#          (parse_time_string("12.25 PM"), parse_time_string("1.20 PM"))),
+#     ])
+
+#     timetable = Timetable.objects.all()
+#     timetable_matrix = []
+
+#     for slot_label, (slot_start, slot_end) in time_slots.items():
+#         row = {'time': slot_label}
+#         for day in days:
+#             lecture = None
+#             for entry in timetable:
+#                 if entry.day != day:
+#                     continue
+#                 entry_start = parse_time_string(entry.lecture_start_time)
+#                 entry_end = parse_time_string(entry.lecture_end_time)
+#                 if entry_start and entry_end:
+#                     # Check if entry overlaps with time slot
+#                     if slot_start <= entry_start < slot_end:
+#                         lecture = entry
+#                         break
+#             row[day] = lecture
+#         timetable_matrix.append(row)
+
+#     context = {
+#         'timetable_matrix': timetable_matrix,
+#         'days': days,
+#     }
+
+#     return render(request, 'superadmin/show_timetable.html', context)
+
+# superadmin/views.py
+
+# parse_time_string function directly in views.py
+# def parse_time_string(time_str):
+#     try:
+#         # Parse time in 12-hour format (e.g., "7:30 AM")
+#         return datetime.strptime(time_str, "%I:%M %p").time()
+#     except ValueError:
+#         return None
+
+# After Filter
+
 def show_timetable(request):
-    return render(request, 'superadmin/show_timetable.html')
+    # Get selected filter values from request
+    department_name = request.GET.get('department', '')
+    course = request.GET.get('course', '')
+    semester = request.GET.get('semester', '')
+    division = request.GET.get('division', '')
 
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
-# def coordinator_login(request):
-#     if request.method == "POST":
-#         username = request.POST.get('username')
-#         password = request.POST.get('password')
+    time_slots = OrderedDict([
+        ("7:30 AM - 8:25 AM", (parse_time_string("7.30 AM"), parse_time_string("8.25 AM"))),
+        ("8:25 AM - 9:20 AM", (parse_time_string("8.25 AM"), parse_time_string("9.20 AM"))),
+        ("9:30 AM - 10:25 AM", (parse_time_string("9.30 AM"),
+         parse_time_string("10.25 AM"))),
+        ("10:25 AM - 11:20 AM",
+         (parse_time_string("10.25 AM"), parse_time_string("11.20 AM"))),
+        ("11:30 AM - 12:25 PM",
+         (parse_time_string("11.30 AM"), parse_time_string("12.25 PM"))),
+        ("12:25 PM - 1:20 PM",
+         (parse_time_string("12.25 PM"), parse_time_string("1.20 PM"))),
+    ])
 
-#         try:
-#             coord = coordinator.objects.get(username=username)
-#             if check_password(password, coord.password):
-#                 request.session['username'] = coord.username
-#                 messages.success(request, "Login successful!")
-#                 # Change to your actual dashboard URL name
-#                 # return render(request, 'superadmin/index.html', {'username': username})
-#                 return redirect('index')
-#             else:
-#                 messages.error(
-#                     request, "Invalid credentials. Please try again.")
-#         except coordinator.DoesNotExist:
-#             messages.error(request, "Coordinator does not exist.")
-#         except Exception as e:
-#             messages.error(request, f"An error occurred: {str(e)}")
+    timetable = Timetable.objects.all()
 
-#         # Change to your actual login URL name
-#         return render(request, 'superadmin/login.html', {'error': 'Invalid credentials.'})
-#     else:
-#         return render(request, 'superadmin/login.html')
+    if department_name:
+        try:
+            dept_obj = department.objects.get(department_name=department_name)
+            timetable = timetable.filter(timetable_department=dept_obj)
+        except department.DoesNotExist:
+            timetable = Timetable.objects.none()
+
+    if course:
+        try:
+            course_obj = Course.objects.get(course_name=course)
+            timetable = timetable.filter(course=course_obj)
+        except Course.DoesNotExist:
+            timetable = Timetable.objects.none()
+    if semester:
+        timetable = timetable.filter(semester=semester)
+    if division:
+        timetable = timetable.filter(division=division)
+
+    timetable_matrix = []
+
+    for slot_label, (slot_start, slot_end) in time_slots.items():
+        row = {'time': slot_label}
+        for day in days:
+            lecture = None
+            for entry in timetable:
+                if entry.day != day:
+                    continue
+                entry_start = parse_time_string(entry.lecture_start_time)
+                entry_end = parse_time_string(entry.lecture_end_time)
+                if entry_start and entry_end and slot_start <= entry_start < slot_end:
+                    lecture = entry
+                    break
+            row[day] = lecture
+        timetable_matrix.append(row)
+
+    context = {
+        'timetable_matrix': timetable_matrix,
+        'days': days,
+        'department': department_name,
+        'course': course,
+        'semester': semester,
+        'division': division,
+        'departments': department.objects.all(),
+        'courses': Course.objects.all(),
+    }
+
+    return render(request, 'superadmin/show_timetable.html', context)
+
 
 def login_view(request):
     if request.method == "POST":
@@ -318,8 +575,21 @@ def add_course(request):
 
 
 def all_course(request):
-    course = Course.objects.all()
-    return render(request, 'superadmin/all-course.html', {'course': course})
+    courses = Course.objects.all()
+    all_departments = department.objects.all()
+
+    name = request.GET.get('name')
+    dept_id = request.GET.get('department')
+
+    if name:
+        courses = courses.filter(course_name__icontains=name)
+    if dept_id:
+        courses = courses.filter(course_department__id=dept_id)
+
+    return render(request, 'superadmin/all-course.html', {
+        'course': courses,
+        'all_departments': all_departments
+    })
 
 
 def delete_course(request, id):
@@ -413,6 +683,36 @@ def all_students(request):
     all_students = Student.objects.all()
     all_departments = department.objects.all()
     all_courses = Course.objects.all()
+
+    student_id = request.GET.get('student_id')
+    dept_name = request.GET.get('department')
+    course_name = request.GET.get('course')
+    semester = request.GET.get('semester')
+    division = request.GET.get('division')
+
+    if student_id:
+        all_students = all_students.filter(enrollment__icontains=student_id)
+
+    if dept_name:
+        try:
+            dept_obj = department.objects.get(department_name=dept_name)
+            all_students = all_students.filter(student_department=dept_obj)
+        except department.DoesNotExist:
+            all_students = Student.objects.none()
+
+    if course_name:
+        try:
+            course_obj = Course.objects.get(course_name=course_name)
+            all_students = all_students.filter(course=course_obj)
+        except Course.DoesNotExist:
+            all_students = Student.objects.none()
+
+    if semester:
+        all_students = all_students.filter(semester=semester)
+
+    if division:
+        all_students = all_students.filter(division=division)
+
     context = {
         'all_departments': all_departments,
         'all_courses': all_courses,
@@ -422,28 +722,47 @@ def all_students(request):
 
 
 def edit_student(request, id):
-    print("HEllo")
-    student = Student.objects.get(id=id)
+    student = get_object_or_404(Student, id=id)
     all_departments = department.objects.all()
     all_courses = Course.objects.all()
 
     if request.method == "POST":
+
         student.enrollment = request.POST.get('enrollment')
         student.firstname = request.POST.get('firstname')
         student.middlename = request.POST.get('middlename')
         student.lastname = request.POST.get('lastname')
         student.email = request.POST.get('email')
+
         new_password = request.POST.get('password')
         if new_password:
             student.password = make_password(new_password)
+
         student.mobile_number = request.POST.get('mobile_number')
         student.gender = request.POST.get('gender')
         student.birth_date = request.POST.get('birth_date')
         student.address_line_1 = request.POST.get('address_line_1')
         student.address_line_2 = request.POST.get('address_line_2')
-        student.country = request.POST.get('country')
-        student.state = request.POST.get('state')
-        student.city = request.POST.get('city')
+
+        # Fallbacks for country/state/city
+        country = request.POST.get('country')
+        if country:
+            student.country = country
+        else:
+            print("No country provided!")
+
+        state = request.POST.get('state')
+        if state:
+            student.state = state
+        else:
+            print("No state provided!")
+
+        city = request.POST.get('city')
+        if city:
+            student.city = city
+        else:
+            print("No city provided!")
+
         student.pincode = request.POST.get('pincode')
         department_id = request.POST.get('student_department')
         course_id = request.POST.get('course')
@@ -462,13 +781,12 @@ def edit_student(request, id):
         student.save()
         return redirect('edit_student', id=student.id)
 
-    else:
-        context = {
-            'all_departments': all_departments,
-            'all_courses': all_courses,
-            'all_students': student
-        }
-        return render(request, 'superadmin/edit-student.html', context)
+    context = {
+        'student': student,
+        'all_departments': all_departments,
+        'all_courses': all_courses
+    }
+    return render(request, 'superadmin/edit-student.html', context)
 
 
 def delete_student(request, id):
@@ -560,8 +878,31 @@ def add_teacher(request):
 
 def all_teachers(request):
     all_teachers = Teacher.objects.all()
+
+    faculty_id = request.GET.get('faculty_id')
+    course = request.GET.get('course')
+    department_id = request.GET.get('department')
+    faculty_name = request.GET.get('faculty_name')
+
+    if faculty_id:
+        all_teachers = all_teachers.filter(faculty_id__icontains=faculty_id)
+
+    if course:
+        all_teachers = all_teachers.filter(course_id=course)
+
+    if department_id:
+        all_teachers = all_teachers.filter(department_id=department_id)
+
+    if faculty_name:
+        all_teachers = all_teachers.filter(
+            models.Q(firstname__icontains=faculty_name) |
+            models.Q(middlename__icontains=faculty_name) |
+            models.Q(lastname__icontains=faculty_name)
+        )
+
     all_departments = department.objects.all()
     all_courses = Course.objects.all()
+
     context = {
         'all_departments': all_departments,
         'all_courses': all_courses,
@@ -610,6 +951,16 @@ def parse_date(date_value):
     except Exception as e:
         return None
 
+# Date parser
+
+
+def parse_custom_date(date_str):
+    try:
+        return datetime.strptime(date_str, "%d-%m-%Y").date()
+    except Exception as e:
+        print(f"Date parsing error for '{date_str}': {e}")
+        return None
+
 
 def add_teachers_bulk(request):
     if request.method == "POST":
@@ -633,66 +984,96 @@ def add_teachers_bulk(request):
 
         for index, row in data.iterrows():
             try:
+                row = row.apply(lambda x: x.strip()
+                                if isinstance(x, str) else x)
+
+                # Debugging
+                print(f"Processing row {index + 1}: {row.to_dict()}")
+
                 # Validate Department & Course
-                teacher_department = department.objects.get(
-                    id=row['department'])
-                course = Course.objects.get(id=row['course'])
+                try:
+                    teacher_department = department.objects.get(
+                        id=row['department'])
+                except department.DoesNotExist:
+                    messages.error(
+                        request, f"Row {index + 1}: Department ID {row['department']} does not exist.")
+                    continue
+
+                try:
+                    course = Course.objects.get(id=row['course'])
+                except Course.DoesNotExist:
+                    messages.error(
+                        request, f"Row {index + 1}: Course ID {row['course']} does not exist.")
+                    continue
 
                 # Handle Image File
                 pic_path = row['pic']
                 pic_file = None
-                if pic_path and os.path.exists(os.path.join(IMAGE_UPLOAD_PATH, pic_path)):
-                    img_file = open(os.path.join(
-                        IMAGE_UPLOAD_PATH, pic_path), 'rb')
-                    pic_file = File(img_file, name=pic_path)
-                    image_files.append(img_file)
+                try:
+                    full_pic_path = os.path.join(IMAGE_UPLOAD_PATH, pic_path)
+                    if pic_path and os.path.exists(full_pic_path):
+                        img_file = open(full_pic_path, 'rb')
+                        pic_file = File(img_file, name=pic_path)
+                        image_files.append(img_file)
+                    else:
+                        print(f"Image not found: {full_pic_path}")  # Debugging
+                except Exception as e:
+                    print(f"Error handling image for row {index + 1}: {e}")
 
                 # Create Teacher Object
-                teacher = Teacher(
-                    faculty_id=row['faculty_id'],
-                    firstname=row['firstname'],
-                    lastname=row['lastname'],
-                    email=row['email'],
-                    password=make_password(row['password']),
-                    mobile_number=row['mobile_number'],
-                    gender=row['gender'],
-                    birth_date=parse_date(row['birth_date']),
-                    address_line_1=row['address_line_1'],
-                    address_line_2=row['address_line_2'],
-                    country=row['country'],
-                    state=row['state'],
-                    city=row['city'],
-                    pincode=row['pincode'],
-                    joining_date=parse_date(row['joining_date']),
-                    course=course,
-                    department=teacher_department,
-                    designations=row['designations'],
-                    achievements=row['achievements'],
-                    qualification=row['qualification'],
-                )
+                try:
+                    teacher = Teacher(
+                        faculty_id=row['faculty_id'],
+                        firstname=row['firstname'],
+                        middlename=row['middlename'],
+                        lastname=row['lastname'],
+                        email=row['email'],
+                        password=make_password(row['password']),
+                        mobile_number=row['mobile_number'],
+                        gender=row['gender'],
+                        birth_date=parse_custom_date(row['birth_date']),
+                        address_line_1=row['address_line_1'],
+                        address_line_2=row['address_line_2'],
+                        country=row['country'],
+                        state=row['state'],
+                        city=row['city'],
+                        pincode=row['pincode'],
+                        joining_date=parse_custom_date(row['joining_date']),
+                        course=course,
+                        department=teacher_department,
+                        designations=row['designations'],
+                        achievements=row['achievements'],
+                        qualification=row['qualification'],
+                    )
 
-                if pic_file:
-                    teacher.pic.save(pic_path, pic_file)
+                    if pic_file:
+                        teacher.pic.save(pic_path, pic_file)
 
-                teacher_objects.append(teacher)
+                    teacher_objects.append(teacher)
 
-            except department.DoesNotExist:
-                messages.error(
-                    request, f"Row {index + 1}: Department ID {row['department']} does not exist.")
-            except Course.DoesNotExist:
-                messages.error(
-                    request, f"Row {index + 1}: Course ID {row['course']} does not exist.")
+                except Exception as e:
+                    print(f"Row {index + 1} object creation error: {e}")
+                    messages.error(
+                        request, f"Row {index + 1} object creation error: {e}")
+
             except Exception as e:
-                messages.error(request, f"Row {index + 1} error: {str(e)}")
+                print(f"Unexpected error at row {index + 1}: {e}")
+                messages.error(
+                    request, f"Unexpected error at row {index + 1}: {e}")
 
         try:
-            Teacher.objects.bulk_create(teacher_objects)
+            # Teacher.objects.bulk_create(teacher_objects)
+            for teacher in teacher_objects:
+                teacher.save()
 
             for img_file in image_files:
                 img_file.close()
 
+            print("✅ Teachers have been added successfully!")
             messages.success(request, "Teachers have been added successfully!")
+
         except Exception as e:
+            print("❌ Error saving teachers to the database:", str(e))
             messages.error(
                 request, f"Error saving teachers to the database: {str(e)}")
 
@@ -706,7 +1087,7 @@ def add_teachers_bulk(request):
 def add_students_bulk(request):
     if request.method == "POST":
         IMAGE_UPLOAD_PATH = "media/student_images/"
-        csv_file = request.FILES.get('csv_file')
+        csv_file = request.FILES.get('file')
 
         # Validate CSV File Type
         if not csv_file or not csv_file.name.endswith('.csv'):
@@ -838,6 +1219,142 @@ def add_subject(request):
         return render(request, 'superadmin/add-subject.html', context)
 
 
+# def bulk_add_subjects(request):
+#     if request.method == "POST":
+#         csv_file = request.FILES.get('file')
+
+#         # Fix: Proper file format validation
+#         if not csv_file or not csv_file.name.endswith('.csv'):
+#             messages.error(
+#                 request, "Invalid file format! Please upload a CSV file.")
+#             return redirect('bulk_add_subjects')
+
+#         try:
+#             data = pd.read_csv(csv_file).fillna('')  # Reading CSV
+#         except Exception as e:
+#             messages.error(request, f"Error reading CSV file: {str(e)}")
+#             return redirect('bulk_add_subjects')
+
+#         subject_objects = []
+
+#         # Iterate over each row in the CSV
+#         for index, row in data.iterrows():
+#             try:
+#                 # Fix: Ensure the column names in CSV match the model fields.
+#                 # Also, ensure foreign key lookups are correct.
+#                 subject_department = Department.objects.get(
+#                     id=row['subject_department'])  # Correct lookup
+#                 subject_course = Course.objects.get(
+#                     id=row['subject_course'])  # Correct lookup
+#                 subject_batch = Batch.objects.get(
+#                     id=row['subject_batch'])  # Correct lookup
+
+#                 # Handling subject_division
+#                 subject_division = 'A'  # Set a default division, or handle based on your business logic
+#                 if 'subject_division' in row:
+#                     # If division is present in the CSV, use it.
+#                     subject_division = row['subject_division']
+
+#                 # Debugging: Print or log the data you're trying to add
+#                 print(
+#                     f"Adding subject {row['subject_name']} for department {subject_department}, course {subject_course}")
+
+#                 subject = Subject(
+#                     subject_code=row['subject_code'],
+#                     subject_name=row['subject_name'],
+#                     subject_department=subject_department,
+#                     subject_batch=subject_batch,
+#                     subject_semester=row['subject_semester'],
+#                     subject_course=subject_course,
+#                     subject_division=subject_division  # Use the division from CSV or default
+#                 )
+
+#                 subject_objects.append(subject)
+#             except Exception as e:
+#                 messages.error(
+#                     request, f"Error processing row {index}: {str(e)}")
+#                 print(f"Error processing row {index}: {str(e)}")
+
+#         # Bulk save and check for any issues
+#         if subject_objects:
+#             try:
+#                 Subject.objects.bulk_create(subject_objects)
+#                 messages.success(request, "Subjects successfully added.")
+#             except Exception as e:
+#                 messages.error(request, f"Error saving subjects: {str(e)}")
+#                 print(f"Error saving subjects: {str(e)}")
+#         else:
+#             messages.error(request, "No valid subjects to add.")
+
+#     return render(request, 'superadmin/add_subjects_bulk.html')
+
+
+def bulk_add_subjects(request):
+    if request.method == "POST":
+        # Make sure to match the file input name
+        csv_file = request.FILES.get('csv_file')
+
+        # Check if file exists and is of correct format
+        if not csv_file:
+            messages.error(request, "No file uploaded.")
+            return redirect('bulk_add_subjects')
+
+        # Validate file format
+        if not csv_file.name.endswith(('.csv', '.xlsx', '.xls')):
+            messages.error(
+                request, "Invalid file format! Please upload a CSV, XLS, or XLSX file.")
+            return redirect('bulk_add_subjects')
+
+        try:
+            # Handle CSV and Excel files
+            if csv_file.name.endswith('.csv'):
+                data = pd.read_csv(csv_file).fillna('')
+            else:
+                data = pd.read_excel(csv_file).fillna('')
+
+        except Exception as e:
+            messages.error(request, f"Error reading file: {str(e)}")
+            return redirect('bulk_add_subjects')
+
+        subject_objects = []
+
+        # Process the rows in the uploaded file
+        for index, row in data.iterrows():
+            try:
+                # Make sure that the foreign key lookups are correct
+                subject_department = department.objects.get(
+                    id=row['subject_department'])
+                subject_course = Course.objects.get(id=row['subject_course'])
+                subject_batch = Batch.objects.get(id=row['subject_batch'])
+
+                subject = Subject(
+                    subject_code=row['subject_code'],
+                    subject_name=row['subject_name'],
+                    subject_department=subject_department,
+                    subject_batch=subject_batch,
+                    subject_semester=row['subject_semester'],
+                    subject_course=subject_course,
+
+                )
+
+                subject_objects.append(subject)
+            except Exception as e:
+                messages.error(
+                    request, f"Error processing row {index}: {str(e)}")
+
+        if subject_objects:
+            try:
+                Subject.objects.bulk_create(subject_objects)
+                messages.success(request, "Subjects successfully added.")
+            except Exception as e:
+                messages.error(request, f"Error saving subjects: {str(e)}")
+
+        else:
+            messages.error(request, "No valid subjects to add.")
+
+    return render(request, 'superadmin/add_subjects_bulk.html')
+
+
 def delete_subject(request, id):
     deleteSubject = Subject.objects.get(id=id)
     deleteSubject.delete()
@@ -875,6 +1392,39 @@ def add_placement(request):
     return render(request, "superadmin/add-placement.html")
 
 
+def edit_placement(request, id):
+    placement = Placement.objects.get(id=id)
+    dict = {
+        'placement': placement
+    }
+    if request.method == "POST":
+        placement.placement_company_name = request.POST.get(
+            "placement_company_name")
+        placement.job_role = request.POST.get("job_role")
+        placement.placement_company_location = request.POST.get(
+            "placement_company_location")
+        placement.placement_company_package = request.POST.get(
+            "placement_company_package")
+        placement.interview_date = request.POST.get("interview_date")
+        placement.deadline_date = request.POST.get("deadline_date")
+
+        if 'placement_company_logo' in request.FILES:
+            placement.placement_company_logo = request.FILES['placement_company_logo']
+
+        if 'placement_job_description' in request.FILES:
+            placement.placement_job_description = request.FILES['placement_job_description']
+
+        placement.save()
+        return redirect(f'/edit_placement/{placement.id}?success=1')
+    return render(request, 'superadmin/edit_placement.html', dict)
+
+
+def delete_placement(request, id):
+    deletePlacement = Placement.objects.get(id=id)
+    deletePlacement.delete()
+    return redirect('/show_placement')
+
+
 def show_placement(request):
     all_placement = list(Placement.objects.values())
 
@@ -884,9 +1434,83 @@ def show_placement(request):
     return render(request, 'superadmin/show_placement.html', {'all_placement': placement_json})
 
 
+def delete_timetable(request, id):
+    deleteTimetable = Timetable.objects.get(id=id)
+    deleteTimetable.delete()
+    return render(request, 'superadmin/show_timetable.html')
+
+
+def add_timetable_bulk(request):
+    if request.method == "POST":
+        csv_file = request.FILES.get('csv_file')
+
+        # Validate File Type
+        if not csv_file or not csv_file.name.endswith('.csv'):
+            messages.error(
+                request, "Invalid file format! Please upload a CSV file.")
+            return redirect('add_timetable_bulk')
+
+         # Validate file format
+        if not csv_file.name.endswith(('.csv', '.xlsx', '.xls')):
+            messages.error(
+                request, "Invalid file format! Please upload a CSV, XLS, or XLSX file.")
+            return redirect('add_timetable_bulk')
+        try:
+            # Handle CSV and Excel files
+            if csv_file.name.endswith('.csv'):
+                data = pd.read_csv(csv_file).fillna('')
+            else:
+                data = pd.read_excel(csv_file).fillna('')
+        except Exception as e:
+            messages.error(request, f"Error reading file: {str(e)}")
+            return redirect('add_timetable_bulk')
+
+        timetable_objects = []
+
+        # Process the rows in the uploaded file
+        for index, row in data.iterrows():
+            try:
+                timetable_subject_name = Subject.objects.get(
+                    id=row['timetable_subject_name'])
+                faculty_name = Teacher.objects.get(id=row['faculty_name'])
+                course = Course.objects.get(id=row['course'])
+                batch = Batch.objects.get(id=row['batch'])
+                timetable_department = department.objects.get(
+                    id=row['timetable_department'])
+                semester = row['semester']
+                timetable = Timetable(
+                    timetable_subject_name=timetable_subject_name,
+                    faculty_name=faculty_name,
+                    day=row['day'],
+                    lecture_start_time=row['lecture_start_time'],
+                    lecture_end_time=row['lecture_end_time'],
+                    course=course,
+                    timetable_department=timetable_department,
+                    batch=batch,
+                    division=row['division'],
+                    semester=semester
+                )
+                timetable_objects.append(timetable)
+            except Exception as e:
+                messages.error(
+                    request, f"Error processing row {index}: {str(e)}")
+
+        if timetable_objects:
+            try:
+                Timetable.objects.bulk_create(timetable_objects)
+                messages.success(request, "Timetable successfully added.")
+            except Exception as e:
+                messages.error(request, f"Error saving timetable: {str(e)}")
+
+        else:
+            messages.error(request, "No valid timetable to add.")
+
+    return render(request, 'superadmin/add_timetable_bulk.html')
+
+
 def add_timetable(request):
     all_subjects = Subject.objects.all()
-    print(all_subjects)
+    # print(all_subjects)
     all_courses = Course.objects.all()
     all_departments = department.objects.all()
     all_batches = Batch.objects.all()
@@ -896,25 +1520,30 @@ def add_timetable(request):
         timetable_subject_name = request.POST.get('timetable_subject_name')
         faculty_name = request.POST.get('faculty_name')
         day = request.POST.get('day')
-        start_time = request.POST.get('start_time')
-        end_time = request.POST.get('end_time')
+        lecture_start_time = request.POST.get('lecture_start_time')
+        lecture_end_time = request.POST.get('lecture_end_time')
         course_id = request.POST.get('course')
         timetable_department_id = request.POST.get('timetable_department')
         print(all_subject)
         batch = request.POST.get('batch')
+        division = request.POST.get('division')
         course = Course.objects.get(id=course_id)
         timetable_department = department.objects.get(
             id=timetable_department_id)
-
+        semester = request.POST.get('semester')
+        # semester = request.POST.get('semester')
         timetable = Timetable.objects.create(
             timetable_subject_name=Subject.objects.get(
                 id=timetable_subject_name),
             faculty_name=Teacher.objects.get(id=faculty_name),
             day=day,
-            start_time=start_time,
-            end_time=end_time,
+            lecture_start_time=lecture_start_time,
+            lecture_end_time=lecture_end_time,
+            batch=Batch.objects.get(id=batch),
             course=course,
-            timetable_department=timetable_department
+            division=division,
+            timetable_department=timetable_department,
+            semester=semester
         )
 
         return render(request, 'superadmin/timetable.html', {

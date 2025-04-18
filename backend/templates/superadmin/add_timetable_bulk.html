@@ -2,7 +2,7 @@
 {% block body %}
 {% load static %}
 <head>
-    <title>Bulk Upload Students</title>
+    <title>Bulk Upload Timetable</title>
     <style>
         .upload-container {
             display: flex;
@@ -149,13 +149,24 @@
 </head>
 
 <div class="upload-container">
-    <h2>Upload Students Data in Bulk</h2>
-    <p>Upload a CSV or Excel file containing teacher information</p>
-    <form id="uploadForm" action="{% url 'add_teachers_bulk' %}" method="post" enctype="multipart/form-data">
+    <!-- Show success or error messages -->
+{% if messages %}
+<div class="alert-container">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+    <h2>Upload Timetable Data in Bulk</h2>
+    <p>Upload a CSV or Excel file containing subject information</p>
+    <form id="uploadForm" action="{% url 'add_timetable_bulk' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="upload-form" id="dropArea" onclick="triggerFileInput()">
-            <input name="file" id="fileInput" type="file" class="upload-input" 
-                   accept=".csv,.xlsx,.xls" onchange="validateFile(this)">
+            <!-- Input name changed to match view 'csv_file' -->
+            <input name="csv_file" id="fileInput" type="file" class="upload-input" accept=".csv,.xlsx,.xls" onchange="validateFile(this)">
             <div class="upload-label">
                 <img src="{% static 'assets/img/upload.png' %}" alt="Upload icon" class="upload-icon"/>
                 <p>Drag and drop your file here or</p>
@@ -169,9 +180,10 @@
         </div>
         
         <div class="text-center mt-4">
-            <button type="submit" class="upload-button" id="submitButton">Upload Teachers Data</button>
+            <button type="submit" class="upload-button" id="submitButton">Upload Timetable Data</button>
         </div>
     </form>
+    
     
     <div class="instructions-container">
         <h3 class="instructions-title">Instructions:</h3>
@@ -179,7 +191,7 @@
             <li>File must be in CSV or Excel format</li>
             <li>Maximum file size: 5MB</li>
             <li>
-                <a href="{% static 'add_data_templates/bulk_students_template.csv' %}" class="template-button" download>
+                <a href="{% static 'add_data_templates/timetable_format.csv' %}" class="template-button" download>
                     <img src="{% static 'assets/img/download.jpeg' %}" alt="" class="template-icon">
                     Download template file
                 </a>
@@ -188,6 +200,7 @@
     </div>
 </div>
 
+<!-- Unchanged JavaScript logic -->
 <script>
     function triggerFileInput() {
         document.getElementById('fileInput').click();
@@ -294,5 +307,22 @@
             console.log('Drag and Drop not supported by this browser');
         }
     });
+    function validateFile(input) {
+        const file = input.files[0];
+        const allowedExtensions = /(\.csv|\.xlsx|\.xls)$/i;
+    
+        // Display file name
+        document.getElementById('fileName').textContent = file.name;
+    
+        // Show error message if the file is not of valid type
+        if (!allowedExtensions.exec(file.name)) {
+            document.getElementById('errorMessage').style.display = 'block';
+            document.getElementById('submitButton').disabled = true; // Disable submit button
+        } else {
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('submitButton').disabled = false; // Enable submit button
+        }
+    }
+    
 </script>
 {% endblock body %}

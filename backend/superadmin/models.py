@@ -101,8 +101,8 @@ class Teacher(models.Model):
 
 
 class Batch(models.Model):
-    batch_start_date = models.DateField()
-    batch_end_date = models.DateField()
+    batch_start_year = models.IntegerField()
+    batch_end_year = models.IntegerField()
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
     class Meta:
@@ -119,8 +119,6 @@ class Subject(models.Model):
     subject_semester = models.IntegerField(
         choices=[(i, str(i)) for i in range(1, 11)])  # Options from 1 to 10
     subject_course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    subject_division = models.CharField(max_length=1, choices=[
-        ('A', 'A'), ('B', 'B'), ('C', 'C')])  # Options A, B, C
 
     class Meta:
         db_table = "subject"
@@ -149,19 +147,6 @@ class Placement(models.Model):
 
 
 class Timetable(models.Model):
-    TIME_CHOICES = [
-        ('07:30', '07:30 AM'),
-        ('08:30', '08:30 AM'),
-        ('09:30', '09:30 AM'),
-        ('10:30', '10:30 AM'),
-        ('11:30', '11:30 AM'),
-        ('12:30', '12:30 PM'),
-        ('13:30', '01:30 PM'),
-        ('14:30', '02:30 PM'),
-        ('15:30', '03:30 PM'),
-        ('16:30', '04:30 PM'),
-    ]
-
     timetable_subject_name = models.ForeignKey(
         Subject, on_delete=models.CASCADE)
     faculty_name = models.ForeignKey(Teacher, on_delete=models.CASCADE)
@@ -176,13 +161,17 @@ class Timetable(models.Model):
             ('Saturday', 'Saturday'),
         ]
     )
-    start_time = models.CharField(max_length=5, choices=TIME_CHOICES)
-    end_time = models.CharField(max_length=5, choices=TIME_CHOICES)
+    lecture_start_time = models.CharField(max_length=20)
+    lecture_end_time = models.CharField(max_length=20)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     timetable_department = models.ForeignKey(
         department, on_delete=models.CASCADE)
+    # Add semester as IntegerField (or CharField if required)
+    # semester = models.IntegerField()
+    semester = models.IntegerField(null=True, blank=True)
+
     batch = models.ForeignKey(Batch, on_delete=models.CASCADE)
-    divsion = models.CharField(max_length=1, choices=[
+    division = models.CharField(max_length=1, choices=[
         ('A', 'A'),
         ('B', 'B'),
         ('C', 'C')
