@@ -10,6 +10,8 @@ from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password
+
 from django.core.files import File
 from collections import defaultdict
 from django.contrib.auth.decorators import login_required
@@ -207,7 +209,6 @@ def edit_subject(request, id):
     return render(request, 'superadmin/edit-subject.html', context)
 
 
-@login_required
 def add_batch(request):
     all_courses = Course.objects.all()
 
@@ -604,74 +605,63 @@ def add_student(request):
 
     if request.method == "POST":
         try:
-            # Enrollment Validation
+            # DEBUG: Show POST data in terminal
+            print("=== POST DATA ===")
+            print(request.POST)
+            print("=== FILES DATA ===")
+            print(request.FILES)
+
+            # Validate and extract basic fields
             enrollment = request.POST.get('enrollment')
-            if not enrollment.isdigit():
+            if not enrollment or not enrollment.isdigit():
                 raise ValueError("Enrollment number must be a valid number.")
             enrollment = int(enrollment)
-            if enrollment <= 0:
-                raise ValueError("Enrollment number must be positive.")
 
-            # Extract Data
             firstname = request.POST.get('firstname')
-            middlename = request.POST.get('middlename', '')
             lastname = request.POST.get('lastname')
             email = request.POST.get('email')
             password = request.POST.get('password')
-            mobile_number = request.POST.get('mobile_number')
-            gender = request.POST.get('gender')
-            birth_date = request.POST.get('birth_date')
-            address_line_1 = request.POST.get('address_line_1')
-            address_line_2 = request.POST.get('address_line_2', '')
-            country = request.POST.get('country')
-            state = request.POST.get('state')
-            city = request.POST.get('city')
-            pincode = request.POST.get('pincode')
+
+            if not all([firstname, lastname, email, password]):
+                raise ValueError(
+                    "Firstname, Lastname, Email, and Password are required.")
+
+            # ForeignKey validation
             department_id = request.POST.get('student_department')
             course_id = request.POST.get('course')
-            semester = request.POST.get('semester')
-            division = request.POST.get('division')
-            student_image = request.FILES.get('student_image')
 
-            # Validate Foreign Keys
             student_department = department.objects.get(id=department_id)
             course = Course.objects.get(id=course_id)
 
-            # Create Student
+            # Create the Student
             student = Student.objects.create(
                 enrollment=enrollment,
                 firstname=firstname,
-                middlename=middlename,
+                middlename=request.POST.get('middlename', ''),
                 lastname=lastname,
                 email=email,
-                password=make_password(password),
-                mobile_number=mobile_number,
-                gender=gender,
-                birth_date=birth_date,
-                address_line_1=address_line_1,
-                address_line_2=address_line_2,
-                country=country,
-                state=state,
-                city=city,
-                pincode=pincode,
+                password=password,  # Will be hashed in model's save()
+                mobile_number=request.POST.get('mobile_number'),
+                gender=request.POST.get('gender'),
+                birth_date=request.POST.get('birth_date'),
+                address_line_1=request.POST.get('address_line_1'),
+                address_line_2=request.POST.get('address_line_2', ''),
+                country=request.POST.get('country'),
+                state=request.POST.get('state'),
+                city=request.POST.get('city'),
+                pincode=request.POST.get('pincode'),
                 student_department=student_department,
                 course=course,
-                semester=int(semester),
-                division=division,
-                student_image=student_image
+                semester=int(request.POST.get('semester')),
+                division=request.POST.get('division'),
+                student_image=request.FILES.get('student_image')
             )
 
-            messages.success(request, "Student added successfully.")
+            # You can change this to a success page
             return redirect('add_student')
 
-        except department.DoesNotExist:
-            messages.error(request, "Selected department does not exist.")
-        except Course.DoesNotExist:
-            messages.error(request, "Selected course does not exist.")
-        except ValueError as e:
-            messages.error(request, str(e))
         except Exception as e:
-            messages.error(request, f"An unexpected error occurred: {str(e)}")
+            print("Error in form submission:", e)
 
     return render(request, 'superadmin/add-student.html', {
         'all_departments': all_departments,
@@ -858,17 +848,16 @@ def add_teacher(request):
                 pic=pic
             )
             print(f"Teacher created: {teacher}")
-            messages.success(request, "Teacher added successfully.")
             return redirect('add_teacher')
 
-        except department.DoesNotExist:
-            messages.error(request, "Selected department does not exist.")
-        except Course.DoesNotExist:
-            messages.error(request, "Selected course does not exist.")
+        except department.DoesNotExist as e:
+            print("Department does not exist:", e)
+        except Course.DoesNotExist as e:
+            print("Course does not exist:", e)
         except ValueError as e:
-            messages.error(request, str(e))
+            print("Validation error:", e)
         except Exception as e:
-            messages.error(request, f"An unexpected error occurred: {str(e)}")
+            print("Unexpected error:", e)
 
     return render(request, 'superadmin/add-teacher.html', {
         'all_departments': all_departments,
