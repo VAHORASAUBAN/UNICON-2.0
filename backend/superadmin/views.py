@@ -807,7 +807,7 @@ def add_teacher(request):
                 raise ValueError("Faculty ID is required.")
 
             firstname = request.POST.get('firstname')
-            middlename = request.POST.get('middlename', '')
+            middlename = request.POST.get('middlename')
             lastname = request.POST.get('lastname')
             email = request.POST.get('email')
             password = request.POST.get('password')
@@ -815,7 +815,7 @@ def add_teacher(request):
             gender = request.POST.get('gender')
             birth_date = request.POST.get('birth_date')
             address_line_1 = request.POST.get('address_line_1')
-            address_line_2 = request.POST.get('address_line_2', '')
+            address_line_2 = request.POST.get('address_line_2')
             country = request.POST.get('country')
             state = request.POST.get('state')
             city = request.POST.get('city')
@@ -857,7 +857,7 @@ def add_teacher(request):
                 qualification=qualification,
                 pic=pic
             )
-
+            print(f"Teacher created: {teacher}")
             messages.success(request, "Teacher added successfully.")
             return redirect('add_teacher')
 
