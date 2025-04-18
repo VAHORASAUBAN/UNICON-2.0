@@ -1,25 +1,50 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
-  final String profileImage = 'assets/images/profile.png';
-  final String email = "student@example.com";
-  final String firstName = "Aarav";
-  final String middleName = "Kumar";
-  final String lastName = "Sharma";
-  final String department = "Computer Science";
-  final String course = "B.Tech";
-  final String semester = "6";
-  final String division = "B";
-  final String gender = "Male";
-  final String mobile = "+91 9876543210";
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  Map<String, dynamic>? studentData;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchStudentProfile();
+  }
+
+  Future<void> fetchStudentProfile() async {
+    const url = 'http://192.168.128.166:8000/student/profile/'; // change if hosted
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({"student_id": 1}), // Replace with actual student ID
+    );
+
+    if (response.statusCode == 200) {
+      setState(() {
+        studentData = jsonDecode(response.body);
+        isLoading = false;
+      });
+    } else {
+      // Handle error
+      print("Failed to fetch: ${response.body}");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      body: Column(
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
         children: [
           _buildHeader(context),
           Expanded(
@@ -32,15 +57,15 @@ class ProfileScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                   _buildEmail(),
                   const SizedBox(height: 25),
-                  _buildInfoTile(Icons.person, 'First Name', firstName),
-                  _buildInfoTile(Icons.person_outline, 'Middle Name', middleName),
-                  _buildInfoTile(Icons.person, 'Last Name', lastName),
-                  _buildInfoTile(Icons.apartment, 'Department', department),
-                  _buildInfoTile(Icons.menu_book, 'Course', course),
-                  _buildInfoTile(Icons.timeline, 'Semester', semester),
-                  _buildInfoTile(Icons.group, 'Division', division),
-                  _buildInfoTile(Icons.male, 'Gender', gender),
-                  _buildInfoTile(Icons.phone, 'Mobile', mobile),
+                  _buildInfoTile(Icons.person, 'First Name', studentData?['firstname']?.toString() ?? ''),
+                  _buildInfoTile(Icons.person_outline, 'Middle Name', studentData?['middlename']?.toString() ?? ''),
+                  _buildInfoTile(Icons.person, 'Last Name', studentData?['lastname']?.toString() ?? ''),
+                  _buildInfoTile(Icons.apartment, 'Department', studentData?['student_department']?.toString() ?? 'Unknown Department'),
+                  _buildInfoTile(Icons.menu_book, 'Course', studentData?['course']?.toString() ?? 'Unknown Course'),
+                  _buildInfoTile(Icons.timeline, 'Semester', studentData?['semester']?.toString() ?? ''),
+                  _buildInfoTile(Icons.group, 'Division', studentData?['division']?.toString() ?? ''),
+                  _buildInfoTile(Icons.male, 'Gender', studentData?['gender']?.toString() ?? ''),
+                  _buildInfoTile(Icons.phone, 'Mobile', studentData?['mobile_number']?.toString() ?? ''),
                 ],
               ),
             ),
@@ -95,6 +120,7 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Widget _buildProfileImage() {
+    final imageUrl = studentData?['student_image'];
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -109,14 +135,16 @@ class ProfileScreen extends StatelessWidget {
       ),
       child: CircleAvatar(
         radius: 55,
-        backgroundImage: AssetImage(profileImage),
+        backgroundImage: imageUrl != null
+            ? NetworkImage(imageUrl)
+            : const AssetImage('assets/images/profile.png') as ImageProvider,
       ),
     );
   }
 
   Widget _buildEmail() {
     return Text(
-      email,
+      studentData?['email'] ?? '',
       style: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w600,
@@ -143,7 +171,7 @@ class ProfileScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, color: Color(0xFF004AAD)),
+          Icon(icon, color: const Color(0xFF004AAD)),
           const SizedBox(width: 15),
           Expanded(
             child: Text(

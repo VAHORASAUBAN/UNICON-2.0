@@ -18,8 +18,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
   bool isLoading = true;
   List<dynamic> timetable = [];
+  String userName = "";
+  String userEmail = "";
 
-  // Fetch timetable data from the API (tested via Postman)
+  // Fetch user profile data from the API
+  Future<void> fetchUserProfile() async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://192.168.128.166:8000/student/profile/'), // Replace with your actual URL
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"student_id": 1}),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          userName = data['firstname'] ?? 'Unknown';
+          userEmail = data['email'] ?? 'Unknown';
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load user data');
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print('Error fetching user data: $e');
+    }
+  }
+
+  // Fetch timetable data from the API
   Future<void> fetchTimetable() async {
     try {
       final response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/todos'));
@@ -40,11 +69,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-
   @override
   void initState() {
     super.initState();
     fetchTimetable();
+    fetchUserProfile();  // Fetch user profile data when the screen loads
   }
 
   void _onTabSelected(int index) {
@@ -79,13 +108,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
-      drawer: SideMenu(
+      drawer: isLoading
+          ? const Center(child: CircularProgressIndicator()) // Show loading indicator until data is fetched
+          : SideMenu(
+        userName: userName,
+        userEmail: userEmail,
         onMenuTap: (route) {
           Navigator.pop(context);
           Navigator.pushNamed(context, route);
         },
-        userName: "John Doe",
-        userEmail: "johndoe@example.com",
       ),
       body: IndexedStack(
         index: _currentIndex,
@@ -151,7 +182,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       }),
     );
   }
-
 
   // Modern Timeline Item
   Widget _buildTimelineItem(String subject, String time, String batch, bool isLast) {
@@ -261,7 +291,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
-
 
   // Dynamic Subject Icons
   Widget _getSubjectIcon(String subject) {

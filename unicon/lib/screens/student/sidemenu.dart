@@ -34,11 +34,10 @@ class SideMenu extends StatelessWidget {
                 ),
               ),
               child: Column(
-
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 20),
-                                  // Profile Picture with Border & Shadow
+                  // Profile Picture with Border & Shadow
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context); // Close the drawer
@@ -67,8 +66,6 @@ class SideMenu extends StatelessWidget {
                       ),
                     ),
                   ),
-
-
                   const SizedBox(height: 12),
 
                   // User Name & Email
