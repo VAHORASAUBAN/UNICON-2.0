@@ -1,21 +1,24 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 class AuthService {
-  static const String baseUrl = "http://192.168.3.135:8000/student/";
+  static const String studentUrl = "http://192.168.72.166:8000/student/login/";
+  static const String teacherUrl = "http://192.168.72.166:8000/teacher/login/";
 
+  static Future<bool> login(String id, String password, String userType) async {
+    String url = userType == 'Faculty' ? teacherUrl : studentUrl;
 
-  static Future<bool> login(String enrollment, String password, String userType) async {
     final response = await http.post(
-      Uri.parse("${baseUrl}login/"),
+      Uri.parse(url),
       headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"enrollment": enrollment, "password": password}),
+      body: jsonEncode(userType == 'Faculty'
+          ? {"faculty_id": id, "password": password}
+          : {"enrollment": id, "password": password}),
     );
 
     if (response.statusCode == 200) {
-      return true; // Login successful
+      return true;
     } else {
-      return false; // Login failed
+      return false;
     }
   }
 }
