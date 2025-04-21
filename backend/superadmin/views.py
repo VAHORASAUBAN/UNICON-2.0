@@ -11,7 +11,8 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import make_password
-
+import datetime
+from django.utils import timezone
 from django.core.files import File
 from collections import defaultdict
 from django.contrib.auth.decorators import login_required
@@ -61,7 +62,28 @@ def calendar(request):
 
 
 def faculty_dash(request):
-    return render(request, 'faculty/faculty_dash.html')
+    faculty_id = request.session.get("faculty_id")
+
+    if not faculty_id:
+        return redirect('login')
+
+    try:
+        faculty = Teacher.objects.get(faculty_id=faculty_id)
+    except Teacher.DoesNotExist:
+        return redirect('login')
+
+    today_day = timezone.now().strftime('%A')
+
+    todays_lectures = Timetable.objects.filter(
+        faculty_name=faculty,
+        day=today_day
+    ).select_related('timetable_subject_name', 'course', 'timetable_department')
+
+    context = {
+        'todays_lectures': todays_lectures,
+    }
+
+    return render(request, 'faculty/faculty_dash.html', context)
 
 
 def edit_blog(request):
@@ -84,7 +106,7 @@ def edit_teacher(request, faculty_id):
     }
 
     if request.method == "POST":
-        # teacher.faculty_id = request.POST.get('faculty_id')
+        
         teacher.firstname = request.POST.get('firstname')
         teacher.middlename = request.POST.get('middlename', '')
         teacher.lastname = request.POST.get('lastname')
@@ -1601,8 +1623,43 @@ def faculty_dash(request):
 def faculty_all_student(request):
 
     all_students = Student.objects.all()
-    print(all_students)
-    return render(request, 'faculty/faculty_all-students.html', {'all_students': all_students})
+    all_departments = department.objects.all()
+    all_courses = Course.objects.all()
+
+    student_id = request.GET.get('student_id')
+    dept_name = request.GET.get('department')
+    course_name = request.GET.get('course')
+    semester = request.GET.get('semester')
+    division = request.GET.get('division')
+
+    if student_id:
+        all_students = all_students.filter(enrollment__icontains=student_id)
+
+    if dept_name:
+        try:
+            dept_obj = department.objects.get(department_name=dept_name)
+            all_students = all_students.filter(student_department=dept_obj)
+        except department.DoesNotExist:
+            all_students = Student.objects.none()
+    if course_name:
+        try:
+            course_obj = Course.objects.get(course_name=course_name)
+            all_students = all_students.filter(course=course_obj)
+        except Course.DoesNotExist:
+            all_students = Student.objects.none()
+
+    if semester:
+        all_students = all_students.filter(semester=semester)
+
+    if division:
+        all_students = all_students.filter(division=division)
+
+    context = {
+        'all_departments': all_departments,
+        'all_courses': all_courses,
+        'all_students': all_students
+    }
+    return render(request, 'faculty/faculty_all-students.html', context)
 
 
 def qr_code(request):
@@ -1627,7 +1684,87 @@ def qr_code(request):
 
 
 def faculty_subject(request):
-    return render(request, 'faculty/faculty_subject.html')
+    faculty_id = request.session.get("faculty_id")
+
+    if not faculty_id:
+        return render(request, "superadmin/login.html", {"error": "Please log in first."})
+
+    try:
+        faculty = Teacher.objects.get(faculty_id=faculty_id)
+    except Teacher.DoesNotExist:
+        return render(request, "superadmin/login.html", {"error": "Faculty not found."})
+
+    # Filters from GET
+    department_name = request.GET.get('department')
+    course_name = request.GET.get('course')
+    semester = request.GET.get('semester')
+    division = request.GET.get('division')
+
+    # Base timetable filtering based on logged-in faculty
+    timetable = Timetable.objects.filter(
+        faculty_name=faculty)  # Only this faculty's timetable
+
+    # Filteration based on department, course, semester, and division
+    if department_name:
+        timetable = timetable.filter(
+            timetable_department__department_name=department_name)  # Corrected filter
+    if course_name:
+        timetable = timetable.filter(course__course_name=course_name)
+    if semester:
+        timetable = timetable.filter(semester=semester)
+    if division:
+        timetable = timetable.filter(division=division)
+
+    # Days and time slots
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    time_slots = OrderedDict([  # Define time slots for timetable matrix
+        ("7:30 AM - 8:25 AM", (parse_time_string("7.30 AM"), parse_time_string("8.25 AM"))),
+        ("8:25 AM - 9:20 AM", (parse_time_string("8.25 AM"), parse_time_string("9.20 AM"))),
+        ("9:30 AM - 10:25 AM", (parse_time_string("9.30 AM"),
+         parse_time_string("10.25 AM"))),
+        ("10:25 AM - 11:20 AM",
+         (parse_time_string("10.25 AM"), parse_time_string("11.20 AM"))),
+        ("11:30 AM - 12:25 PM",
+         (parse_time_string("11.30 AM"), parse_time_string("12.25 PM"))),
+        ("12:25 PM - 1:20 PM",
+         (parse_time_string("12.25 PM"), parse_time_string("1.20 PM"))),
+    ])
+
+    timetable_matrix = []
+
+    for slot_label, (slot_start, slot_end) in time_slots.items():
+        row = {'time': slot_label}
+        for day in days:
+            lecture = None
+            for entry in timetable:
+                if entry.day != day:
+                    continue
+                entry_start = parse_time_string(entry.lecture_start_time)
+                entry_end = parse_time_string(entry.lecture_end_time)
+                if entry_start and entry_end and slot_start <= entry_start < slot_end:
+                    lecture = entry
+                    break
+            row[day] = lecture
+        timetable_matrix.append(row)
+
+    # Fetch courses and departments for dropdown (filtered by the faculty's department)
+    all_departments = department.objects.all()  # Fetch all departments for dropdown
+    # Fetch courses related to faculty's department
+    courses = Course.objects.filter(
+        course_department__department_name=faculty.department.department_name)
+
+    context = {
+        'timetable_matrix': timetable_matrix,
+        'days': days,
+        'all_departments': all_departments,  # All departments for dropdown
+        'courses': courses,  # Courses related to this faculty's department
+        'department_name': department_name,
+        'course_name': course_name,
+        'semester': semester,
+        'division': division,
+    }
+
+    return render(request, 'faculty/faculty_subject.html', context)
 
 
 def faculty_all_students(request):

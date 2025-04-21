@@ -10,3 +10,8 @@ def to(value, arg):
 @register.filter
 def split(value, delimiter):
     return value.split(delimiter)
+
+
+@register.filter
+def dict_get(d, key):
+    return d.get(key)

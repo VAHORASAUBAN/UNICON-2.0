@@ -290,85 +290,34 @@
                     </div>
                   </div>
                
-                <h1>Today Session</h1>
+                <h1>Today's Session</h1>
                 <div class="row">
-                    <!-- add cards here -->
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Subject Name: Mathematics</h5>
-                                <p class="card-text">Course: B.Sc</p>
-                                <p class="card-text">Department: Science</p>
-                                <p class="card-text">Semester: 1</p>
-                                <p class="card-text">Division: A</p>
-                                <button class="btn btn-primary btn-qr"
-                                    onclick="generateQRCode('Mathematics', 'B.Sc', 'Science', 'A', '1')">
-                                    <i class="fas fa-qrcode"></i> Generate QR Code
-                                </button>
+                    {% if todays_lectures %}
+                        {% for lecture in todays_lectures %}
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Subject Name: {{ lecture.timetable_subject_name.subject_name }}</h5>
+                                        <p class="card-text">Course: {{ lecture.course.course_name }}</p>
+                                        <p class="card-text">Department: {{ lecture.timetable_department.department_name }}</p>
+                                        <p class="card-text">Semester: {{ lecture.semester }}</p>
+                                        <p class="card-text">Division: {{ lecture.division }}</p>
+                                        <p class="card-text">Time: {{ lecture.lecture_start_time }} - {{ lecture.lecture_end_time }}</p>
+                                        <button class="btn btn-primary btn-qr"
+                                            onclick="generateQRCode('{{ lecture.timetable_subject_name.subject_name }}', '{{ lecture.course.course_name }}', '{{ lecture.timetable_department.department_name }}', '{{ lecture.division }}', '{{ lecture.semester }}')">
+                                            <i class="fas fa-qrcode"></i> Generate QR Code
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-md-12 text-center">
+                            <h5>No lectures scheduled for today!</h5>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Subject Name: Physics</h5>
-                                <p class="card-text">Course: B.Sc</p>
-                                <p class="card-text">Department: Science</p>
-                                <p class="card-text">Semester: 2</p>
-                                <p class="card-text">Division: B</p>
-                                <button class="btn btn-primary btn-qr"
-                                    onclick="generateQRCode('Physics', 'B.Sc', 'Science', 'B', '2')">
-                                    <i class="fas fa-qrcode"></i> Generate QR Code
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Subject Name: Chemistry</h5>
-                                <p class="card-text">Course: B.Sc</p>
-                                <p class="card-text">Department: Science</p>
-                                <p class="card-text">Semester: 1</p>
-                                <p class="card-text">Division: A</p>
-                                <button class="btn btn-primary btn-qr"
-                                    onclick="generateQRCode('Chemistry', 'B.Sc', 'Science', 'A', '1')">
-                                    <i class="fas fa-qrcode"></i> Generate QR Code
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Subject Name: English</h5>
-                                <p class="card-text">Course: B.A</p>
-                                <p class="card-text">Department: Arts</p>
-                                <p class="card-text">Semester: 3</p>
-                                <p class="card-text">Division: C</p>
-                                <button class="btn btn-primary btn-qr"
-                                    onclick="generateQRCode('English', 'B.A', 'Arts', 'C', '3')">
-                                    <i class="fas fa-qrcode"></i> Generate QR Code
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Subject Name: History</h5>
-                                <p class="card-text">Course: B.A</p>
-                                <p class="card-text">Department: Arts</p>
-                                <p class="card-text">Semester: 2</p>
-                                <p class="card-text">Division: B</p>
-                                <button class="btn btn-primary btn-qr"
-                                    onclick="generateQRCode('History', 'B.A', 'Arts', 'B', '2')">
-                                    <i class="fas fa-qrcode"></i> Generate QR Code
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    {% endif %}
                 </div>
+                
             </div>
         </div>
     </div>
