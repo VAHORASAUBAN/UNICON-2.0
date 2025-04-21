@@ -62,10 +62,7 @@ class TeacherSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def get_pic(self, obj):
-        request = self.context.get('request')
-        if obj.pic:
-            return request.build_absolute_uri(obj.pic.url)
-        return None
+        return get_image_url(self.context.get('request'), obj.pic)
 
 
 class PlacementSerializer(serializers.ModelSerializer):

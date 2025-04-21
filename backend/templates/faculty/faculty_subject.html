@@ -1,3 +1,4 @@
+{% load custom_filters %}
 {% load static %}
 
 <!DOCTYPE html>
@@ -335,220 +336,129 @@
                             </div>
                         </div>
                     </div>
-                    
+                    <div class="container mt-4">
+                        <form method="get" action="{% url 'faculty_subject' %}">
+                            <div class="row filter-row">
+                                <!-- Department Dropdown -->
+                                <div class="col-sm-2">
+                                    <div class="form-group form-focus select-focus">
+                                        <select class="select form-control" name="department">
+                                            <option value="">Select Department</option>
+                                            {% for dept in all_departments %}
+                                                <option value="{{ dept.department_name }}" {% if department_name == dept.department_name %}selected{% endif %}>
+                                                    {{ dept.department_name }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                        <label class="focus-label">Department</label>
+                                    </div>
+                                </div>
+                        
+                                <!-- Course Dropdown -->
+                                <div class="col-sm-2">
+                                    <div class="form-group form-focus select-focus">
+                                        <select class="select form-control" name="course">
+                                            <option value="">Select Course</option>
+                                            {% for c in courses %}
+                                                <option value="{{ c.course_name }}" {% if course == c.course_name %}selected{% endif %}>
+                                                    {{ c.course_name }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                        <label class="focus-label">Course</label>
+                                    </div>
+                                </div>
+                        
+                                <!-- Semester Dropdown -->
+                                <div class="col-sm-2">
+                                    <div class="form-group form-focus select-focus">
+                                        <select class="select form-control" name="semester">
+                                            <option value="">Select Semester</option>
+                                            <option value="1" {% if semester == "1" %}selected{% endif %}>1</option>
+                                            <option value="2" {% if semester == "2" %}selected{% endif %}>2</option>
+                                            <option value="3" {% if semester == "3" %}selected{% endif %}>3</option>
+                                            <option value="4" {% if semester == "4" %}selected{% endif %}>4</option>
+                                            <option value="5" {% if semester == "5" %}selected{% endif %}>5</option>
+                                            <option value="6" {% if semester == "6" %}selected{% endif %}>6</option>
+                                            <option value="7" {% if semester == "7" %}selected{% endif %}>7</option>
+                                            <option value="8" {% if semester == "8" %}selected{% endif %}>8</option>
+                                        </select>
+                                        <label class="focus-label">Semester</label>
+                                    </div>
+                                </div>
+                        
+                                <!-- Division Dropdown -->
+                                <div class="col-sm-2">
+                                    <div class="form-group form-focus select-focus">
+                                        <select class="select form-control" name="division">
+                                            <option value="">Select Division</option>
+                                            <option value="A" {% if division == "A" %}selected{% endif %}>A</option>
+                                            <option value="B" {% if division == "B" %}selected{% endif %}>B</option>
+                                            <option value="C" {% if division == "C" %}selected{% endif %}>C</option>
+                                        </select>
+                                        <label class="focus-label">Division</label>
+                                    </div>
+                                </div>
+                        
+                                <!-- Search Button -->
+                                <div class="col-sm-4">
+                                    <button type="submit" class="btn btn-search rounded btn-block mb-3">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        
+                    </div>
     
                     <div class="container">
                         <div class="timetable-img text-center">
                             <img src="img/content/timetable.png" alt="">
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-bordered text-center">
-                                <thead>
-                                    <tr class="bg-light-gray">
-                                        <th class="text-uppercase">Time
-                                        </th>
-                                        <th class="text-uppercase">Monday</th>
-                                        <th class="text-uppercase">Tuesday</th>
-                                        <th class="text-uppercase">Wednesday</th>
-                                        <th class="text-uppercase">Thursday</th>
-                                        <th class="text-uppercase">Friday</th>
-                                        <th class="text-uppercase">Saturday</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="align-middle">07:30 AM - 08:30 AM </td>
-                                        <td>
-                                            <span
-                                                class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">ADS</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">CNS</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-    
-                                        <td>
-                                            <span
-                                                class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">HPC</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">ADS</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Flutter</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">MLP</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                    </tr>
-    
-                                    <tr>
-                                        <td class="align-middle">08:30 AM - 09:30 AM</td>
-                                        <td>
-                                            <span
-                                                class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">HPC</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td class="bg-light-gray">
-    
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Flutter</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">CNS</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">MLP</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td class="bg-light-gray">
-    
-                                        </td>
-                                    </tr>
-    
-                                    <tr>
-                                        <td class="align-middle">09:30 AM - 10:30 AM</td>
-                                        <td>
-                                            <span
-                                                class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Break</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Break</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Break</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Break</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Break</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Break</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                    </tr>
-    
-                                    <tr>
-                                        <td class="align-middle">10:30 AM - 11:30 AM</td>
-                                        <td class="bg-light-gray">
-    
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">Flutter</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">ADS</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">HPC</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td class="bg-light-gray">
-    
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">CNS</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                    </tr>
-    
-                                    <tr>
-                                        <td class="align-middle">11:30 AM - 12:30 PM	</td>
-                                        <td>
-                                            <span
-                                                class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">MLP</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">HPC</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td class="bg-light-gray">
-    
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">MLP</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">CNS</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">HPC</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="align-middle">12:30 AM - 01:30 PM	</td>
-                                        <td>
-                                            <span
-                                                class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">MLP</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">HPC</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td class="bg-light-gray">
-    
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">MLP</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">CNS</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">HPC</span>
-                                            <div class="margin-10px-top font-size14"></div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            {% load custom_filters %}
+
+<table class="table table-bordered text-center">
+    <thead>
+        <tr class="bg-light-gray">
+            <th class="text-uppercase">Time</th>
+            {% for day in days %}
+                <th class="text-uppercase">{{ day }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in timetable_matrix %}
+            <tr>
+                <td class="align-middle">
+                    {{ row.time }}
+                </td>
+                {% for day in days %}
+                    <td>
+                        {% with lecture=row|dict_get:day %}
+                            {% if lecture %}
+                                <div>
+                                    <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">
+                                        {{ lecture.timetable_subject_name.subject_name }}
+                                    </span>
+                                </div>
+                                <div class="margin-10px-top font-size14">
+                                    {{ lecture.lecture_start_time }} - {{ lecture.lecture_end_time }}
+                                </div>
+                                <div class="font-size13 text-light-gray">
+                                    Faculty: {{ lecture.faculty_name }}<br>
+                                    Division: {{ lecture.division }}
+                                </div>
+                            {% else %}
+                                <div class="font-size13 text-light-gray">No Lecture</div>
+                            {% endif %}
+                        {% endwith %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
                         </div>
                     </div>
     
