@@ -35,11 +35,14 @@
       <div id="sidebar-menu" class="sidebar-menu">
         <div class="header-left">
           <a href="/index/" class="logo">
-            <img style="margin-top: -30px;" src="{% static 'assets/img/brand_logo.png' %}" width="50" height="50" alt="" />
+            <img style="margin-top: -30px;" src="{% static 'assets/img/brand_logo.png' %}" width="150" height="150"
+              alt="" />
           </a>
         </div>
         <ul class="sidebar-ul">
-          {% comment %} <li class="menu-title">Menu</li> {% endcomment %}
+          <a id="mobile_btn" class="mobile_btn float-left" href="#sidebar">
+            <i class="fas fa-bars" aria-hidden="true"></i>
+          </a>
           <li>
             <a href="/index/"><i class="fa-solid fa-house"
                 style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i><span>Dashboard</span></a>
@@ -127,7 +130,7 @@
                 style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i><span>
                 Events</span></a>
           </li>
-          <li class="submenu">
+          <!-- <li class="submenu">
             <a href="#" data-menu="Placement"><i class="fa-solid fa-newspaper"
                 style="font-size: 1.5em; color: #337AB7; margin-left: 0px;"></i>
               <span> Blog</span> <span class="menu-arrow"></span></a>
@@ -135,7 +138,7 @@
               <li><a href="/blog_details/"><span>Show blog</span></a></li>
               <li><a href="/add_blog/"><span>Add Blog</span></a></li>
             </ul>
-          </li>
+          </li> -->
         </ul>
       </div>
     </div>
