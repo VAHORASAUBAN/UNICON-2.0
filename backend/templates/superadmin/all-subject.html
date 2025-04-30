@@ -10,19 +10,11 @@
   <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/logo_unicon.png' %}" />
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
-  <link rel="stylesheet" href="{%static 'assets/css/bootstrap.min.css'%}" />
-
-  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css'%}" />
-  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css'%}" />
-
-
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}" />
   <link rel="stylesheet" href="{% static 'assets/css/select2.min.css' %}" />
-
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
-  <!--[if lt IE 9]>
-      <script src="assets/js/html5shiv.min.js"></script>
-      <script src="assets/js/respond.min.js"></script>
-    <![endif]-->
 </head>
 
 
@@ -59,7 +51,6 @@
         </ul>
 
         <ul class="nav user-menu float-right">
-
           <li class="nav-item dropdown has-arrow">
             <a href="#" class="nav-link user-link" data-toggle="dropdown">
               <span class="user-img">
@@ -94,7 +85,7 @@
           <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-12">
               <h5 class="text-uppercase mb-0 mt-0 page-title">
-                All Subject
+                All Subjects
               </h5>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-12">
@@ -105,7 +96,7 @@
                 <li class="breadcrumb-item">
                   <a href="/index/">Subject</a>
                 </li>
-                <li class="breadcrumb-item"><span>All Subject</span></li>
+                <li class="breadcrumb-item"><span>All Subjects</span></li>
               </ul>
             </div>
           </div>
@@ -114,28 +105,23 @@
           <div class="col-sm-4 col-12"></div>
           <div class="col-sm-8 col-12 text-right add-btn-col">
             <a href="/add_subject/" class="btn btn-primary btn-rounded float-right"><i class="fas fa-plus"></i> Add
-              subject</a>
+              Subject</a>
           </div>
         </div>
         <form method="get" action="{% url 'all_subject' %}">
-          <div class="row filter-row d-flex align-items-center justify-content-between">
-
+          <div class="row filter-row align-items-center justify-content-between">
             <div class="col-12 col-sm-6 col-md-2 mb-3">
               <div class="form-group form-focus">
                 <input type="text" name="subject_id" class="form-control floating" />
                 <label class="focus-label">Subject ID</label>
               </div>
             </div>
-
-            <!-- Subject Name -->
             <div class="col-12 col-sm-6 col-md-2 mb-3">
               <div class="form-group form-focus">
                 <input type="text" name="subject_name" class="form-control floating" />
                 <label class="focus-label">Subject Name</label>
               </div>
             </div>
-
-            <!-- Department -->
             <div class="col-12 col-sm-6 col-md-2 mb-3">
               <div class="form-group form-focus select-focus">
                 <select class="select form-control" name="department">
@@ -147,8 +133,6 @@
                 <label class="focus-label">Department</label>
               </div>
             </div>
-
-            <!-- Course -->
             <div class="col-12 col-sm-6 col-md-2 mb-3">
               <div class="form-group form-focus select-focus">
                 <select class="select form-control" name="course">
@@ -160,8 +144,6 @@
                 <label class="focus-label">Course</label>
               </div>
             </div>
-
-            <!-- Batch -->
             <div class="col-12 col-sm-6 col-md-2 mb-3">
               <div class="form-group form-focus select-focus">
                 <select class="select form-control" name="batch">
@@ -174,46 +156,39 @@
               </div>
             </div>
             <div class="col-12 d-flex justify-content-between mb-3">
-              <!-- Search Button -->
               <div class="col-md-5">
-                <div class="form-group">
-                  <button type="submit" class="btn btn-search rounded btn-block">Search</button>
-                </div>
+                <button type="submit" class="btn btn-search rounded btn-block">Search</button>
               </div>
-              <!-- Clear Filter Link -->
               <div class="col-md-5">
                 <a href="{% url 'all_subject' %}" class="btn btn-outline-secondary btn-sm btn-block">Clear Filter</a>
               </div>
             </div>
-
           </div>
         </form>
 
-
         <div class="row staff-grid-row">
+          {% for i in all_subjects %}
           <div class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-            {% for i in all_subjects %}
             <div class="profile-widget position-relative">
               <div class="user-info">
                 <div class="large text-muted" style="font-size: 24px; font-weight: bold">
                   {{ i.subject_name }}
                 </div>
               </div>
-              <button class="btn btn-danger btn-sm position-absolute" style="top: 10px; right: 10px">
-                <a href="{% url " delete_subject" i.id %}"> <i class="fas fa-trash-alt"></i> </a>
-                <a href="{% url " edit_subject" i.id %}" class="btn btn-primary btn-sm mb-1">
+              <div class="position-absolute" style="top: 10px; right: 10px">
+                <a href="{% url 'delete_subject' i.id %}" class="btn btn-danger btn-sm">
+                  <i class="fas fa-trash-alt"></i>
+                </a>
+                <a href="{% url 'edit_subject' i.id %}" class="btn btn-primary btn-sm">
                   <i class="far fa-edit"></i>
                 </a>
-              </button>
+              </div>
             </div>
-            {% endfor %}
-
           </div>
+          {% endfor %}
         </div>
-
       </div>
     </div>
-  </div>
   </div>
 </body>
 
