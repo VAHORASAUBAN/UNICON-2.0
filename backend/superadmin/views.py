@@ -1,4 +1,5 @@
 # Imports
+from .models import AttendanceSession, Student, AttendanceRecord
 from .serializers import TimetableSerializer, PlacementSerializer
 from .models import Student, Timetable, Course, department, Batch, Subject, Placement, Teacher
 from rest_framework.decorators import api_view
@@ -6,6 +7,22 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.timezone import now
+import qrcode
+import io
+import base64
+from django.shortcuts import render
+from django.http import HttpResponse
+from .models import AttendanceSession, Subject, Teacher
+
+
+from django.shortcuts import render
+from django.utils.timezone import now
+import qrcode
+import io
+import base64
+from django.http import HttpResponse
+from .models import AttendanceSession
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
 import pandas as pd
@@ -51,12 +68,6 @@ import traceback
 
 def add_blog(request):
     return render(request, 'superadmin/add-blog.html')
-
-
-# def all_teachers(request):
-#     all_faculty = Teacher.objects.all()
-#     context = {'all_faculty': all_faculty}
-#     return render(request, 'superadmin/all-teachers.html', context)
 
 
 def blog_details(request):
@@ -348,72 +359,10 @@ def format_time_to_am_pm(time_str):
     return time_obj.strftime('%I:%M %p')
 
 
-# def parse_time_string(time_str):
-#     """Convert '7.30 AM' to datetime.time object"""
-#     formats = ["%I.%M %p", "%I:%M %p"]  # Handle both dot and colon
-#     for fmt in formats:
-#         try:
-#             return datetime.strptime(time_str.strip(), fmt).time()
-#         except ValueError:
-#             continue
-#     return None
-
 def parse_time_string(time_str):
     fmt = "%I.%M %p"
     return datetime.strptime(time_str.strip(), fmt).time()
 
-# before filter
-
-
-# def show_timetable(request):
-#     days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-
-#     # Fixed time slots in 12hr format
-#     time_slots = OrderedDict([
-#         ("7:30 AM - 8:25 AM", (parse_time_string("7.30 AM"), parse_time_string("8.25 AM"))),
-#         ("8:25 AM - 9:20 AM", (parse_time_string("8.25 AM"), parse_time_string("9.20 AM"))),
-#         ("9:30 AM - 10:25 AM", (parse_time_string("9.30 AM"),
-#          parse_time_string("10.25 AM"))),
-#         ("10:25 AM - 11:20 AM",
-#          (parse_time_string("10.25 AM"), parse_time_string("11.20 AM"))),
-#         ("11:30 AM - 12:25 PM",
-#          (parse_time_string("11.30 AM"), parse_time_string("12.25 PM"))),
-#         ("12:25 PM - 1:20 PM",
-#          (parse_time_string("12.25 PM"), parse_time_string("1.20 PM"))),
-#     ])
-
-#     timetable = Timetable.objects.all()
-#     timetable_matrix = []
-
-#     for slot_label, (slot_start, slot_end) in time_slots.items():
-#         row = {'time': slot_label}
-#         for day in days:
-#             lecture = None
-#             for entry in timetable:
-#                 if entry.day != day:
-#                     continue
-#                 entry_start = parse_time_string(entry.lecture_start_time)
-#                 entry_end = parse_time_string(entry.lecture_end_time)
-#                 if entry_start and entry_end:
-#                     # Check if entry overlaps with time slot
-#                     if slot_start <= entry_start < slot_end:
-#                         lecture = entry
-#                         break
-#             row[day] = lecture
-#         timetable_matrix.append(row)
-
-#     context = {
-#         'timetable_matrix': timetable_matrix,
-#         'days': days,
-#     }
-
-#     return render(request, 'superadmin/show_timetable.html', context)
-
-# superadmin/views.py
-
-# parse_time_string function directly in views.py
-
-# After Filter
 
 def show_timetable(request):
     # Get selected filter values from request
@@ -986,128 +935,6 @@ def parse_custom_date(date_str):
         return None
 
 
-# def add_teachers_bulk(request):
-#     if request.method == "POST":
-#         IMAGE_UPLOAD_PATH = "media/teacher_images/"
-#         csv_file = request.FILES.get('file')
-
-#         # Validate File Type
-#         if not csv_file or not csv_file.name.endswith('.csv'):
-#             messages.error(
-#                 request, "Invalid file format! Please upload a CSV file.")
-#             return redirect('add_teachers_bulk')
-
-#         try:
-#             data = pd.read_csv(csv_file).fillna('')
-#         except Exception as e:
-#             messages.error(request, f"Error reading CSV file: {str(e)}")
-#             return redirect('add_teachers_bulk')
-
-#         teacher_objects = []
-#         image_files = []
-
-#         for index, row in data.iterrows():
-#             try:
-#                 row = row.apply(lambda x: x.strip()
-#                                 if isinstance(x, str) else x)
-
-#                 # Debugging
-#                 print(f"Processing row {index + 1}: {row.to_dict()}")
-
-#                 # Validate Department & Course
-#                 try:
-#                     teacher_department = department.objects.get(
-#                         id=row['department'])
-#                 except department.DoesNotExist:
-#                     messages.error(
-#                         request, f"Row {index + 1}: Department ID {row['department']} does not exist.")
-#                     continue
-
-#                 try:
-#                     course = Course.objects.get(id=row['course'])
-#                 except Course.DoesNotExist:
-#                     messages.error(
-#                         request, f"Row {index + 1}: Course ID {row['course']} does not exist.")
-#                     continue
-
-#                 # Handle Image File
-#                 pic_path = row['pic']
-#                 pic_file = None
-#                 try:
-#                     full_pic_path = os.path.join(IMAGE_UPLOAD_PATH, pic_path)
-#                     if pic_path and os.path.exists(full_pic_path):
-#                         img_file = open(full_pic_path, 'rb')
-#                         pic_file = File(img_file, name=pic_path)
-#                         image_files.append(img_file)
-#                     else:
-#                         print(f"Image not found: {full_pic_path}")  # Debugging
-#                 except Exception as e:
-#                     print(f"Error handling image for row {index + 1}: {e}")
-
-#                 # Create Teacher Object
-#                 try:
-#                     teacher = Teacher(
-#                         faculty_id=row['faculty_id'],
-#                         firstname=row['firstname'],
-#                         middlename=row['middlename'],
-#                         lastname=row['lastname'],
-#                         email=row['email'],
-#                         password=make_password(row['password']),
-#                         mobile_number=row['mobile_number'],
-#                         gender=row['gender'],
-#                         birth_date=parse_custom_date(row['birth_date']),
-#                         address_line_1=row['address_line_1'],
-#                         address_line_2=row['address_line_2'],
-#                         country=row['country'],
-#                         state=row['state'],
-#                         city=row['city'],
-#                         pincode=row['pincode'],
-#                         joining_date=parse_custom_date(row['joining_date']),
-#                         course=course,
-#                         department=teacher_department,
-#                         designations=row['designations'],
-#                         achievements=row['achievements'],
-#                         qualification=row['qualification'],
-#                     )
-
-#                     if pic_file:
-#                         teacher.pic.save(pic_path, pic_file)
-
-#                     teacher_objects.append(teacher)
-
-#                 except Exception as e:
-#                     print(f"Row {index + 1} object creation error: {e}")
-#                     messages.error(
-#                         request, f"Row {index + 1} object creation error: {e}")
-
-#             except Exception as e:
-#                 print(f"Unexpected error at row {index + 1}: {e}")
-#                 messages.error(
-#                     request, f"Unexpected error at row {index + 1}: {e}")
-
-#         try:
-#             # Teacher.objects.bulk_create(teacher_objects)
-#             for teacher in teacher_objects:
-#                 teacher.save()
-
-#             for img_file in image_files:
-#                 img_file.close()
-
-#             print("✅ Teachers have been added successfully!")
-#             messages.success(request, "Teachers have been added successfully!")
-
-#         except Exception as e:
-#             print("❌ Error saving teachers to the database:", str(e))
-#             messages.error(
-#                 request, f"Error saving teachers to the database: {str(e)}")
-
-#         return render(request, 'superadmin/add_teachers_bulk.html', {
-#             'success': "Teachers have been added successfully!"
-#         })
-
-#     return render(request, 'superadmin/add_teachers_bulk.html')
-
-
 def parse_custom_date(date_str):
     """ Safely parse multiple date formats """
     for fmt in ("%Y-%m-%d", "%d-%m-%Y", "%m/%d/%Y"):
@@ -1374,76 +1201,6 @@ def add_subject(request):
             'all_courses': all_courses,
         }
         return render(request, 'superadmin/add-subject.html', context)
-
-
-# def bulk_add_subjects(request):
-#     if request.method == "POST":
-#         csv_file = request.FILES.get('file')
-
-#         # Fix: Proper file format validation
-#         if not csv_file or not csv_file.name.endswith('.csv'):
-#             messages.error(
-#                 request, "Invalid file format! Please upload a CSV file.")
-#             return redirect('bulk_add_subjects')
-
-#         try:
-#             data = pd.read_csv(csv_file).fillna('')  # Reading CSV
-#         except Exception as e:
-#             messages.error(request, f"Error reading CSV file: {str(e)}")
-#             return redirect('bulk_add_subjects')
-
-#         subject_objects = []
-
-#         # Iterate over each row in the CSV
-#         for index, row in data.iterrows():
-#             try:
-#                 # Fix: Ensure the column names in CSV match the model fields.
-#                 # Also, ensure foreign key lookups are correct.
-#                 subject_department = Department.objects.get(
-#                     id=row['subject_department'])  # Correct lookup
-#                 subject_course = Course.objects.get(
-#                     id=row['subject_course'])  # Correct lookup
-#                 subject_batch = Batch.objects.get(
-#                     id=row['subject_batch'])  # Correct lookup
-
-#                 # Handling subject_division
-#                 subject_division = 'A'  # Set a default division, or handle based on your business logic
-#                 if 'subject_division' in row:
-#                     # If division is present in the CSV, use it.
-#                     subject_division = row['subject_division']
-
-#                 # Debugging: Print or log the data you're trying to add
-#                 print(
-#                     f"Adding subject {row['subject_name']} for department {subject_department}, course {subject_course}")
-
-#                 subject = Subject(
-#                     subject_code=row['subject_code'],
-#                     subject_name=row['subject_name'],
-#                     subject_department=subject_department,
-#                     subject_batch=subject_batch,
-#                     subject_semester=row['subject_semester'],
-#                     subject_course=subject_course,
-#                     subject_division=subject_division  # Use the division from CSV or default
-#                 )
-
-#                 subject_objects.append(subject)
-#             except Exception as e:
-#                 messages.error(
-#                     request, f"Error processing row {index}: {str(e)}")
-#                 print(f"Error processing row {index}: {str(e)}")
-
-#         # Bulk save and check for any issues
-#         if subject_objects:
-#             try:
-#                 Subject.objects.bulk_create(subject_objects)
-#                 messages.success(request, "Subjects successfully added.")
-#             except Exception as e:
-#                 messages.error(request, f"Error saving subjects: {str(e)}")
-#                 print(f"Error saving subjects: {str(e)}")
-#         else:
-#             messages.error(request, "No valid subjects to add.")
-
-#     return render(request, 'superadmin/add_subjects_bulk.html')
 
 
 def bulk_add_subjects(request):
@@ -1803,39 +1560,84 @@ def faculty_all_student(request):
     }
     return render(request, 'faculty/faculty_all-students.html', context)
 
+# views.py
 
-def qr_code(request):
-    # Get lecture details from request parameters
-    subject = request.GET.get('subject', 'N/A')
-    course = request.GET.get('course', 'N/A')
-    department = request.GET.get('department', 'N/A')
-    division = request.GET.get('division', 'N/A')
-    semester = request.GET.get('semester', 'N/A')
-    lecture_date = request.GET.get('date', now().date().strftime('%Y-%m-%d'))
-    lecture_time = request.GET.get('time', now().strftime('%H:%M %p'))
 
-    # Prepare QR data
-    qr_data = (f"Subject: {subject}, Course: {course}, Department: {department}, "
-               f"Division: {division}, Semester: {semester}, "
-               f"Date: {lecture_date}, Time: {lecture_time}")
+def get_subject_and_faculty_from_id(subject_raw, faculty_raw):
+    """
+    Function to get the Subject and Faculty by their IDs.
+    """
+    if not subject_raw or not faculty_raw:
+        return None, None, "Missing subject or faculty ID"
 
     try:
-        # Generate QR code
-        img = qrcode.make(qr_data)
+        # Convert to integers and fetch records from the database
+        subject_id = int(subject_raw)
+        faculty_id = int(faculty_raw)
+
+        # Fetch the Subject and Teacher based on their IDs
+        subject = Subject.objects.get(id=subject_id)
+        faculty = Teacher.objects.get(id=faculty_id)
+
+        return subject, faculty, None
+    except (ValueError, Subject.DoesNotExist, Teacher.DoesNotExist) as e:
+        return None, None, f"Error: {str(e)}"
+
+
+def generate_qr_code(token):
+    """
+    Helper function to generate a QR code from the token.
+    """
+    img = qrcode.make(token)
+    buffer = io.BytesIO()
+    img.save(buffer, format='PNG')
+    buffer.seek(0)
+    return base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+
+def qr_code(request):
+    subject_raw = request.GET.get('subject')
+    faculty_raw = request.GET.get('faculty')
+
+    if not subject_raw or not faculty_raw:
+        return HttpResponse("Error: Missing subject or faculty ID", status=400)
+
+    try:
+        subject_id = int(subject_raw)
+        faculty_id = int(faculty_raw)
+        subject = Subject.objects.get(id=subject_id)
+        faculty = Teacher.objects.get(id=faculty_id)
+    except (ValueError, Subject.DoesNotExist, Teacher.DoesNotExist) as e:
+        return HttpResponse(f"Error: {str(e)}", status=400)
+
+    try:
+        # Create a session with 5-minute expiry
+        session = AttendanceSession.objects.create(
+            subject=subject,
+            faculty=faculty,
+            date=now().date(),
+            token_expiry=timezone.now() + timedelta(minutes=5)
+        )
+
+        token = str(session.token)
+        print(f"[DEBUG] Generated Token: {token}")  # for debugging
+
+        # Generate QR Code
+        img = qrcode.make(token)
         buffer = io.BytesIO()
         img.save(buffer, format='PNG')
         buffer.seek(0)
         img_str = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
         context = {
-            'qr_data': qr_data,
-            'qr_code_url': f"data:image/png;base64,{img_str}"
+            'qr_data': f"Subject: {subject.subject_name}, Date: {session.date}",
+            'qr_code_url': f"data:image/png;base64,{img_str}",
         }
+
         return render(request, 'faculty/qr_code.html', context)
 
     except Exception as e:
-        # Handle errors
-        return HttpResponse(f"Error generating QR code: {str(e)}")
+        return HttpResponse(f"Error: {str(e)}", status=500)
 
 
 def faculty_subject(request):
@@ -2156,3 +1958,38 @@ def student_placement_list(request):
         return Response({'placements': serializer.data}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def mark_attendance(request):
+    try:
+        token = request.data.get('token')
+        student_id = request.data.get('student_id')
+
+        if not token or not student_id:
+            return Response({"error": "Missing token or student ID"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Fetch session using token
+        session = AttendanceSession.objects.get(token=token)
+
+        # ✅ Check if token has expired
+        if session.is_expired():
+            return Response({"error": "Attendance session expired"}, status=status.HTTP_400_BAD_REQUEST)
+
+        student = Student.objects.get(id=student_id)
+
+        # Check for duplicate attendance
+        if AttendanceRecord.objects.filter(session=session, student=student).exists():
+            return Response({"message": "Attendance already marked"}, status=status.HTTP_200_OK)
+
+        # Mark attendance
+        AttendanceRecord.objects.create(session=session, student=student)
+
+        return Response({"message": "Attendance marked successfully"}, status=status.HTTP_201_CREATED)
+
+    except AttendanceSession.DoesNotExist:
+        return Response({"error": "Invalid session token"}, status=status.HTTP_400_BAD_REQUEST)
+    except Student.DoesNotExist:
+        return Response({"error": "Invalid student ID"}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

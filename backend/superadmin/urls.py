@@ -116,7 +116,8 @@ urlpatterns = [
 
     path('student/placements/', superadmin_views.student_placement_list,
          name='student-placements'),
-
+    path('student/mark-attendance/',
+         superadmin_views.mark_attendance, name='mark_attendance'),
 
 
 ]
