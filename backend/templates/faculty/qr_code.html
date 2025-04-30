@@ -83,7 +83,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="qr-container">
         <h3>QR Code for Lecture</h3>
@@ -95,5 +94,31 @@
         {% endif %}
     </div>
 </body>
+
+<script>
+    function scanQRCode(token, student_id) {
+      fetch('/mark_attendance/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: token,
+          student_id: student_id,
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (data.message) {
+          alert(data.message); // Success message
+        } else {
+          alert(data.error); // Error message
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    }
+  </script>
+  
 
 </html>
