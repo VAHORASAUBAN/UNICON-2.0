@@ -136,211 +136,134 @@
                     <div class="row">
                  
                       <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                        <form
-                          class="custom-mt-form"
-                          action="/add_student/"
-                          method="POST"
-                          enctype="multipart/form-data">
+                        <form class="custom-mt-form" action="/add_student/" method="POST" enctype="multipart/form-data">
                           {% csrf_token %}
                           <div class="form-group">
-                            <label>Enrollment</label>
-                            <input
-                              type="number"
-                              class="form-control"
-                              name="enrollment"
-                            />
+                              <label>Enrollment</label>
+                              <input type="number" class="form-control" name="enrollment" />
                           </div>
                           <div class="form-group">
-                            <label>Firstname</label>
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="firstname"
-                            />
+                              <label>Firstname</label>
+                              <input type="text" class="form-control" name="firstname" />
                           </div>
                           <div class="form-group">
-                            <label>Middlename</label>
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="middlename"
-                            />
+                              <label>Middlename</label>
+                              <input type="text" class="form-control" name="middlename" />
                           </div>
                           <div class="form-group">
-                            <label>Lastname</label>
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="lastname"
-                            />
+                              <label>Lastname</label>
+                              <input type="text" class="form-control" name="lastname" />
                           </div>
                           <div class="form-group">
-                            <label>email</label>
-                            <input
-                              type="email"
-                              class="form-control"
-                              name="email"
-                            />
+                              <label>Email</label>
+                              <input type="email" class="form-control" name="email" />
                           </div>
                           <div class="form-group">
-                            <label>Password</label>
-                            <input
-                              type="password"
-                              class="form-control"
-                              name="password"
-                            />
+                              <label>Password</label>
+                              <input type="password" class="form-control" name="password" />
                           </div>
                           <div class="form-group">
-                            <label>Mobile Number</label>
-                            <input
-                              type="number"
-                              class="form-control"
-                              name="mobile_number"
-                            />
+                              <label>Mobile Number</label>
+                              <input type="number" class="form-control" name="mobile_number" />
                           </div>
                           <div class="form-group">
-                            <label>Gender</label>
-                            <select class="form-control select" name="gender">
-                              <option>Male</option>
-                              <option>Female</option>
-                            </select>
+                              <label>Gender</label>
+                              <select class="form-control select" name="gender">
+                                  <option>Male</option>
+                                  <option>Female</option>
+                              </select>
                           </div>
                           <div class="form-group">
-                            <label>Birth Date</label>
-                            <input
-                              class="form-control datetimepicker-input datetimepicker"
-                              type="date"
-                              data-toggle="datetimepicker"
-                              name="birth_date"
-                            />
+                              <label>Birth Date</label>
+                              <input class="form-control datetimepicker-input datetimepicker" type="date" data-toggle="datetimepicker" name="birth_date" />
                           </div>
                           <div class="form-group">
-                            <label>Address Line 1</label>
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="address_line_1"
-                            />
+                              <label>Address Line 1</label>
+                              <input type="text" class="form-control" name="address_line_1" />
                           </div>
                           <div class="form-group">
-                            <label>Address Line 2</label>
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="address_line_2"
-                            />
+                              <label>Address Line 2</label>
+                              <input type="text" class="form-control" name="address_line_2" />
                           </div>
                           <div class="form-group">
-
-                            <label>Country</label>
-                            <select
-                              class="form-control select form-select country"
-                              aria-label="Default select example"
-                              name="country"
-                              onchange="loadStates()"
-                            >
-                              <option selected>Select Country</option>
-                            </select>
+                              <label>Country</label>
+                              <select class="form-control select form-select country" aria-label="Default select example" name="country" onchange="loadStates()">
+                                  <option selected>Select Country</option>
+                              </select>
                           </div>
                           <div class="form-group">
-                            <label>State</label>
-                            <select
-                              class="form-control select form-select state"
-                              aria-label="Default select example"
-                              name="state"
-                              onchange="loadCities()"
-                            >
-                              <option selected>Select State</option>
-                            </select>
+                              <label>State</label>
+                              <select class="form-control select form-select state" aria-label="Default select example" name="state" onchange="loadCities()">
+                                  <option selected>Select State</option>
+                              </select>
                           </div>
                           <div class="form-group">
-                            <label>City</label>
-                            <select
-                              class="form-control select form-select city"
-                              aria-label="Default select example"
-                              name="city"
-                            >
-                              <option selected>Select City</option>
-
-                            </select>
+                              <label>City</label>
+                              <select class="form-control select form-select city" aria-label="Default select example" name="city">
+                                  <option selected>Select City</option>
+                              </select>
                           </div>
                           <div class="form-group">
-                            <label>Pincode</label>
-                            <input
-                              type="number"
-                              class="form-control"
-                              name="pincode"
-                            />
+                              <label>Pincode</label>
+                              <input type="number" class="form-control" name="pincode" />
                           </div>
                           <div class="form-group">
-                            <label>Department</label>
-                            <select
-                              class="form-control select"
-                              name="student_department"
-                            >
-                              {% for i in all_departments %}
-                              <option value="{{ i.id }}">
-                                {{ i.department_name}}
-                              </option>
-                              {% endfor %}
-                            </select>
+                              <label>Department</label>
+                              <select class="form-control select" name="student_department">
+                                  {% for i in all_departments %}
+                                      <option value="{{ i.id }}">{{ i.department_name }}</option>
+                                  {% endfor %}
+                              </select>
                           </div>
                           <div class="form-group">
-                            <label>Course</label>
-                            <select class="form-control select" name="course">
-                              {% for i in all_courses %}
-                              <option value="{{ i.id }}">
-                                {{ i.course_name }}
-                              </option>
-                              {% endfor %}
-                            </select>
+                              <label>Course</label>
+                              <select class="form-control select" name="course">
+                                  {% for i in all_courses %}
+                                      <option value="{{ i.id }}">{{ i.course_name }}</option>
+                                  {% endfor %}
+                              </select>
                           </div>
                           <div class="form-group">
-                            <label>Semester</label>
-                            <select class="form-control select" name="semester">
-                              <option>1</option>
-                              <option>2</option>
-                              <option>3</option>
-                              <option>4</option>
-                              <option>5</option>
-                              <option>6</option>
-                              <option>7</option>
-                              <option>8</option>
-                              <option>9</option>
-                              <option>10</option>
-                            </select>
+                              <label>Semester</label>
+                              <select class="form-control select" name="semester">
+                                  <option>1</option>
+                                  <option>2</option>
+                                  <option>3</option>
+                                  <option>4</option>
+                                  <option>5</option>
+                                  <option>6</option>
+                                  <option>7</option>
+                                  <option>8</option>
+                                  <option>9</option>
+                                  <option>10</option>
+                              </select>
                           </div>
                           <div class="form-group">
-                            <label>Division</label>
-                            <select class="form-control select" name="division">
-                              <option>A</option>
-                              <option>B</option>
-                              <option>C</option>
-                            </select>
+                              <label>Division</label>
+                              <select class="form-control select" name="division">
+                                  <option>A</option>
+                                  <option>B</option>
+                                  <option>C</option>
+                              </select>
                           </div>
                           <div class="form-group">
-                            <label>Student Image</label>
-                            <input
-                              type="file"
-                              name="student_image"
-                              accept="image/*"
-                              class="form-control"
-                            />
+                              <label>Student Image</label>
+                              <input type="file" name="student_image" accept="image/*" class="form-control" />
                           </div>
-                          <div
-                            class="form-group text-center custom-mt-form-group"
-                          >
-                          <a class="btn btn-primary mr-2" href="{% url "add_students_bulk" %}">
-                            Import Students
-                          </a>
-                            <button class="btn btn-primary mr-2" type="submit">
-                              Submit
-                            </button>
-                            <button class="btn btn-secondary" type="reset">
-                              Cancel
-                            </button>
+                      
+                          {% if error_message %}
+                              <div class="alert alert-danger">
+                                  {{ error_message }}
+                              </div>
+                          {% endif %}
+                      
+                          <div class="form-group text-center custom-mt-form-group">
+                              <a class="btn btn-primary mr-2" href="{% url "add_students_bulk" %}">Import Students</a>
+                              <button class="btn btn-primary mr-2" type="submit">Submit</button>
+                              <button class="btn btn-secondary" type="reset">Cancel</button>
                           </div>
-                        </form>
+                      </form>
+                      
                       </div>
                     </div>
                   </div>
@@ -349,228 +272,7 @@
             </div>
           </div>
         </div>
-        <!-- <div class="notification-box">
-				<div class="msg-sidebar notifications msg-noti">
-					<div class="topnav-dropdown-header">
-						<span>Messages</span>
-					</div>
-					<div class="drop-scroll msg-list-scroll">
-						<ul class="list-box">
-							<li>
-								<a href="chat.html">
-									<div class="list-item">
-										<div class="list-left">
-											<span class="avatar">R</span>
-										</div>
-										<div class="list-body">
-											<span class="message-author">Richard Miles </span>
-											<span class="message-time">12:28 AM</span>
-											<div class="clearfix"></div>
-											<span class="message-content">Lorem ipsum dolor sit amet, consectetur
-												adipiscing</span>
-										</div>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="chat.html">
-									<div class="list-item new-message">
-										<div class="list-left">
-											<span class="avatar">J</span>
-										</div>
-										<div class="list-body">
-											<span class="message-author">Ruth C. Gault</span>
-											<span class="message-time">1 Aug</span>
-											<div class="clearfix"></div>
-											<span class="message-content">Lorem ipsum dolor sit amet, consectetur
-												adipiscing</span>
-										</div>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="chat.html">
-									<div class="list-item">
-										<div class="list-left">
-											<span class="avatar">T</span>
-										</div>
-										<div class="list-body">
-											<span class="message-author"> Tarah Shropshire </span>
-											<span class="message-time">12:28 AM</span>
-											<div class="clearfix"></div>
-											<span class="message-content">Lorem ipsum dolor sit amet, consectetur
-												adipiscing</span>
-										</div>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="chat.html">
-									<div class="list-item">
-										<div class="list-left">
-											<span class="avatar">M</span>
-										</div>
-										<div class="list-body">
-											<span class="message-author">Mike Litorus</span>
-											<span class="message-time">12:28 AM</span>
-											<div class="clearfix"></div>
-											<span class="message-content">Lorem ipsum dolor sit amet, consectetur
-												adipiscing</span>
-										</div>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="chat.html">
-									<div class="list-item">
-										<div class="list-left">
-											<span class="avatar">C</span>
-										</div>
-										<div class="list-body">
-											<span class="message-author"> Catherine Manseau </span>
-											<span class="message-time">12:28 AM</span>
-											<div class="clearfix"></div>
-											<span class="message-content">Lorem ipsum dolor sit amet, consectetur
-												adipiscing</span>
-										</div>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="chat.html">
-									<div class="list-item">
-										<div class="list-left">
-											<span class="avatar">D</span>
-										</div>
-										<div class="list-body">
-											<span class="message-author"> Domenic Houston </span>
-											<span class="message-time">12:28 AM</span>
-											<div class="clearfix"></div>
-											<span class="message-content">Lorem ipsum dolor sit amet, consectetur
-												adipiscing</span>
-										</div>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="chat.html">
-									<div class="list-item">
-										<div class="list-left">
-											<span class="avatar">B</span>
-										</div>
-										<div class="list-body">
-											<span class="message-author"> Buster Wigton </span>
-											<span class="message-time">12:28 AM</span>
-											<div class="clearfix"></div>
-											<span class="message-content">Lorem ipsum dolor sit amet, consectetur
-												adipiscing</span>
-										</div>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="chat.html">
-									<div class="list-item">
-										<div class="list-left">
-											<span class="avatar">R</span>
-										</div>
-										<div class="list-body">
-											<span class="message-author"> Rolland Webber </span>
-											<span class="message-time">12:28 AM</span>
-											<div class="clearfix"></div>
-											<span class="message-content">Lorem ipsum dolor sit amet, consectetur
-												adipiscing</span>
-										</div>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="chat.html">
-									<div class="list-item">
-										<div class="list-left">
-											<span class="avatar">C</span>
-										</div>
-										<div class="list-body">
-											<span class="message-author"> Claire Mapes </span>
-											<span class="message-time">12:28 AM</span>
-											<div class="clearfix"></div>
-											<span class="message-content">Lorem ipsum dolor sit amet, consectetur
-												adipiscing</span>
-										</div>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="chat.html">
-									<div class="list-item">
-										<div class="list-left">
-											<span class="avatar">M</span>
-										</div>
-										<div class="list-body">
-											<span class="message-author">Melita Faucher</span>
-											<span class="message-time">12:28 AM</span>
-											<div class="clearfix"></div>
-											<span class="message-content">Lorem ipsum dolor sit amet, consectetur
-												adipiscing</span>
-										</div>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="chat.html">
-									<div class="list-item">
-										<div class="list-left">
-											<span class="avatar">J</span>
-										</div>
-										<div class="list-body">
-											<span class="message-author">Jeffery Lalor</span>
-											<span class="message-time">12:28 AM</span>
-											<div class="clearfix"></div>
-											<span class="message-content">Lorem ipsum dolor sit amet, consectetur
-												adipiscing</span>
-										</div>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="chat.html">
-									<div class="list-item">
-										<div class="list-left">
-											<span class="avatar">L</span>
-										</div>
-										<div class="list-body">
-											<span class="message-author">Loren Gatlin</span>
-											<span class="message-time">12:28 AM</span>
-											<div class="clearfix"></div>
-											<span class="message-content">Lorem ipsum dolor sit amet, consectetur
-												adipiscing</span>
-										</div>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="chat.html">
-									<div class="list-item">
-										<div class="list-left">
-											<span class="avatar">T</span>
-										</div>
-										<div class="list-body">
-											<span class="message-author">Tarah Shropshire</span>
-											<span class="message-time">12:28 AM</span>
-											<div class="clearfix"></div>
-											<span class="message-content">Lorem ipsum dolor sit amet, consectetur
-												adipiscing</span>
-										</div>
-									</div>
-								</a>
-							</li>
-						</ul>
-					</div>
-					<div class="topnav-dropdown-footer">
-						<a href="chat.html">See all messages</a>
-					</div>
-				</div>
-			</div> -->
+
       </div>
     </div>
     <script>

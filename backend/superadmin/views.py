@@ -1,40 +1,42 @@
-# Assuming the function is imported from your utils
-from .models import Timetable
-from .models import Course, department, Batch, Subject
+# Imports
+from .serializers import TimetableSerializer, PlacementSerializer
+from .models import Student, Timetable, Course, department, Batch, Subject, Placement, Teacher
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 from django.core.files.storage import FileSystemStorage
-from django.shortcuts import render
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth.hashers import make_password
 import datetime
 from django.utils import timezone
 from django.core.files import File
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
+from django.utils.timezone import now  # Add this import
+from .serializers import *
 from django.contrib.auth.decorators import login_required
+import qrcode
+import io
+import base64
+from datetime import datetime, timedelta, time, date
 
-from collections import OrderedDict
 
+from django.utils.dateparse import parse_datetime
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 
-from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from addcoordinator.models import coordinator
-from .models import Teacher, Student, department, Course, Subject, Batch, Placement
-from .serializers import *
 
 import pandas as pd
-from datetime import datetime
 import os
-import io
 import json
 import traceback
 
@@ -72,7 +74,7 @@ def faculty_dash(request):
     except Teacher.DoesNotExist:
         return redirect('login')
 
-    today_day = timezone.now().strftime('%A')
+    today_day = now().strftime('%A')  # Use 'now' from timezone
 
     todays_lectures = Timetable.objects.filter(
         faculty_name=faculty,
@@ -106,7 +108,7 @@ def edit_teacher(request, faculty_id):
     }
 
     if request.method == "POST":
-        
+
         teacher.firstname = request.POST.get('firstname')
         teacher.middlename = request.POST.get('middlename', '')
         teacher.lastname = request.POST.get('lastname')
@@ -337,22 +339,20 @@ def format_time_to_am_pm(time_str):
     time_obj = datetime.strptime(time_str, '%H:%M')
     return time_obj.strftime('%I:%M %p')
 
-# def parse_time_string(time_str):
-#     try:
-#         return datetime.strptime(time_str.strip(), "%I.%M %p").time()
-#     except ValueError:
-#         return None
 
+# def parse_time_string(time_str):
+#     """Convert '7.30 AM' to datetime.time object"""
+#     formats = ["%I.%M %p", "%I:%M %p"]  # Handle both dot and colon
+#     for fmt in formats:
+#         try:
+#             return datetime.strptime(time_str.strip(), fmt).time()
+#         except ValueError:
+#             continue
+#     return None
 
 def parse_time_string(time_str):
-    """Convert '7.30 AM' to datetime.time object"""
-    formats = ["%I.%M %p", "%I:%M %p"]  # Handle both dot and colon
-    for fmt in formats:
-        try:
-            return datetime.strptime(time_str.strip(), fmt).time()
-        except ValueError:
-            continue
-    return None
+    fmt = "%I.%M %p"
+    return datetime.strptime(time_str.strip(), fmt).time()
 
 # before filter
 
@@ -404,12 +404,6 @@ def parse_time_string(time_str):
 # superadmin/views.py
 
 # parse_time_string function directly in views.py
-# def parse_time_string(time_str):
-#     try:
-#         # Parse time in 12-hour format (e.g., "7:30 AM")
-#         return datetime.strptime(time_str, "%I:%M %p").time()
-#     except ValueError:
-#         return None
 
 # After Filter
 
@@ -624,6 +618,7 @@ def delete_course(request, id):
 def add_student(request):
     all_departments = department.objects.all()
     all_courses = Course.objects.all()
+    error_message = None  # Initialize error message
 
     if request.method == "POST":
         try:
@@ -652,8 +647,12 @@ def add_student(request):
             department_id = request.POST.get('student_department')
             course_id = request.POST.get('course')
 
-            student_department = department.objects.get(id=department_id)
-            course = Course.objects.get(id=course_id)
+            # Handling department and course lookup
+            try:
+                student_department = department.objects.get(id=department_id)
+                course = Course.objects.get(id=course_id)
+            except ObjectDoesNotExist:
+                raise ValueError("Invalid department or course selected.")
 
             # Create the Student
             student = Student.objects.create(
@@ -679,15 +678,21 @@ def add_student(request):
                 student_image=request.FILES.get('student_image')
             )
 
-            # You can change this to a success page
+            # Success page redirection (you can change this as needed)
             return redirect('add_student')
 
+        except ValueError as ve:
+            # Value errors should be user-friendly
+            error_message = str(ve)
         except Exception as e:
+            # General errors
             print("Error in form submission:", e)
+            error_message = "There was an issue with your submission. Please try again."
 
     return render(request, 'superadmin/add-student.html', {
         'all_departments': all_departments,
-        'all_courses': all_courses
+        'all_courses': all_courses,
+        'error_message': error_message  # Passing error message to template
     })
 
 
@@ -1616,10 +1621,6 @@ def faculty_sidebar(request):
     return render(request, 'faculty/faculty_sidebar.html')
 
 
-def faculty_dash(request):
-    return render(request, 'faculty/faculty_dash.html')
-
-
 def faculty_all_student(request):
 
     all_students = Student.objects.all()
@@ -1663,24 +1664,37 @@ def faculty_all_student(request):
 
 
 def qr_code(request):
-    subject = request.GET.get('subject')
-    course = request.GET.get('course')
-    department = request.GET.get('department')
-    division = request.GET.get('division')
-    semester = request.GET.get('semester')
+    # Get lecture details from request parameters
+    subject = request.GET.get('subject', 'N/A')
+    course = request.GET.get('course', 'N/A')
+    department = request.GET.get('department', 'N/A')
+    division = request.GET.get('division', 'N/A')
+    semester = request.GET.get('semester', 'N/A')
+    lecture_date = request.GET.get('date', now().date().strftime('%Y-%m-%d'))
+    lecture_time = request.GET.get('time', now().strftime('%H:%M %p'))
 
-    qr_data = f"Subject: {subject}, Course: {course}, Department: {department}, Division: {division}, Semester: {semester}"
-    img = qrcode.make(qr_data)
-    buffer = io.BytesIO()
-    img.save(buffer, format='PNG')
-    buffer.seek(0)
-    img_str = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    # Prepare QR data
+    qr_data = (f"Subject: {subject}, Course: {course}, Department: {department}, "
+               f"Division: {division}, Semester: {semester}, "
+               f"Date: {lecture_date}, Time: {lecture_time}")
 
-    context = {
-        'qr_data': qr_data,
-        'qr_code_url': f"data:image/png;base64,{img_str}"
-    }
-    return render(request, 'faculty/qr_code.html', context)
+    try:
+        # Generate QR code
+        img = qrcode.make(qr_data)
+        buffer = io.BytesIO()
+        img.save(buffer, format='PNG')
+        buffer.seek(0)
+        img_str = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+        context = {
+            'qr_data': qr_data,
+            'qr_code_url': f"data:image/png;base64,{img_str}"
+        }
+        return render(request, 'faculty/qr_code.html', context)
+
+    except Exception as e:
+        # Handle errors
+        return HttpResponse(f"Error generating QR code: {str(e)}")
 
 
 def faculty_subject(request):
@@ -1924,3 +1938,59 @@ def all_students_api(request):
     serializer = StudentListSerializer(
         students, many=True, context={'request': request})
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def student_today_sessions(request):
+    try:
+        student_id = request.query_params.get('student_id')
+
+        if not student_id:
+            return Response({'error': 'Student ID required'}, status=400)
+
+        student = Student.objects.get(id=student_id)
+
+        today_day = datetime.today().strftime('%A')
+        print(f"Student ID: {student.id}, Today: {today_day}")
+        print(
+            f"Semester: {student.semester}, Division: {student.division}, Course ID: {student.course.id}")
+
+        # Filter without batch
+        timetable_qs = Timetable.objects.filter(
+            day=today_day,
+            semester=student.semester,
+            division=student.division,
+            course=student.course,
+            timetable_department=student.student_department
+        )
+
+        if timetable_qs.exists():
+            # Sort by lecture_start_time (handle '8.25 AM' as '8:25 AM')
+            sorted_timetable = sorted(
+                timetable_qs,
+                key=lambda x: datetime.strptime(
+                    x.lecture_start_time.replace('.', ':'), "%I:%M %p")
+            )
+
+            serializer = TimetableSerializer(
+                sorted_timetable, many=True, context={'request': request})
+            return Response({'today_subjects': serializer.data}, status=200)
+
+        else:
+            return Response({'message': 'No subjects for today'}, status=404)
+
+    except Student.DoesNotExist:
+        return Response({'error': 'Student not found'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
+
+
+@api_view(['GET'])
+def student_placement_list(request):
+    try:
+        placements = Placement.objects.all().order_by('-interview_date')  # latest first
+        serializer = PlacementSerializer(
+            placements, many=True, context={'request': request})
+        return Response({'placements': serializer.data}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

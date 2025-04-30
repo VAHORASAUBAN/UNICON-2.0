@@ -293,24 +293,34 @@
                 <h1>Today's Session</h1>
                 <div class="row">
                     {% if todays_lectures %}
-                        {% for lecture in todays_lectures %}
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Subject Name: {{ lecture.timetable_subject_name.subject_name }}</h5>
-                                        <p class="card-text">Course: {{ lecture.course.course_name }}</p>
-                                        <p class="card-text">Department: {{ lecture.timetable_department.department_name }}</p>
-                                        <p class="card-text">Semester: {{ lecture.semester }}</p>
-                                        <p class="card-text">Division: {{ lecture.division }}</p>
-                                        <p class="card-text">Time: {{ lecture.lecture_start_time }} - {{ lecture.lecture_end_time }}</p>
-                                        <button class="btn btn-primary btn-qr"
-                                            onclick="generateQRCode('{{ lecture.timetable_subject_name.subject_name }}', '{{ lecture.course.course_name }}', '{{ lecture.timetable_department.department_name }}', '{{ lecture.division }}', '{{ lecture.semester }}')">
-                                            <i class="fas fa-qrcode"></i> Generate QR Code
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
+                    {% for lecture in todays_lectures %}
+                    <div class="lecture-info">
+                        <p>Subject: {{ lecture.timetable_subject_name.subject_name }}</p>
+                        <p>Course: {{ lecture.course.course_name }}</p>
+                        <p>Department: {{ lecture.timetable_department.department_name }}</p>
+                        <p>Division: {{ lecture.division }}</p>
+                        <p>Semester: {{ lecture.semester }}</p>
+                        <p>Date: {{ lecture.date }}</p>
+                        <p>Time: {{ lecture.lecture_start_time }} - {{ lecture.lecture_end_time }}</p>
+                        <button class="btn btn-primary btn-qr"
+                                onclick="generateQRCode('{{ lecture.timetable_subject_name.subject_name }}', 
+                                                         '{{ lecture.course.course_name }}', 
+                                                         '{{ lecture.timetable_department.department_name }}', 
+                                                         '{{ lecture.division }}', 
+                                                         '{{ lecture.semester }}', 
+                                                         '{{ lecture.date }}', 
+                                                         '{{ lecture.lecture_start_time }}')">
+                            <i class="fas fa-qrcode"></i> Generate QR Code
+                        </button>
+                    </div>
+                    {% endfor %}
+                    
+                    <script>
+                      function generateQRCode(subject, course, department, division, semester, date, time) {
+                        const url = `/qr_code/?subject=${encodeURIComponent(subject)}&course=${encodeURIComponent(course)}&department=${encodeURIComponent(department)}&division=${encodeURIComponent(division)}&semester=${encodeURIComponent(semester)}&date=${encodeURIComponent(date)}&time=${encodeURIComponent(time)}`;
+                        window.location.href = url;
+                      }
+                    </script>
                     {% else %}
                         <div class="col-md-12 text-center">
                             <h5>No lectures scheduled for today!</h5>

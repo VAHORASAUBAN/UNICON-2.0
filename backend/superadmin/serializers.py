@@ -16,17 +16,36 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+# class StudentSerializer(serializers.ModelSerializer):
+#     student_image = serializers.SerializerMethodField()
+#     student_department = DepartmentSerializer(read_only=True)
+#     course = CourseSerializer(read_only=True)
+
+#     class Meta:
+#         model = Student
+#         fields = '__all__'
+#         extra_kwargs = {'password': {'write_only': True}}
+
+#     def get_student_image(self, obj):
+#         request = self.context.get('request')
+#         if obj.student_image:
+#             return request.build_absolute_uri(obj.student_image.url)
+#         return None
 class StudentSerializer(serializers.ModelSerializer):
+    # This is where we get the image URL
     student_image = serializers.SerializerMethodField()
     student_department = DepartmentSerializer(read_only=True)
     course = CourseSerializer(read_only=True)
 
     class Meta:
         model = Student
-        fields = '__all__'
+        fields = '__all__'  # Include all fields
+        # Ensure password is write-only
         extra_kwargs = {'password': {'write_only': True}}
 
     def get_student_image(self, obj):
+        # This method constructs the absolute URL for student_image
+        # Request context to build absolute URL
         request = self.context.get('request')
         if obj.student_image:
             return request.build_absolute_uri(obj.student_image.url)
@@ -49,6 +68,12 @@ class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
         fields = '__all__'
+
+
+def get_image_url(request, image_field):
+    if image_field:
+        return request.build_absolute_uri(image_field.url)
+    return None
 
 
 class TeacherSerializer(serializers.ModelSerializer):
