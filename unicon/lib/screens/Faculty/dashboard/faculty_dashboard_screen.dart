@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import '../../../styles/colors.dart';
 import '../../../styles/fonts.dart';
 import '../../../widgets/AttendancePieChart.dart';
-
-
 import '../../../../widgets/faculty_navbar.dart';
 import '../faculty_sidemenu.dart';
 
@@ -18,6 +16,27 @@ class FacultyDashboardScreen extends StatefulWidget {
 
 class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
   int _currentIndex = 0;
+  bool isLoading = true;
+  List<dynamic> timetable = [];
+
+  // Fetch timetable data (static example or real API fetch can be used here)
+  Future<void> fetchTimetable() async {
+    // Replace with your actual timetable fetching code or static data.
+    setState(() {
+      timetable = [
+        {"id": 1, "subject": "ADS", "time": "09:00 AM - 10:00 AM", "batch": "A"},
+        {"id": 2, "subject": "Flutter", "time": "10:00 AM - 11:00 AM", "batch": "A"},
+        {"id": 3, "subject": "MLP", "time": "11:00 AM - 12:00 PM", "batch": "B"},
+      ];
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTimetable(); // Fetch timetable data when the screen loads
+  }
 
   void _onTabSelected(int index) {
     setState(() {
@@ -87,187 +106,166 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AttendancePieChart(),
+          const SizedBox(height: 24),
+
+          // Today's Classes Section
+          const Text(
+            "Today's Classes",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 12),
+
+          // Timeline View: show loading, no classes, or the timeline
+          if (isLoading)
+            const Center(child: CircularProgressIndicator())
+          else if (timetable.isEmpty)
+            const Center(
+              child: Text(
+                "No Classes Today",
+                style: TextStyle(fontSize: 16, color: Colors.black54),
+              ),
+            )
+          else
+            _buildTimeline(),
         ],
       ),
     );
   }
-}
-/*import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:unicon/features/screens/Faculty/faculty_sidemenu.dart';
-import '../../../../shared/AttendancePieChart.dart';
-import '../../../../shared/widgets/faculty_navbar.dart';
-import 'package:unicon/shared/styles/colors.dart';
-import 'package:unicon/shared/styles/fonts.dart';
 
-class FacultyDashboardScreen extends StatefulWidget {
-  final String userName;
-
-  const FacultyDashboardScreen({Key? key, required this.userName}) : super(key: key);
-
-  @override
-  _FacultyDashboardScreenState createState() => _FacultyDashboardScreenState();
-}
-
-class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
-  int _currentIndex = 0;
-
-  String getTodayDay() {
-    return DateFormat('EEEE').format(DateTime.now());
+  // Enhanced Timeline Widget
+  Widget _buildTimeline() {
+    return Column(
+      children: List.generate(timetable.length, (index) {
+        final item = timetable[index];
+        return _buildTimelineItem(
+          item["subject"],
+          item["time"],
+          item["batch"],
+          index == timetable.length - 1,
+        );
+      }),
+    );
   }
 
-  List<Map<String, String>> getTodayTimetable(String today) {
-    Map<String, List<Map<String, String>>> timetableData = {
-      'Monday': [
-        {'subject': 'ADS', 'time': '09:00 - 10:00', 'division': 'A'},
-        {'subject': 'Flutter', 'time': '10:00 - 11:00', 'division': 'A'},
-        {'subject': 'MLP', 'time': '11:00 - 12:00', 'division': 'B'},
-      ],
-      'Tuesday': [
-        {'subject': 'CNS', 'time': '09:00 - 10:00', 'division': 'A'},
-        {'subject': 'ADS', 'time': '10:00 - 11:00', 'division': 'B'},
-        {'subject': 'Flutter', 'time': '11:00 - 12:00', 'division': 'C'},
-      ],
-      'Wednesday': [
-        {'subject': 'MLP', 'time': '09:00 - 10:00', 'division': 'C'},
-        {'subject': 'ADS', 'time': '10:00 - 11:00', 'division': 'A'},
-        {'subject': 'Flutter', 'time': '11:00 - 12:00', 'division': 'B'},
-      ],
-      // Add other days if needed
-    };
-
-    return timetableData[today] ?? [];
-  }
-
-  void _onTabSelected(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
-  void _onScannerTap() {
-    print("Scanner button tapped!");
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final today = getTodayDay();
-    final todayTimetable = getTodayTimetable(today);
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          "Dashboard",
-          style: TextStyle(
-            fontSize: 24,
-            fontFamily: "Arial",
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: AppColors.primaryBlue,
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-      ),
-      drawer: faculty_sidemenu(
-        onMenuTap: (route) {
-          Navigator.pop(context);
-          Navigator.pushNamed(context, route);
-        },
-        userName: widget.userName,
-        userEmail: "johndoe@example.com",
-      ),
-      body: IndexedStack(
-        index: _currentIndex,
+  // Modern Timeline Item
+  Widget _buildTimelineItem(String subject, String time, String batch, bool isLast) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildDashboardContent(today, todayTimetable),
-          Center(
-            child: Text(
-              "Updates Content",
-              style: AppFonts.comment.copyWith(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+          // Timeline Column (Dot + Line)
+          Column(
+            children: [
+              // Circular Dot
+              Container(
+                width: 15,
+                height: 30,
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade800,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.blue.shade300,
+                      blurRadius: 8,
+                    ),
+                  ],
+                ),
+              ),
+              if (!isLast)
+                Container(
+                  width: 2, // Slim line for clean look
+                  height: 40, // Adjust height for even spacing
+                  color: Colors.blue.shade800,
+                ),
+            ],
+          ),
+          const SizedBox(width: 7 ), // Space between line & card
+
+          // Class Details Card
+          Expanded(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+              margin: const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF0A3B87), Color(0xFF004AAD)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.blue.shade300.withOpacity(0.4),
+                    blurRadius: 8,
+                    offset: const Offset(2, 4),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  // Subject Icon
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 20,
+                    child: _getSubjectIcon(subject),
+                  ),
+                  const SizedBox(width: 12),
+
+                  // Subject & Batch Details
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          subject,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          batch,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Time Display
+                  Text(
+                    time,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: FacultyNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onTabSelected,
-        onScannerTap: _onScannerTap,
-      ),
     );
   }
 
-  Widget _buildDashboardContent(String today, List<Map<String, String>> timetable) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AttendancePieChart(),
-
-          const SizedBox(height: 20),
-
-          Text(
-            "Today's Timetable - $today",
-            style: AppFonts.headline.copyWith(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primaryBlue,
-            ),
-          ),
-          const SizedBox(height: 10),
-
-          timetable.isEmpty
-              ? Text("No lectures today!", style: AppFonts.comment)
-              : Column(
-            children: timetable.map((entry) {
-              return Container(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  gradient: LinearGradient(
-                    colors: [Colors.blue.shade50, Colors.white],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade200,
-                      blurRadius: 6,
-                      offset: const Offset(0, 3),
-                    )
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Subject: ${entry['subject']}",
-                            style: AppFonts.headline.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            )),
-                        Text("Time: ${entry['time']}", style: AppFonts.comment),
-                        Text("Division: ${entry['division']}", style: AppFonts.comment),
-                      ],
-                    ),
-                    const Icon(Icons.schedule, color: Colors.blueAccent),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
+  // Dynamic Subject Icons
+  Widget _getSubjectIcon(String subject) {
+    if (subject.toLowerCase().contains("java")) {
+      return const Icon(Icons.code, color: Colors.blue);
+    } else if (subject.toLowerCase().contains("blockchain")) {
+      return const Icon(Icons.security, color: Colors.green);
+    } else if (subject.toLowerCase().contains("cns")) {
+      return const Icon(Icons.computer, color: Colors.orange);
+    } else {
+      return const Icon(Icons.book, color: Colors.black);
+    }
   }
-}*/
+}

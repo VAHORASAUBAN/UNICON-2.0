@@ -2,39 +2,52 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class FacultyProfileScreen extends StatefulWidget {
+  const FacultyProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<FacultyProfileScreen> createState() => _FacultyProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  Map<String, dynamic>? studentData;
+class _FacultyProfileScreenState extends State<FacultyProfileScreen> {
+  Map<String, dynamic>? facultyData;
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    fetchStudentProfile();
+    fetchFacultyProfile();
   }
 
-  Future<void> fetchStudentProfile() async {
-    const url = 'http://192.168.188.15:8000/student/profile/'; // change if hosted
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"student_id": 1}), // Replace with actual student ID
-    );
+  Future<void> fetchFacultyProfile() async {
+    const url = "http://192.168.188.15:8000/teacher/profile/"; // Update URL if necessary
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"faculty_id": 1}), // Replace with actual faculty_id
+      );
 
-    if (response.statusCode == 200) {
-      setState(() {
-        studentData = jsonDecode(response.body);
-        isLoading = false;
-      });
-    } else {
-      // Handle error
-      print("Failed to fetch: ${response.body}");
+      if (response.statusCode == 200) {
+        print("Response body: ${response.body}");  // Debugging line
+
+        if (mounted) {
+          setState(() {
+            // Parse the response as a list of dynamic objects
+            List<dynamic> responseList = jsonDecode(response.body);
+            if (responseList.isNotEmpty) {
+              facultyData = Map<String, dynamic>.from(responseList[0]);  // Convert the first element to a Map
+            } else {
+              facultyData = {};  // Empty data if the list is empty
+            }
+            isLoading = false;
+          });
+        }
+      } else {
+        print("Failed to fetch: ${response.body}");
+      }
+    } catch (e) {
+      print("Error fetching profile: $e");
     }
   }
 
@@ -57,15 +70,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 12),
                   _buildEmail(),
                   const SizedBox(height: 25),
-                  _buildInfoTile(Icons.person, 'First Name', studentData?['firstname']?.toString() ?? ''),
-                  _buildInfoTile(Icons.person_outline, 'Middle Name', studentData?['middlename']?.toString() ?? ''),
-                  _buildInfoTile(Icons.person, 'Last Name', studentData?['lastname']?.toString() ?? ''),
-                  _buildInfoTile(Icons.apartment, 'Department', studentData?['student_department']?.toString() ?? 'Unknown Department'),
-                  _buildInfoTile(Icons.menu_book, 'Course', studentData?['course']?.toString() ?? 'Unknown Course'),
-                  _buildInfoTile(Icons.timeline, 'Semester', studentData?['semester']?.toString() ?? ''),
-                  _buildInfoTile(Icons.group, 'Division', studentData?['division']?.toString() ?? ''),
-                  _buildInfoTile(Icons.male, 'Gender', studentData?['gender']?.toString() ?? ''),
-                  _buildInfoTile(Icons.phone, 'Mobile', studentData?['mobile_number']?.toString() ?? ''),
+                  _buildInfoTile(Icons.person, 'First Name', facultyData?['firstname'] ?? ''),
+                  _buildInfoTile(Icons.person_outline, 'Middle Name', facultyData?['middlename'] ?? ''),
+                  _buildInfoTile(Icons.person, 'Last Name', facultyData?['lastname'] ?? ''),
+                  _buildInfoTile(Icons.apartment, 'Department', facultyData?['department']['department_name'] ?? 'Unknown Department'),
+                  _buildInfoTile(Icons.menu_book, 'Course', facultyData?['course']['course_name'] ?? 'Unknown Course'),
+                  _buildInfoTile(Icons.work, 'Designation', facultyData?['designations'] ?? ''),
+                  _buildInfoTile(Icons.school, 'Qualification', facultyData?['qualification'] ?? ''),
+                  _buildInfoTile(Icons.military_tech, 'Achievements', facultyData?['achievements'] ?? ''),
+                  _buildInfoTile(Icons.male, 'Gender', facultyData?['gender'] ?? ''),
+                  _buildInfoTile(Icons.phone, 'Mobile Number', facultyData?['mobile_number'] ?? ''),
+                  _buildInfoTile(Icons.calendar_today, 'Birth Date', facultyData?['birth_date'] ?? ''),
+                  _buildInfoTile(Icons.date_range, 'Joining Date', facultyData?['joining_date'] ?? ''),
+                  _buildInfoTile(Icons.location_city, 'City', facultyData?['city'] ?? ''),
+                  _buildInfoTile(Icons.location_on, 'State', facultyData?['state'] ?? ''),
+                  _buildInfoTile(Icons.flag, 'Country', facultyData?['country'] ?? ''),
+                  _buildInfoTile(Icons.location_pin, 'Pincode', facultyData?['pincode'] ?? ''),
+                  _buildInfoTile(Icons.home, 'Address Line 1', facultyData?['address_line_1'] ?? ''),
+                  _buildInfoTile(Icons.home_outlined, 'Address Line 2', facultyData?['address_line_2'] ?? ''),
                 ],
               ),
             ),
@@ -94,7 +116,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Padding(
               padding: const EdgeInsets.only(top: 50),
               child: const Text(
-                "Student Profile",
+                "Faculty Profile",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,
@@ -120,7 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfileImage() {
-    final imageUrl = studentData?['student_image'];
+    final imageUrl = facultyData?['pic'];
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -135,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       child: CircleAvatar(
         radius: 55,
-        backgroundImage: imageUrl != null
+        backgroundImage: imageUrl != null && imageUrl.isNotEmpty
             ? NetworkImage(imageUrl)
             : const AssetImage('assets/images/profile.png') as ImageProvider,
       ),
@@ -144,7 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildEmail() {
     return Text(
-      studentData?['email'] ?? '',
+      facultyData?['email'] ?? '',
       style: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w600,

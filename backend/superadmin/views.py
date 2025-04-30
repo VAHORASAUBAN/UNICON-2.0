@@ -2011,24 +2011,46 @@ def student_profile(request):
     return JsonResponse({"error": "Invalid request method"}, status=400)
 
 
+# @csrf_exempt
+# def teacher_profile(request):
+#     if request.method == 'POST':
+#         try:
+#             json_data = request.body
+#             stream = io.BytesIO(json_data)
+#             python_data = JSONParser().parse(stream)
+#             teacher_id = python_data.get('id', None)
+
+#             if teacher_id is not None:
+#                 teacher = Teacher.objects.get(id=teacher_id)
+#                 serializer = TeacherSerializer(
+#                     teacher, context={'request': request})
+#                 return JsonResponse(serializer.data, status=200)
+#             else:
+#                 teachers = Teacher.objects.all()
+#                 serializer = TeacherSerializer(
+#                     teachers, many=True, context={'request': request})
+#                 return JsonResponse(serializer.data, safe=False, status=200)
+
+#         except Teacher.DoesNotExist:
+#             return JsonResponse({'error': 'Teacher not found'}, status=404)
+#         except Exception as e:
+#             return JsonResponse({'error': str(e)}, status=500)
+
+#     return JsonResponse({'error': 'Invalid request method'}, status=400)
 @csrf_exempt
 def teacher_profile(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         try:
-            json_data = request.body
-            stream = io.BytesIO(json_data)
-            python_data = JSONParser().parse(stream)
-            teacher_id = python_data.get('id', None)
+            data = json.loads(request.body)
+            teacher_id = data.get('id')
 
-            if teacher_id is not None:
+            if teacher_id:
                 teacher = Teacher.objects.get(id=teacher_id)
-                serializer = TeacherSerializer(
-                    teacher, context={'request': request})
+                serializer = TeacherSerializer(teacher, context={'request': request})
                 return JsonResponse(serializer.data, status=200)
             else:
                 teachers = Teacher.objects.all()
-                serializer = TeacherSerializer(
-                    teachers, many=True, context={'request': request})
+                serializer = TeacherSerializer(teachers, many=True, context={'request': request})
                 return JsonResponse(serializer.data, safe=False, status=200)
 
         except Teacher.DoesNotExist:
@@ -2037,7 +2059,6 @@ def teacher_profile(request):
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
-
 
 @csrf_exempt
 def teacher_login(request):
