@@ -8,6 +8,14 @@ from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
+import pandas as pd
+import os
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.core.files import File
+from django.contrib.auth.hashers import make_password
+from .models import Teacher, department, Course
+from datetime import datetime
 from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
@@ -978,21 +986,160 @@ def parse_custom_date(date_str):
         return None
 
 
+# def add_teachers_bulk(request):
+#     if request.method == "POST":
+#         IMAGE_UPLOAD_PATH = "media/teacher_images/"
+#         csv_file = request.FILES.get('file')
+
+#         # Validate File Type
+#         if not csv_file or not csv_file.name.endswith('.csv'):
+#             messages.error(
+#                 request, "Invalid file format! Please upload a CSV file.")
+#             return redirect('add_teachers_bulk')
+
+#         try:
+#             data = pd.read_csv(csv_file).fillna('')
+#         except Exception as e:
+#             messages.error(request, f"Error reading CSV file: {str(e)}")
+#             return redirect('add_teachers_bulk')
+
+#         teacher_objects = []
+#         image_files = []
+
+#         for index, row in data.iterrows():
+#             try:
+#                 row = row.apply(lambda x: x.strip()
+#                                 if isinstance(x, str) else x)
+
+#                 # Debugging
+#                 print(f"Processing row {index + 1}: {row.to_dict()}")
+
+#                 # Validate Department & Course
+#                 try:
+#                     teacher_department = department.objects.get(
+#                         id=row['department'])
+#                 except department.DoesNotExist:
+#                     messages.error(
+#                         request, f"Row {index + 1}: Department ID {row['department']} does not exist.")
+#                     continue
+
+#                 try:
+#                     course = Course.objects.get(id=row['course'])
+#                 except Course.DoesNotExist:
+#                     messages.error(
+#                         request, f"Row {index + 1}: Course ID {row['course']} does not exist.")
+#                     continue
+
+#                 # Handle Image File
+#                 pic_path = row['pic']
+#                 pic_file = None
+#                 try:
+#                     full_pic_path = os.path.join(IMAGE_UPLOAD_PATH, pic_path)
+#                     if pic_path and os.path.exists(full_pic_path):
+#                         img_file = open(full_pic_path, 'rb')
+#                         pic_file = File(img_file, name=pic_path)
+#                         image_files.append(img_file)
+#                     else:
+#                         print(f"Image not found: {full_pic_path}")  # Debugging
+#                 except Exception as e:
+#                     print(f"Error handling image for row {index + 1}: {e}")
+
+#                 # Create Teacher Object
+#                 try:
+#                     teacher = Teacher(
+#                         faculty_id=row['faculty_id'],
+#                         firstname=row['firstname'],
+#                         middlename=row['middlename'],
+#                         lastname=row['lastname'],
+#                         email=row['email'],
+#                         password=make_password(row['password']),
+#                         mobile_number=row['mobile_number'],
+#                         gender=row['gender'],
+#                         birth_date=parse_custom_date(row['birth_date']),
+#                         address_line_1=row['address_line_1'],
+#                         address_line_2=row['address_line_2'],
+#                         country=row['country'],
+#                         state=row['state'],
+#                         city=row['city'],
+#                         pincode=row['pincode'],
+#                         joining_date=parse_custom_date(row['joining_date']),
+#                         course=course,
+#                         department=teacher_department,
+#                         designations=row['designations'],
+#                         achievements=row['achievements'],
+#                         qualification=row['qualification'],
+#                     )
+
+#                     if pic_file:
+#                         teacher.pic.save(pic_path, pic_file)
+
+#                     teacher_objects.append(teacher)
+
+#                 except Exception as e:
+#                     print(f"Row {index + 1} object creation error: {e}")
+#                     messages.error(
+#                         request, f"Row {index + 1} object creation error: {e}")
+
+#             except Exception as e:
+#                 print(f"Unexpected error at row {index + 1}: {e}")
+#                 messages.error(
+#                     request, f"Unexpected error at row {index + 1}: {e}")
+
+#         try:
+#             # Teacher.objects.bulk_create(teacher_objects)
+#             for teacher in teacher_objects:
+#                 teacher.save()
+
+#             for img_file in image_files:
+#                 img_file.close()
+
+#             print("✅ Teachers have been added successfully!")
+#             messages.success(request, "Teachers have been added successfully!")
+
+#         except Exception as e:
+#             print("❌ Error saving teachers to the database:", str(e))
+#             messages.error(
+#                 request, f"Error saving teachers to the database: {str(e)}")
+
+#         return render(request, 'superadmin/add_teachers_bulk.html', {
+#             'success': "Teachers have been added successfully!"
+#         })
+
+#     return render(request, 'superadmin/add_teachers_bulk.html')
+
+
+def parse_custom_date(date_str):
+    """ Safely parse multiple date formats """
+    for fmt in ("%Y-%m-%d", "%d-%m-%Y", "%m/%d/%Y"):
+        try:
+            return datetime.strptime(date_str, fmt).date()
+        except ValueError:
+            continue
+    return None  # Will be stored as NULL if invalid
+
+
 def add_teachers_bulk(request):
     if request.method == "POST":
         IMAGE_UPLOAD_PATH = "media/teacher_images/"
-        csv_file = request.FILES.get('file')
+        uploaded_file = request.FILES.get('file')
 
-        # Validate File Type
-        if not csv_file or not csv_file.name.endswith('.csv'):
+        # ✅ Support for CSV and Excel files
+        if not uploaded_file or not (
+            uploaded_file.name.endswith(
+                '.csv') or uploaded_file.name.endswith(('.xlsx', '.xls'))
+        ):
             messages.error(
-                request, "Invalid file format! Please upload a CSV file.")
+                request, "Invalid file format! Please upload a CSV or Excel file.")
             return redirect('add_teachers_bulk')
 
+        # ✅ Read file using pandas
         try:
-            data = pd.read_csv(csv_file).fillna('')
+            if uploaded_file.name.endswith('.csv'):
+                data = pd.read_csv(uploaded_file).fillna('')
+            else:
+                data = pd.read_excel(uploaded_file).fillna('')
         except Exception as e:
-            messages.error(request, f"Error reading CSV file: {str(e)}")
+            messages.error(request, f"Error reading file: {str(e)}")
             return redirect('add_teachers_bulk')
 
         teacher_objects = []
@@ -1002,11 +1149,9 @@ def add_teachers_bulk(request):
             try:
                 row = row.apply(lambda x: x.strip()
                                 if isinstance(x, str) else x)
-
-                # Debugging
                 print(f"Processing row {index + 1}: {row.to_dict()}")
 
-                # Validate Department & Course
+                # ✅ Validate department
                 try:
                     teacher_department = department.objects.get(
                         id=row['department'])
@@ -1015,6 +1160,7 @@ def add_teachers_bulk(request):
                         request, f"Row {index + 1}: Department ID {row['department']} does not exist.")
                     continue
 
+                # ✅ Validate course
                 try:
                     course = Course.objects.get(id=row['course'])
                 except Course.DoesNotExist:
@@ -1022,7 +1168,7 @@ def add_teachers_bulk(request):
                         request, f"Row {index + 1}: Course ID {row['course']} does not exist.")
                     continue
 
-                # Handle Image File
+                # ✅ Handle image
                 pic_path = row['pic']
                 pic_file = None
                 try:
@@ -1032,70 +1178,61 @@ def add_teachers_bulk(request):
                         pic_file = File(img_file, name=pic_path)
                         image_files.append(img_file)
                     else:
-                        print(f"Image not found: {full_pic_path}")  # Debugging
+                        print(
+                            f"Row {index + 1}: Image not found at {full_pic_path}")
                 except Exception as e:
-                    print(f"Error handling image for row {index + 1}: {e}")
+                    print(f"Row {index + 1}: Error loading image: {e}")
 
-                # Create Teacher Object
-                try:
-                    teacher = Teacher(
-                        faculty_id=row['faculty_id'],
-                        firstname=row['firstname'],
-                        middlename=row['middlename'],
-                        lastname=row['lastname'],
-                        email=row['email'],
-                        password=make_password(row['password']),
-                        mobile_number=row['mobile_number'],
-                        gender=row['gender'],
-                        birth_date=parse_custom_date(row['birth_date']),
-                        address_line_1=row['address_line_1'],
-                        address_line_2=row['address_line_2'],
-                        country=row['country'],
-                        state=row['state'],
-                        city=row['city'],
-                        pincode=row['pincode'],
-                        joining_date=parse_custom_date(row['joining_date']),
-                        course=course,
-                        department=teacher_department,
-                        designations=row['designations'],
-                        achievements=row['achievements'],
-                        qualification=row['qualification'],
-                    )
+                # ✅ Create Teacher object
+                teacher = Teacher(
+                    faculty_id=row['faculty_id'],
+                    firstname=row['firstname'],
+                    middlename=row['middlename'],
+                    lastname=row['lastname'],
+                    email=row['email'],
+                    password=make_password(row['password']),
+                    mobile_number=row['mobile_number'],
+                    gender=row['gender'],
+                    birth_date=parse_custom_date(row['birth_date']),
+                    address_line_1=row['address_line_1'],
+                    address_line_2=row['address_line_2'],
+                    country=row['country'],
+                    state=row['state'],
+                    city=row['city'],
+                    pincode=row['pincode'],
+                    joining_date=parse_custom_date(row['joining_date']),
+                    course=course,
+                    department=teacher_department,
+                    designations=row['designations'],
+                    achievements=row['achievements'],
+                    qualification=row['qualification'],
+                )
 
-                    if pic_file:
-                        teacher.pic.save(pic_path, pic_file)
+                if pic_file:
+                    teacher.pic.save(pic_path, pic_file)
 
-                    teacher_objects.append(teacher)
-
-                except Exception as e:
-                    print(f"Row {index + 1} object creation error: {e}")
-                    messages.error(
-                        request, f"Row {index + 1} object creation error: {e}")
+                teacher_objects.append(teacher)
 
             except Exception as e:
-                print(f"Unexpected error at row {index + 1}: {e}")
                 messages.error(
-                    request, f"Unexpected error at row {index + 1}: {e}")
+                    request, f"Row {index + 1}: Unexpected error: {str(e)}")
+                print(f"Unexpected error at row {index + 1}: {e}")
 
         try:
-            # Teacher.objects.bulk_create(teacher_objects)
             for teacher in teacher_objects:
                 teacher.save()
 
             for img_file in image_files:
                 img_file.close()
 
-            print("✅ Teachers have been added successfully!")
-            messages.success(request, "Teachers have been added successfully!")
+            messages.success(
+                request, f"{len(teacher_objects)} teacher(s) added successfully!")
 
         except Exception as e:
-            print("❌ Error saving teachers to the database:", str(e))
-            messages.error(
-                request, f"Error saving teachers to the database: {str(e)}")
+            messages.error(request, f"Error saving teachers: {str(e)}")
+            print("❌ Database save error:", str(e))
 
-        return render(request, 'superadmin/add_teachers_bulk.html', {
-            'success': "Teachers have been added successfully!"
-        })
+        return render(request, 'superadmin/add_teachers_bulk.html')
 
     return render(request, 'superadmin/add_teachers_bulk.html')
 
@@ -1103,18 +1240,24 @@ def add_teachers_bulk(request):
 def add_students_bulk(request):
     if request.method == "POST":
         IMAGE_UPLOAD_PATH = "media/student_images/"
-        csv_file = request.FILES.get('file')
+        uploaded_file = request.FILES.get('file')
 
-        # Validate CSV File Type
-        if not csv_file or not csv_file.name.endswith('.csv'):
-            messages.error(
-                request, "Invalid file format! Please upload a CSV file.")
+        # Validate File Type
+        if not uploaded_file:
+            messages.error(request, "No file uploaded.")
             return redirect('add_students_bulk')
 
         try:
-            data = pd.read_csv(csv_file).fillna('')
+            if uploaded_file.name.endswith('.csv'):
+                data = pd.read_csv(uploaded_file).fillna('')
+            elif uploaded_file.name.endswith(('.xlsx', '.xls')):
+                data = pd.read_excel(uploaded_file).fillna('')
+            else:
+                messages.error(
+                    request, "Unsupported file format. Upload CSV or Excel.")
+                return redirect('add_students_bulk')
         except Exception as e:
-            messages.error(request, f"Error reading CSV file: {str(e)}")
+            messages.error(request, f"Error reading file: {str(e)}")
             return redirect('add_students_bulk')
 
         student_objects = []
@@ -1122,23 +1265,22 @@ def add_students_bulk(request):
 
         for index, row in data.iterrows():
             try:
-                # Validate Department & Course
                 student_department = department.objects.get(
                     id=row['student_department'])
                 course = Course.objects.get(id=row['course'])
+                birth_date = parse_date(str(row['birth_date']))
 
-                birth_date = parse_date(row['birth_date'])
+                if not birth_date:
+                    raise ValueError(f"Invalid date format at row {index + 1}")
 
-                # Handle Image Upload
-                pic_path = row['student_image']
                 pic_file = None
+                pic_path = row['student_image']
                 if pic_path and os.path.exists(os.path.join(IMAGE_UPLOAD_PATH, pic_path)):
                     img_file = open(os.path.join(
                         IMAGE_UPLOAD_PATH, pic_path), 'rb')
                     pic_file = File(img_file, name=pic_path)
                     image_files.append(img_file)
 
-                # Create Student Object
                 student = Student(
                     enrollment=row['enrollment'],
                     firstname=row['firstname'],
@@ -1157,7 +1299,7 @@ def add_students_bulk(request):
                     pincode=row['pincode'],
                     student_department=student_department,
                     course=course,
-                    semester=row['semester'] if row['semester'] else '1',
+                    semester=int(row['semester']) if row['semester'] else 1,
                     division=row['division'] if row['division'] else 'A',
                 )
 
@@ -1168,24 +1310,23 @@ def add_students_bulk(request):
 
             except department.DoesNotExist:
                 messages.error(
-                    request, f"Row {index + 1}: Department ID {row['student_department']} does not exist.")
+                    request, f"Row {index + 1}: Invalid department ID: {row['student_department']}")
             except Course.DoesNotExist:
                 messages.error(
-                    request, f"Row {index + 1}: Course ID {row['course']} does not exist.")
+                    request, f"Row {index + 1}: Invalid course ID: {row['course']}")
             except Exception as e:
-                messages.error(
-                    request, f"Row {index + 1} error in processing: {str(e)}")
+                messages.error(request, f"Row {index + 1}: {str(e)}")
 
         try:
             Student.objects.bulk_create(student_objects)
 
-            for img_file in image_files:
-                img_file.close()
+            for img in image_files:
+                img.close()
 
             messages.success(request, "Students have been added successfully!")
+
         except Exception as e:
-            messages.error(
-                request, f"Error saving students to the database: {str(e)}")
+            messages.error(request, f"Error saving students: {str(e)}")
 
         return redirect('add_students_bulk')
 

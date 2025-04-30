@@ -151,7 +151,7 @@
 <div class="upload-container">
     <h2>Upload Students Data in Bulk</h2>
     <p>Upload a CSV or Excel file containing teacher information</p>
-    <form id="uploadForm" action="{% url 'add_teachers_bulk' %}" method="post" enctype="multipart/form-data">
+    <form id="uploadForm" action="/add_students_bulk/" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="upload-form" id="dropArea" onclick="triggerFileInput()">
             <input name="file" id="fileInput" type="file" class="upload-input" 
