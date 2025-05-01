@@ -56,7 +56,67 @@
         }
     </script>
 </head>
+<style>
+    .lecture-info {
+        margin-bottom: 20px;
+    }
 
+    .lecture-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .lecture-card:hover {
+        transform: scale(1.05);
+    }
+
+    .lecture-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .lecture-card p {
+        font-size: 14px;
+        line-height: 1.5;
+        color: #555;
+    }
+
+    .btn-qr {
+        margin-top: 15px;
+        background-color: #007bff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        color: #fff;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-qr:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-qr i {
+        margin-right: 8px;
+    }
+
+    .lecture-info p strong {
+        color: #333;
+    }
+
+    .text-center h5 {
+        font-size: 18px;
+        color: #888;
+    }
+</style>
 <body>
     <div class="main-wrapper">
         <div class="header-outer">
@@ -291,7 +351,7 @@
                   </div>
                
                 <h1>Today's Session</h1>
-                <div class="row">
+                {% comment %} <div class="row">
                     {% if todays_lectures %}
                     {% for lecture in todays_lectures %}
                     <div class="lecture-info">
@@ -316,6 +376,38 @@
                         window.location.href = url;
                       }
                     </script>
+                    {% else %}
+                        <div class="col-md-12 text-center">
+                            <h5>No lectures scheduled for today!</h5>
+                        </div>
+                    {% endif %}
+                </div> {% endcomment %}
+                <div class="row">
+                    {% if todays_lectures %}
+                        {% for lecture in todays_lectures %}
+                        <div class="col-md-4 lecture-info">
+                            <div class="lecture-card">
+                                <h4 class="lecture-title">{{ lecture.timetable_subject_name.subject_name }}</h4>
+                                <p><strong>Course:</strong> {{ lecture.course.course_name }}</p>
+                                <p><strong>Department:</strong> {{ lecture.timetable_department.department_name }}</p>
+                                <p><strong>Division:</strong> {{ lecture.division }}</p>
+                                <p><strong>Semester:</strong> {{ lecture.semester }}</p>
+                                <p><strong>Date:</strong> {{ lecture.date }}</p>
+                                <p><strong>Time:</strong> {{ lecture.lecture_start_time }} - {{ lecture.lecture_end_time }}</p>
+                                <button class="btn btn-primary btn-qr" onclick="generateQRCode('{{ lecture.timetable_subject_name.id }}', '{{ lecture.faculty_name.id }}')">
+                                    <i class="fas fa-qrcode"></i> Generate QR Code
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                
+                        <script>
+                            function generateQRCode(subjectId, facultyId) {
+                                const url = `/qr_code/?subject=${encodeURIComponent(subjectId)}&faculty=${encodeURIComponent(facultyId)}`;
+                                window.location.href = url;
+                            }
+                        </script>
+                
                     {% else %}
                         <div class="col-md-12 text-center">
                             <h5>No lectures scheduled for today!</h5>
