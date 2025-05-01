@@ -43,10 +43,6 @@
     <link rel="stylesheet" href="{% static 'assets/css/select2.min.css' %}" />
 
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
-    <!--[if lt IE 9]>
-      <script src="{% static 'assets/js/html5shiv.min.js' %}"></script>
-      <script src="{% static 'assets/js/respond.min.js' %}"></script>
-    <![endif]-->
   </head>
 
   <body>
@@ -263,42 +259,7 @@
               {% endfor %}
             </div>
           </div>
-          {% comment %} {% for i in all_teachers %}
-          <div class="row staff-grid-row">
-            <div class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-              <div class="profile-widget">
-                <div class="profile-img">
-                  <a href="/faculty_individual_profile/{{i.faculty_id}}"
-                    ><img class="avatar" src="{{ i.pic.url }}" alt="loading"
-                  /></a>
-                </div>
-                <div class="dropdown profile-action">
-                  <a
-                    href="#"
-                    class="action-icon dropdown-toggle"
-                    data-toggle="dropdown"
-                    aria-expanded="false"
-                    ><i class="fas fa-ellipsis-v"></i
-                  ></a>
-                  <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="/edit_teacher/{{i.faculty_id}}"
-                      ><i class="fas fa-pencil-alt m-r-5"></i> Edit</a
-                    >
-                    <a class="dropdown-item" href="/delete_teacher/{{i.id}}"
-                      ><i class="fas fa-trash-alt m-r-5"></i> Delete</a
-                    >
-                  </div>
-                </div>
-
-                <h4 class="user-name m-t-10 m-b-0 text-ellipsis">
-                  <a href="/faculty_individual_profile/{{i.faculty_id}}"
-                    >{{i.firstname}}</a>
-                </h4>
-                <div class="small text-muted">{{i.faculty_id}}</div>
-              </div>
-            </div>
-          </div>
-          {% endfor %} {% endcomment %}
+    
         
         </div>
       </div>
@@ -337,5 +298,4 @@
     <script src="assets/js/app.js"></script>
   </body>
 
-  <!-- Mirrored from dreamguystech.com/preadmin/html/school/light/all-teachers by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jun 2022 14:07:20 GMT -->
 </html>
