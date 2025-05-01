@@ -219,3 +219,14 @@ class AttendanceRecord(models.Model):
 
     def __str__(self):
         return f"{self.student.firstname} - {self.session.subject.subject_name} @ {self.timestamp}"
+
+
+class SubjectTeacher(models.Model):
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('subject', 'teacher')  # prevent duplicates
+
+    def __str__(self):
+        return f"{self.subject.subject_name} - {self.teacher.firstname}"

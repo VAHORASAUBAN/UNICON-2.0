@@ -232,9 +232,9 @@
                 <p class="mb-2"><strong>Company Name:</strong> ${company.placement_company_name}</p>
                 <p class="mb-2"><strong>Location:</strong> ${company.placement_company_location}</p>
                 <p class="mb-2"><strong>Position:</strong> ${company.job_role}</p>
-                <p class="mb-2"><strong>Work Mode:</strong> Remote / On-Site</p>
+                {% comment %} <p class="mb-2"><strong>Work Mode:</strong> Remote / On-Site</p> {% endcomment %}
                 <p class="mb-2"><strong>Salary Range:</strong> ${company.placement_company_package}</p>
-                <p class="mb-2"><strong>Website:</strong> <a href="#" class="text-primary">Company Website</a></p>
+                {% comment %} <p class="mb-2"><strong>Website:</strong> <a href="#" class="text-primary">Company Website</a></p> {% endcomment %}
                 <p class="mb-2"><strong>Interview Date:</strong> ${company.interview_date}</p>
                 <p class="mb-2"><strong>Application Deadline:</strong> ${company.deadline_date}</p>
             `);
