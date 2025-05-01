@@ -27,7 +27,7 @@ class _FacultyProfileScreenState extends State<FacultyProfileScreen> {
       final response = await http.post(
         Uri.parse(url),
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"faculty_id": 1}), // Replace with actual faculty_id
+        body: jsonEncode({"faculty_id": 2}), // Replace with actual faculty_id
       );
 
       if (response.statusCode == 200) {

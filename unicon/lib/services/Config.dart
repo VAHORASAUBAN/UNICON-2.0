@@ -1,5 +1,5 @@
 class Config {
-  static const String baseIp = "http://192.168.128.166:8000"; // <- Change IP only here
+  static const String baseIp = "http://192.168.188.15:8000"; // <- Change IP only here
 
   // Auth Endpoints
   static const String studentLogin = "$baseIp/student/login/";
@@ -8,6 +8,8 @@ class Config {
   // Profiles and other endpoints
   static const String studentProfile = "$baseIp/student/profile/";
   static const String teacherProfile = "$baseIp/teacher/profile/";
+  //static const String allStudents = "$baseIp/teacher/students/";
+  static const String allStudents = "$baseIp/teacher/students/";
 
 // Add more as needed, all use baseIp
 }
