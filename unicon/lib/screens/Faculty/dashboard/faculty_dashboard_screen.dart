@@ -50,6 +50,9 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -78,7 +81,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          _buildDashboardContent(),
+          _buildDashboardContent(screenWidth, screenHeight),
           Center(
             child: Text(
               "TimeTable",
@@ -99,41 +102,43 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
     );
   }
 
-  Widget _buildDashboardContent() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AttendancePieChart(),
-          const SizedBox(height: 24),
+  Widget _buildDashboardContent(double screenWidth, double screenHeight) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(screenWidth * 0.04), // 4% padding on all sides
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AttendancePieChart(),
+            SizedBox(height: screenHeight * 0.03), // 3% height spacing
 
-          // Today's Classes Section
-          const Text(
-            "Today's Classes",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 12),
+            // Today's Classes Section
+            const Text(
+              "Today's Classes",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+            SizedBox(height: screenHeight * 0.02), // 2% height spacing
 
-          // Timeline View: show loading, no classes, or the timeline
-          if (isLoading)
-            const Center(child: CircularProgressIndicator())
-          else if (timetable.isEmpty)
-            const Center(
-              child: Text(
-                "No Classes Today",
-                style: TextStyle(fontSize: 16, color: Colors.black54),
-              ),
-            )
-          else
-            _buildTimeline(),
-        ],
+            // Timeline View: show loading, no classes, or the timeline
+            if (isLoading)
+              const Center(child: CircularProgressIndicator())
+            else if (timetable.isEmpty)
+              const Center(
+                child: Text(
+                  "No Classes Today",
+                  style: TextStyle(fontSize: 16, color: Colors.black54),
+                ),
+              )
+            else
+              _buildTimeline(screenWidth),
+          ],
+        ),
       ),
     );
   }
 
   // Enhanced Timeline Widget
-  Widget _buildTimeline() {
+  Widget _buildTimeline(double screenWidth) {
     return Column(
       children: List.generate(timetable.length, (index) {
         final item = timetable[index];
@@ -180,7 +185,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                 ),
             ],
           ),
-          const SizedBox(width: 7 ), // Space between line & card
+          const SizedBox(width: 7), // Space between line & card
 
           // Class Details Card
           Expanded(
