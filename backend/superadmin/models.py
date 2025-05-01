@@ -107,6 +107,7 @@ class Teacher(models.Model):
     def __str__(self):
         return f'{self.firstname} {self.lastname} ({self.faculty_id})'
 
+
 class Batch(models.Model):
     batch_start_year = models.IntegerField(null=True, blank=True)
     batch_end_year = models.IntegerField(null=True, blank=True)
@@ -154,7 +155,8 @@ class Placement(models.Model):
 
 
 class Timetable(models.Model):
-    timetable_subject_name = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    timetable_subject_name = models.ForeignKey(
+        Subject, on_delete=models.CASCADE)
     faculty_name = models.ForeignKey(Teacher, on_delete=models.CASCADE)
 
     day = models.CharField(
@@ -173,7 +175,8 @@ class Timetable(models.Model):
     lecture_end_time = models.CharField(max_length=20, default="10:00 AM")
 
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    timetable_department = models.ForeignKey(department, on_delete=models.CASCADE)
+    timetable_department = models.ForeignKey(
+        department, on_delete=models.CASCADE)
     semester = models.IntegerField(null=True, blank=True)
     batch = models.ForeignKey(Batch, on_delete=models.CASCADE)
 
@@ -185,7 +188,6 @@ class Timetable(models.Model):
 
     def __str__(self):
         return f"{self.timetable_subject_name} - {self.day} ({self.lecture_start_time} to {self.lecture_end_time})"
-
 
 
 class AttendanceSession(models.Model):
@@ -223,9 +225,6 @@ class AttendanceRecord(models.Model):
 class SubjectTeacher(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ('subject', 'teacher')  # prevent duplicates
 
     def __str__(self):
         return f"{self.subject.subject_name} - {self.teacher.firstname}"

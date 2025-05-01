@@ -94,6 +94,9 @@ urlpatterns = [
          name="faculty_attendence"),
     path('faculty_attendence_1/', superadmin_views.faculty_attendence_1,
          name="faculty_attendence_1"),
+    path('update_attendance/', superadmin_views.update_attendance,
+         name="update_attendance"),
+
     #     path('faculty_login/', superadmin_views.faculty_login, name='faculty_login'),
     path('faculty_logout_view/', superadmin_views.faculty_logout_view,
          name='faculty_logout_view'),
