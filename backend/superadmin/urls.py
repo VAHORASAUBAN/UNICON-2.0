@@ -114,12 +114,24 @@ urlpatterns = [
     path('teacher/login/', superadmin_views.teacher_login, name='teacher_login'),
     path('teacher/students/', superadmin_views.all_students_api,
          name='all_students_api'),
-    
+
+
+    path('teacher/faculty_today_sessions/', superadmin_views.faculty_today_sessions,
+         name='faculty_today_sessions'),
+    path('teacher/faculty_week_sessions/', superadmin_views.faculty_week_sessions,
+         name='faculty_week_sessions'),
+
+
     path('student/today-sessions/', superadmin_views.student_today_sessions,
          name='student-today-sessions'),
+    path('student/student_week_sessions/', superadmin_views.student_week_sessions,
+         name='student-student_week_sessions'),
+
+
     path('student/placements/', superadmin_views.student_placement_list,
          name='student-placements'),
     path('student/mark-attendance/',
          superadmin_views.mark_attendance, name='mark_attendance'),
+
 
 ]

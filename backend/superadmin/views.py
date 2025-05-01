@@ -2077,3 +2077,128 @@ def update_attendance(request):
         return JsonResponse({"error": "Invalid student ID"}, status=400)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
+
+@api_view(['GET'])
+def faculty_today_sessions(request):
+    try:
+        faculty_id = request.query_params.get('faculty_id')
+
+        if not faculty_id:
+            return Response({'error': 'Faculty ID required'}, status=400)
+
+        teacher = Teacher.objects.get(faculty_id=faculty_id)
+
+        today_day = datetime.today().strftime('%A')
+        print(f"Faculty ID: {teacher.faculty_id}, Today: {today_day}")
+
+        # Filter timetable by faculty and day
+        timetable_qs = Timetable.objects.filter(
+            day=today_day,
+            faculty_name=teacher
+        )
+
+        if timetable_qs.exists():
+            # Sort sessions by lecture start time
+            sorted_timetable = sorted(
+                timetable_qs,
+                key=lambda x: datetime.strptime(
+                    x.lecture_start_time.replace('.', ':'), "%I:%M %p")
+            )
+
+            serializer = TimetableSerializer(
+                sorted_timetable, many=True, context={'request': request})
+            return Response({'today_sessions': serializer.data}, status=200)
+
+        else:
+            return Response({'message': 'No sessions for today'}, status=404)
+
+    except Teacher.DoesNotExist:
+        return Response({'error': 'Faculty not found'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
+
+
+@api_view(['GET'])
+def faculty_week_sessions(request):
+    try:
+        faculty_id = request.query_params.get('faculty_id')
+
+        if not faculty_id:
+            return Response({'error': 'Faculty ID required'}, status=400)
+
+        teacher = Teacher.objects.get(faculty_id=faculty_id)
+
+        week_days = ['Monday', 'Tuesday', 'Wednesday',
+                     'Thursday', 'Friday', 'Saturday']
+        week_data = {}
+
+        for day in week_days:
+            sessions = Timetable.objects.filter(
+                day=day,
+                faculty_name=teacher
+            )
+
+            sorted_sessions = sorted(
+                sessions,
+                key=lambda x: datetime.strptime(
+                    x.lecture_start_time.replace('.', ':'), "%I:%M %p")
+            )
+
+            serializer = TimetableSerializer(
+                sorted_sessions, many=True, context={'request': request})
+            week_data[day] = serializer.data
+
+        return Response({'week_sessions': week_data}, status=200)
+
+    except Teacher.DoesNotExist:
+        return Response({'error': 'Faculty not found'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
+
+
+@api_view(['GET'])
+def student_week_sessions(request):
+    try:
+        student_id = request.query_params.get('student_id')
+
+        if not student_id:
+            return Response({'error': 'Student ID required'}, status=400)
+
+        # Fetch the student based on the student_id
+        student = Student.objects.get(id=student_id)
+
+        week_days = ['Monday', 'Tuesday', 'Wednesday',
+                     'Thursday', 'Friday', 'Saturday']
+        week_data = {}
+
+        # Loop through the days of the week
+        for day in week_days:
+            # Filter timetable based on student details (semester, division, course, department)
+            sessions = Timetable.objects.filter(
+                day=day,
+                semester=student.semester,
+                division=student.division,
+                course=student.course,
+                timetable_department=student.student_department
+            )
+
+            # Sorting the timetable based on lecture start time
+            sorted_sessions = sorted(
+                sessions,
+                key=lambda x: datetime.strptime(
+                    x.lecture_start_time.replace('.', ':'), "%I:%M %p")
+            )
+
+            # Serialize the sessions data
+            serializer = TimetableSerializer(
+                sorted_sessions, many=True, context={'request': request})
+            week_data[day] = serializer.data
+
+        # Return the structured response with sessions for the entire week
+        return Response({'week_sessions': week_data}, status=200)
+
+    except Student.DoesNotExist:
+        return Response({'error': 'Student not found'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
