@@ -1,20 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
-
 {% load static %}
 
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-	<link
-    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
-    rel="stylesheet"
-/>
+	<link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
 	<title>UNICON</title>
 	<link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/logo1.png' %}" />
-  
+
 	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
 
 	<link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
@@ -68,117 +62,117 @@
 				</ul>
 
 				<ul class="nav user-menu float-right">
-                    <li class="nav-item dropdown d-none d-sm-block">
-                        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                            <i class="fa-solid fa-bell"  style="color: #337AB7;"></i>
-                        </a>
-                        <div class="dropdown-menu notifications">
-                            <div class="topnav-dropdown-header">
-                                <span>Notifications</span>
-                            </div>
-                            <div class="drop-scroll">
-                                <ul class="notification-list">
-                                    <li class="notification-message">
-                                        <a href="activities">
-                                            <div class="media">
-                                                <span class="avatar">
-                                                    <img alt="John Doe" src="{% static 'assets/img/user-06.jpg' %}"
-                                                        class="img-fluid rounded-circle" />
-                                                </span>
-                                                <div class="media-body">
-                                                    <p class="noti-details">
-                                                        <span class="noti-title">John Doe</span> is now following you
-                                                    </p>
-                                                    <p class="noti-time">
-                                                        <span class="notification-time">4 mins ago</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="notification-message">
-                                        <a href="activities">
-                                            <div class="media">
-                                                <span class="avatar">T</span>
-                                                <div class="media-body">
-                                                    <p class="noti-details">
-                                                        <span class="noti-title">Tarah Shropshire</span> sent you a
-                                                        message.
-                                                    </p>
-                                                    <p class="noti-time">
-                                                        <span class="notification-time">6 mins ago</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="notification-message">
-                                        <a href="activities">
-                                            <div class="media">
-                                                <span class="avatar">L</span>
-                                                <div class="media-body">
-                                                    <p class="noti-details">
-                                                        <span class="noti-title">Misty Tison</span> liked your photo.
-                                                    </p>
-                                                    <p class="noti-time">
-                                                        <span class="notification-time">8 mins ago</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="notification-message">
-                                        <a href="activities">
-                                            <div class="media">
-                                                <span class="avatar">G</span>
-                                                <div class="media-body">
-                                                    <p class="noti-details">
-                                                        <span class="noti-title">Rolland Webber</span> booked an
-                                                        appointment for a meeting.
-                                                    </p>
-                                                    <p class="noti-time">
-                                                        <span class="notification-time">12 mins ago</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="notification-message">
-                                        <a href="activities">
-                                            <div class="media">
-                                                <span class="avatar">T</span>
-                                                <div class="media-body">
-                                                    <p class="noti-details">
-                                                        <span class="noti-title">Bernardo Galaviz</span> liked your
-                                                        photo.
-                                                    </p>
-                                                    <p class="noti-time">
-                                                        <span class="notification-time">2 days ago</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="topnav-dropdown-footer">
-                                <a href="activities">View all Notifications</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown has-arrow">
-                        <a href="#" class="nav-link user-link" data-toggle="dropdown">
-                            <span class="user-img">
-                                <i class="fa-solid fa-user"  style="color: #337AB7;"></i>
-                            </span>
-                        </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/profile/">My Profile</a>
-                            <a class="dropdown-item" href="/edit_profile/">Edit Profile</a>
-                            <a class="dropdown-item" href="/logout/">Logout</a>
-                        </div>
-                    </li>
-                </ul>
+					<li class="nav-item dropdown d-none d-sm-block">
+						<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+							<i class="fa-solid fa-bell" style="color: #337AB7;"></i>
+						</a>
+						<div class="dropdown-menu notifications">
+							<div class="topnav-dropdown-header">
+								<span>Notifications</span>
+							</div>
+							<div class="drop-scroll">
+								<ul class="notification-list">
+									<li class="notification-message">
+										<a href="activities">
+											<div class="media">
+												<span class="avatar">
+													<img alt="John Doe" src="{% static 'assets/img/user-06.jpg' %}"
+														class="img-fluid rounded-circle" />
+												</span>
+												<div class="media-body">
+													<p class="noti-details">
+														<span class="noti-title">John Doe</span> is now following you
+													</p>
+													<p class="noti-time">
+														<span class="notification-time">4 mins ago</span>
+													</p>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li class="notification-message">
+										<a href="activities">
+											<div class="media">
+												<span class="avatar">T</span>
+												<div class="media-body">
+													<p class="noti-details">
+														<span class="noti-title">Tarah Shropshire</span> sent you a
+														message.
+													</p>
+													<p class="noti-time">
+														<span class="notification-time">6 mins ago</span>
+													</p>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li class="notification-message">
+										<a href="activities">
+											<div class="media">
+												<span class="avatar">L</span>
+												<div class="media-body">
+													<p class="noti-details">
+														<span class="noti-title">Misty Tison</span> liked your photo.
+													</p>
+													<p class="noti-time">
+														<span class="notification-time">8 mins ago</span>
+													</p>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li class="notification-message">
+										<a href="activities">
+											<div class="media">
+												<span class="avatar">G</span>
+												<div class="media-body">
+													<p class="noti-details">
+														<span class="noti-title">Rolland Webber</span> booked an
+														appointment for a meeting.
+													</p>
+													<p class="noti-time">
+														<span class="notification-time">12 mins ago</span>
+													</p>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li class="notification-message">
+										<a href="activities">
+											<div class="media">
+												<span class="avatar">T</span>
+												<div class="media-body">
+													<p class="noti-details">
+														<span class="noti-title">Bernardo Galaviz</span> liked your
+														photo.
+													</p>
+													<p class="noti-time">
+														<span class="notification-time">2 days ago</span>
+													</p>
+												</div>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+							<div class="topnav-dropdown-footer">
+								<a href="activities">View all Notifications</a>
+							</div>
+						</div>
+					</li>
+					<li class="nav-item dropdown has-arrow">
+						<a href="#" class="nav-link user-link" data-toggle="dropdown">
+							<span class="user-img">
+								<i class="fa-solid fa-user" style="color: #337AB7;"></i>
+							</span>
+						</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="/profile/">My Profile</a>
+							<a class="dropdown-item" href="/edit_profile/">Edit Profile</a>
+							<a class="dropdown-item" href="/logout/">Logout</a>
+						</div>
+					</li>
+				</ul>
 				<div class="dropdown mobile-user-menu float-right">
 					<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 						<i class="fas fa-ellipsis-v"></i>
@@ -203,9 +197,9 @@
 						<div class="col-lg-6 col-md-6 col-sm-6 col-12">
 							<h5 class="text-uppercase mb-0 mt-0 page-title">Edit Teacher</h5>
 						</div>
-							{% if request.GET.success %}
-  								<div class="alert alert-success">Teacher updated successfully!</div>
-							{% endif %}
+						{% if request.GET.success %}
+						<div class="alert alert-success">Teacher updated successfully!</div>
+						{% endif %}
 						<div class="col-lg-6 col-md-6 col-sm-6 col-12">
 							<ul class="breadcrumb float-right p-0 mb-0">
 								<li class="breadcrumb-item"><a href="/index/"><i class="fas fa-home"></i> Home</a>
@@ -223,178 +217,181 @@
 								<div class="card-body">
 									<div class="row">
 										<div class="col-lg-12 col-md-12 col-sm-12 col-12">
-										  <form class="custom-mt-form" action="{% url 'edit_teacher' teacher.faculty_id %}" method="post" enctype="multipart/form-data">
-											{% csrf_token %}
-										  
-											<div class="form-group">
-											  <label>Id</label>
-											  <input type="text" class="form-control" name="faculty_id" value="{{ teacher.faculty_id }}" readonly/>
-											</div>
-										  
-											<div class="form-group">
-											  <label>Firstname</label>
-											  <input type="text" class="form-control" name="firstname" value="{{ teacher.firstname }}" />
-											</div>
-										  
-											<div class="form-group">
-											  <label>Middlename</label>
-											  <input type="text" class="form-control" name="middlename" value="{{ teacher.middlename }}" />
-											</div>
-										  
-											<div class="form-group">
-											  <label>Lastname</label>
-											  <input type="text" class="form-control" name="lastname" value="{{ teacher.lastname }}" />
-											</div>
-										  
-											<div class="form-group">
-											  <label>Email</label>
-											  <input type="email" class="form-control" name="email" value="{{ teacher.email }}" />
-											</div>
-										  
-											<div class="form-group">
-											  <label>Password</label>
-											  <input type="password" class="form-control" name="password" placeholder="Enter new password (optional)" />
-											</div>
-										  
-											<div class="form-group">
-											  <label>Mobile Number</label>
-											  <input type="number" class="form-control" name="mobile_number" value="{{ teacher.mobile_number }}" />
-											</div>
-										  
-											<div class="form-group">
-											  <label>Gender</label>
-											  <select class="form-control select" name="gender">
-												<option value="Male" {% if teacher.gender == "Male" %}selected{% endif %}>Male</option>
-												<option value="Female" {% if teacher.gender == "Female" %}selected{% endif %}>Female</option>
-											  </select>
-											</div>
-										  
-											<div class="form-group">
-											  <label>Birth Date</label>
-											  <input type="date" class="form-control datetimepicker" name="birth_date" value="{{ teacher.birth_date|date:'Y-m-d' }}" />
-											</div>
-										  
-											<div class="form-group">
-											  <label>Address Line 1</label>
-											  <input type="text" class="form-control" name="address_line_1" value="{{ teacher.address_line_1 }}" />
-											</div>
-										  
-											<div class="form-group">
-											  <label>Address Line 2</label>
-											  <input type="text" class="form-control" name="address_line_2" value="{{ teacher.address_line_2 }}" />
-											</div>
-										  
-											<!-- Country -->
-											  <div class="form-group">
-												<label>Country</label>
-												<select
-												  class="form-control select form-select country"
-												  aria-label="Default select example"
-												  name="country"
-												  onchange="loadStates()">
-												  <option value="{{ teacher.country }}" selected>{{ teacher.country }}</option>
-												  <!-- More country options can be added via JS or here -->
-												</select>
-											  </div>
-				  
-											<!-- State -->
-											<div class="form-group">
-											  <label>State</label>
-											  <select
-												class="form-control select form-select state"
-												aria-label="Default select example"
-												name="state"
-												onchange="loadCities()">
-												<option value="{{ teacher.state }}" selected>{{ teacher.state }}</option>
-												<!-- More state options will be populated via JS -->
-											  </select>
-											</div>
-				  
-											  <!-- City -->
-											  <div class="form-group">
-												<label>City</label>
-												<select class="form-control select form-select city" name="city">
-												  <option value="{{ teacher.city }}" selected>{{ teacher.city }}</option>
-												  <!-- More city options will be populated via JS -->
-												</select>
-											  </div>
-				  
-											<div class="form-group">
-											  <label>Pincode</label>
-											  <input type="number" class="form-control" name="pincode" value="{{ teacher.pincode }}" />
-											</div>
-											<div class="form-group">
-												<label>Joining Date</label>
-												<input
-												  class="form-control datetimepicker-input datetimepicker"
-												  type="date"
-												  data-toggle="datetimepicker"
-												  name="joining_date"
-												  value="{{ teacher.joining_date|date:'Y-m-d' }}"
-												/>
-											  </div>
-											  <div class="form-group">
-												<label>Course</label>
-												<select class="form-control select" name="course">
-												  {% for i in all_courses %}
-													<option value="{{ i.id }}" {% if teacher.course.id == i.id %}selected{% endif %}>{{ i.course_name }}</option>
-												  {% endfor %}
-												</select>
-											  </div>
-											<div class="form-group">
-											  <label>Department</label>
-											  <select class="form-control select" name="department">
-												{% for i in all_departments %}
-												  <option value="{{ i.id }}" {% if teacher.department.id == i.id %}selected{% endif %}>{{ i.department_name }}</option>
-												{% endfor %}
-											  </select>
-											</div>
-											<div class="form-group">
-												<label>Designations</label>
-												<input
-												  type="text"
-												  class="form-control"
-												  name="designations"
-												  value="{{ teacher.designations }}"
-												/>
-											  </div>
-											  <div class="form-group">
-												<label>Achievements</label>
-												<input
-												  type="text"
-												  class="form-control"
-												  name="achievements"
-												  value="{{ teacher.achievements }}"
-												/>
-											  </div>
-											  <div class="form-group">
-												<label>Qualification</label>
-												<input
-												  type="text"
-												  class="form-control"
-												  name="qualification"
-												  value="{{ teacher.qualification }}"
-												/>
-											  </div>
-											
-											<div class="form-group">
-											  <label>Teacher Image</label>
-											  <img src="{{teacher.pic.url}}" alt="loading..." srcset="" height="100px" width="100px" class="rounded-circle" />
-											</div>
-											<div class="form-group">
-											  <label>teacher Image</label>
-											  <input type="file" name="pic" accept="image/*" class="form-control" />
-											</div>
-										  
-											<div class="form-group text-center custom-mt-form-group">
-											  <button class="btn btn-primary mr-2" type="submit">Submit</button>
-											  <button class="btn btn-secondary" type="reset">Cancel</button>
-											</div>
-										</form>
-										  
-				  
+											<form class="custom-mt-form"
+												action="{% url 'edit_teacher' teacher.faculty_id %}" method="post"
+												enctype="multipart/form-data">
+												{% csrf_token %}
+
+												<div class="form-group">
+													<label>Id</label>
+													<input type="text" class="form-control" name="faculty_id"
+														value="{{ teacher.faculty_id }}" readonly />
+												</div>
+
+												<div class="form-group">
+													<label>Firstname</label>
+													<input type="text" class="form-control" name="firstname"
+														value="{{ teacher.firstname }}" />
+												</div>
+
+												<div class="form-group">
+													<label>Middlename</label>
+													<input type="text" class="form-control" name="middlename"
+														value="{{ teacher.middlename }}" />
+												</div>
+
+												<div class="form-group">
+													<label>Lastname</label>
+													<input type="text" class="form-control" name="lastname"
+														value="{{ teacher.lastname }}" />
+												</div>
+
+												<div class="form-group">
+													<label>Email</label>
+													<input type="email" class="form-control" name="email"
+														value="{{ teacher.email }}" />
+												</div>
+
+												<div class="form-group">
+													<label>Password</label>
+													<input type="password" class="form-control" name="password"
+														placeholder="Enter new password (optional)" />
+												</div>
+
+												<div class="form-group">
+													<label>Mobile Number</label>
+													<input type="number" class="form-control" name="mobile_number"
+														value="{{ teacher.mobile_number }}" />
+												</div>
+
+												<div class="form-group">
+													<label>Gender</label>
+													<select class="form-control select" name="gender">
+														<option value="Male" {% if teacher.gender=="Male" %}selected{%
+															endif %}>Male</option>
+														<option value="Female" {% if teacher.gender=="Female"
+															%}selected{% endif %}>Female</option>
+													</select>
+												</div>
+
+												<div class="form-group">
+													<label>Birth Date</label>
+													<input type="date" class="form-control datetimepicker"
+														name="birth_date"
+														value="{{ teacher.birth_date|date:'Y-m-d' }}" />
+												</div>
+
+												<div class="form-group">
+													<label>Address Line 1</label>
+													<input type="text" class="form-control" name="address_line_1"
+														value="{{ teacher.address_line_1 }}" />
+												</div>
+
+												<div class="form-group">
+													<label>Address Line 2</label>
+													<input type="text" class="form-control" name="address_line_2"
+														value="{{ teacher.address_line_2 }}" />
+												</div>
+
+												<!-- Country -->
+												<div class="form-group">
+													<label>Country</label>
+													<select class="form-control select form-select country"
+														aria-label="Default select example" name="country"
+														onchange="loadStates()">
+														<option value="{{ teacher.country }}" selected>{{
+															teacher.country }}</option>
+														<!-- More country options can be added via JS or here -->
+													</select>
+												</div>
+
+												<!-- State -->
+												<div class="form-group">
+													<label>State</label>
+													<select class="form-control select form-select state"
+														aria-label="Default select example" name="state"
+														onchange="loadCities()">
+														<option value="{{ teacher.state }}" selected>{{ teacher.state }}
+														</option>
+														<!-- More state options will be populated via JS -->
+													</select>
+												</div>
+
+												<!-- City -->
+												<div class="form-group">
+													<label>City</label>
+													<select class="form-control select form-select city" name="city">
+														<option value="{{ teacher.city }}" selected>{{ teacher.city }}
+														</option>
+														<!-- More city options will be populated via JS -->
+													</select>
+												</div>
+
+												<div class="form-group">
+													<label>Pincode</label>
+													<input type="number" class="form-control" name="pincode"
+														value="{{ teacher.pincode }}" />
+												</div>
+												<div class="form-group">
+													<label>Joining Date</label>
+													<input class="form-control datetimepicker-input datetimepicker"
+														type="date" data-toggle="datetimepicker" name="joining_date"
+														value="{{ teacher.joining_date|date:'Y-m-d' }}" />
+												</div>
+												<div class="form-group">
+													<label>Course</label>
+													<select class="form-control select" name="course">
+														{% for i in all_courses %}
+														<option value="{{ i.id }}" {% if teacher.course.id==i.id
+															%}selected{% endif %}>{{ i.course_name }}</option>
+														{% endfor %}
+													</select>
+												</div>
+												<div class="form-group">
+													<label>Department</label>
+													<select class="form-control select" name="department">
+														{% for i in all_departments %}
+														<option value="{{ i.id }}" {% if teacher.department.id==i.id
+															%}selected{% endif %}>{{ i.department_name }}</option>
+														{% endfor %}
+													</select>
+												</div>
+												<div class="form-group">
+													<label>Designations</label>
+													<input type="text" class="form-control" name="designations"
+														value="{{ teacher.designations }}" />
+												</div>
+												<div class="form-group">
+													<label>Achievements</label>
+													<input type="text" class="form-control" name="achievements"
+														value="{{ teacher.achievements }}" />
+												</div>
+												<div class="form-group">
+													<label>Qualification</label>
+													<input type="text" class="form-control" name="qualification"
+														value="{{ teacher.qualification }}" />
+												</div>
+
+												<div class="form-group">
+													<label>Teacher Image</label>
+													<img src="{{teacher.pic.url}}" alt="loading..." srcset=""
+														height="100px" width="100px" class="rounded-circle" />
+												</div>
+												<div class="form-group">
+													<label>teacher Image</label>
+													<input type="file" name="pic" accept="image/*"
+														class="form-control" />
+												</div>
+
+												<div class="form-group text-center custom-mt-form-group">
+													<button class="btn btn-primary mr-2" type="submit">Submit</button>
+													<button class="btn btn-secondary" type="reset">Cancel</button>
+												</div>
+											</form>
+
+
 										</div>
-									  </div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -628,142 +625,142 @@
 	</div>
 	<script>
 		var config = {
-		  cUrl: "https://api.countrystatecity.in/v1/countries",
-		  ckey: "S3lLdVBHeDZTR1RYWUU5M3IxdG1jUTZvYTRLYlQ3bWRXSWFOcWhTSw==",
+			cUrl: "https://api.countrystatecity.in/v1/countries",
+			ckey: "S3lLdVBHeDZTR1RYWUU5M3IxdG1jUTZvYTRLYlQ3bWRXSWFOcWhTSw==",
 		};
-  
+
 		var countrySelect = document.querySelector(".country"),
-		  stateSelect = document.querySelector(".state"),
-		  citySelect = document.querySelector(".city");
-  
+			stateSelect = document.querySelector(".state"),
+			citySelect = document.querySelector(".city");
+
 		// Store country data globally
 		var countryData = [];
 		// Store state data globally for the selected country
 		var stateData = [];
-  
+
 		function loadCountries() {
-		  let apiEndPoint = config.cUrl;
-  
-		  fetch(apiEndPoint, { headers: { "X-CSCAPI-KEY": config.ckey } })
-			.then((Response) => Response.json())
-			.then((data) => {
-			  // Store the country data globally
-			  countryData = data;
-  
-			  // Check if data is an array
-			  if (Array.isArray(data)) {
-				data.forEach((country) => {
-				  const option = document.createElement("option");
-				  option.value = country.name; // Store country name
-				  option.textContent = country.name;
-				  countrySelect.appendChild(option);
-				});
-			  } else {
-				console.error("Received data is not an array:", data);
-			  }
-			})
-			.catch((error) => console.error("Error loading countries:", error));
-  
-		  stateSelect.disabled = true;
-		  citySelect.disabled = true;
-		  stateSelect.style.pointerEvents = "none";
-		  citySelect.style.pointerEvents = "none";
+			let apiEndPoint = config.cUrl;
+
+			fetch(apiEndPoint, { headers: { "X-CSCAPI-KEY": config.ckey } })
+				.then((Response) => Response.json())
+				.then((data) => {
+					// Store the country data globally
+					countryData = data;
+
+					// Check if data is an array
+					if (Array.isArray(data)) {
+						data.forEach((country) => {
+							const option = document.createElement("option");
+							option.value = country.name; // Store country name
+							option.textContent = country.name;
+							countrySelect.appendChild(option);
+						});
+					} else {
+						console.error("Received data is not an array:", data);
+					}
+				})
+				.catch((error) => console.error("Error loading countries:", error));
+
+			stateSelect.disabled = true;
+			citySelect.disabled = true;
+			stateSelect.style.pointerEvents = "none";
+			citySelect.style.pointerEvents = "none";
 		}
-  
+
 		function loadStates() {
-		  stateSelect.disabled = false;
-		  citySelect.disabled = true;
-		  stateSelect.style.pointerEvents = "auto";
-		  citySelect.style.pointerEvents = "none";
-  
-		  const selectedCountryName = countrySelect.value;
-  
-		  // Find the selected country's ISO code from the global `countryData`
-		  const selectedCountry = countryData.find(
-			(country) => country.name === selectedCountryName
-		  );
-		  const selectedCountryCode = selectedCountry ? selectedCountry.iso2 : "";
-  
-		  stateSelect.innerHTML = '<option value="">Select State</option>';
-		  citySelect.innerHTML = '<option value="">Select City</option>';
-  
-		  if (!selectedCountryCode) {
-			console.error("Country code not found for:", selectedCountryName);
-			return;
-		  }
-  
-		  fetch(`${config.cUrl}/${selectedCountryCode}/states`, {
-			headers: { "X-CSCAPI-KEY": config.ckey },
-		  })
-			.then((response) => response.json())
-			.then((data) => {
-			  // Store the state data globally for the selected country
-			  stateData = data;
-  
-			  // Check if data is an array
-			  if (Array.isArray(data)) {
-				data.forEach((state) => {
-				  const option = document.createElement("option");
-				  option.value = state.name; // Store state name
-				  option.textContent = state.name;
-				  stateSelect.appendChild(option);
-				});
-			  } else {
-				console.error("Received data is not an array for states:", data);
-			  }
+			stateSelect.disabled = false;
+			citySelect.disabled = true;
+			stateSelect.style.pointerEvents = "auto";
+			citySelect.style.pointerEvents = "none";
+
+			const selectedCountryName = countrySelect.value;
+
+			// Find the selected country's ISO code from the global `countryData`
+			const selectedCountry = countryData.find(
+				(country) => country.name === selectedCountryName
+			);
+			const selectedCountryCode = selectedCountry ? selectedCountry.iso2 : "";
+
+			stateSelect.innerHTML = '<option value="">Select State</option>';
+			citySelect.innerHTML = '<option value="">Select City</option>';
+
+			if (!selectedCountryCode) {
+				console.error("Country code not found for:", selectedCountryName);
+				return;
+			}
+
+			fetch(`${config.cUrl}/${selectedCountryCode}/states`, {
+				headers: { "X-CSCAPI-KEY": config.ckey },
 			})
-			.catch((error) => console.error("Error loading states:", error));
+				.then((response) => response.json())
+				.then((data) => {
+					// Store the state data globally for the selected country
+					stateData = data;
+
+					// Check if data is an array
+					if (Array.isArray(data)) {
+						data.forEach((state) => {
+							const option = document.createElement("option");
+							option.value = state.name; // Store state name
+							option.textContent = state.name;
+							stateSelect.appendChild(option);
+						});
+					} else {
+						console.error("Received data is not an array for states:", data);
+					}
+				})
+				.catch((error) => console.error("Error loading states:", error));
 		}
-  
+
 		function loadCities() {
-		  citySelect.disabled = false;
-		  citySelect.style.pointerEvents = "auto";
-  
-		  const selectedCountryName = countrySelect.value;
-		  const selectedStateName = stateSelect.value;
-  
-		  // Find the selected country's ISO code from the global `countryData`
-		  const selectedCountry = countryData.find(
-			(country) => country.name === selectedCountryName
-		  );
-		  const selectedCountryCode = selectedCountry ? selectedCountry.iso2 : "";
-  
-		  // Find the selected state's ISO code from the global `stateData`
-		  const selectedState = stateData.find(
-			(state) => state.name === selectedStateName
-		  );
-		  const selectedStateCode = selectedState ? selectedState.iso2 : "";
-  
-		  citySelect.innerHTML = '<option value="">Select City</option>';
-  
-		  if (!selectedStateCode) {
-			console.error("State code not found for:", selectedStateName);
-			return;
-		  }
-  
-		  fetch(
-			`${config.cUrl}/${selectedCountryCode}/states/${selectedStateCode}/cities`,
-			{ headers: { "X-CSCAPI-KEY": config.ckey } }
-		  )
-			.then((response) => response.json())
-			.then((data) => {
-			  // Check if data is an array
-			  if (Array.isArray(data)) {
-				data.forEach((city) => {
-				  const option = document.createElement("option");
-				  option.value = city.name; // Store city name
-				  option.textContent = city.name;
-				  citySelect.appendChild(option);
-				});
-			  } else {
-				console.error("Received data is not an array for cities:", data);
-			  }
-			})
-			.catch((error) => console.error("Error loading cities:", error));
+			citySelect.disabled = false;
+			citySelect.style.pointerEvents = "auto";
+
+			const selectedCountryName = countrySelect.value;
+			const selectedStateName = stateSelect.value;
+
+			// Find the selected country's ISO code from the global `countryData`
+			const selectedCountry = countryData.find(
+				(country) => country.name === selectedCountryName
+			);
+			const selectedCountryCode = selectedCountry ? selectedCountry.iso2 : "";
+
+			// Find the selected state's ISO code from the global `stateData`
+			const selectedState = stateData.find(
+				(state) => state.name === selectedStateName
+			);
+			const selectedStateCode = selectedState ? selectedState.iso2 : "";
+
+			citySelect.innerHTML = '<option value="">Select City</option>';
+
+			if (!selectedStateCode) {
+				console.error("State code not found for:", selectedStateName);
+				return;
+			}
+
+			fetch(
+				`${config.cUrl}/${selectedCountryCode}/states/${selectedStateCode}/cities`,
+				{ headers: { "X-CSCAPI-KEY": config.ckey } }
+			)
+				.then((response) => response.json())
+				.then((data) => {
+					// Check if data is an array
+					if (Array.isArray(data)) {
+						data.forEach((city) => {
+							const option = document.createElement("option");
+							option.value = city.name; // Store city name
+							option.textContent = city.name;
+							citySelect.appendChild(option);
+						});
+					} else {
+						console.error("Received data is not an array for cities:", data);
+					}
+				})
+				.catch((error) => console.error("Error loading cities:", error));
 		}
-  
+
 		window.onload = loadCountries;
-	  </script>
+	</script>
 	<script src="assets/js/jquery-3.6.0.min.js"></script>
 
 	<script src="assets/js/bootstrap.bundle.min.js"></script>

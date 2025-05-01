@@ -1,101 +1,106 @@
-{% extends "superadmin/navbar.html" %}
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-  {% load static %}
-  {% block body %}
-  <body>
-    <div class="main-wrapper">
 
-      <div class="page-wrapper">
-        <div class="content container-fluid">
-          <div class="page-header">
-            <div class="row">
-              <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                <h5 class="text-uppercase mb-0 mt-0 page-title">my Profile</h5>
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                <ul class="breadcrumb float-right p-0 mb-0">
-                  <li class="breadcrumb-item">
-                    <a href="/index/"><i class="fas fa-home"></i> Home</a>
-                  </li>
-                  <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                  <li class="breadcrumb-item"><span> Profile</span></li>
-                </ul>
-              </div>
+<head>
+  <meta charset="utf-8">
+
+  <title>UNICON</title>
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/logo1.png' %}" />
+
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/unicon_logo.png' %}">
+
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'assets/plugins/datetimepicker/css/tempusdominus-bootstrap-4.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'assets/css/select2.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+  <!--[if lt IE 9]>
+        <script src="{% static 'assets/js/html5shiv.min.js' %}"></script>
+        <script src="{% static 'assets/js/respond.min.js' %}"></script>
+    <![endif]-->
+</head>
+
+<body>
+  <div class="main-wrapper">
+    {% include 'superadmin/sidebar.html' %}
+
+    <div class="page-wrapper">
+      <div class="content container-fluid">
+        <div class="page-header">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+              <h5 class="text-uppercase mb-0 mt-0 page-title">my Profile</h5>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+              <ul class="breadcrumb float-right p-0 mb-0">
+                <li class="breadcrumb-item">
+                  <a href="/index/"><i class="fas fa-home"></i> Home</a>
+                </li>
+                <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                <li class="breadcrumb-item"><span> Profile</span></li>
+              </ul>
             </div>
           </div>
-          <div class="card-box m-b-0">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="profile-view">
-                  <div class="profile-img-wrap">
-                    <div class="profile-img">
-                      <a href="#"
-                        ><img
-                          class="avatar"
-                          src="{{coordinator_data.coordinator_image.url}}"
-                          alt=""
-                      /></a>
-                    </div>
+        </div>
+        <div class="card-box m-b-0">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="profile-view">
+                <div class="profile-img-wrap">
+                  <div class="profile-img">
+                    <a href="#"><img class="avatar" src="{{coordinator_data.coordinator_image.url}}" alt="" /></a>
                   </div>
-                  <div class="profile-basic">
-                    <div class="row">
-                      <div class="col-md-5">
-                        <div class="profile-info-left">
-                          <h3 class="user-name m-t-0">
-                            {{coordinator_data.first_name}}
-                          </h3>
-                          <h5 class="company-role m-t-0 m-b-0">
-                            {{coordinator_data.department}}
-                          </h5>
-                          <small class="text-muted"
-                            >{{coordinator_data.designation}}</small
-                          >
-                          <div class="staff-id">
-                            {{coordinator_data.username}}
-                          </div>
+                </div>
+                <div class="profile-basic">
+                  <div class="row">
+                    <div class="col-md-5">
+                      <div class="profile-info-left">
+                        <h3 class="user-name m-t-0">
+                          {{coordinator_data.first_name}}
+                        </h3>
+                        <h5 class="company-role m-t-0 m-b-0">
+                          {{coordinator_data.department}}
+                        </h5>
+                        <small class="text-muted">{{coordinator_data.designation}}</small>
+                        <div class="staff-id">
+                          {{coordinator_data.username}}
                         </div>
                       </div>
-                      <div class="col-md-7">
-                        <ul class="personal-info">
-                          <li>
-                            <span class="title">Phone:</span>
-                            <span class="text"
-                              ><a href="#"
-                                >{{coordinator_data.mobile_number}}</a
-                              ></span
-                            >
-                          </li>
-                          <li>
-                            <span class="title">Email:</span>
-                            <span class="text"
-                              ><a href="#"
-                                ><span class="__cf_email__"
-                                  >{{coordinator_data.email}}</span
-                                ></a
-                              ></span
-                            >
-                          </li>
-                          <li>
-                            <span class="title">Birthday:</span>
-                            <span class="text"
-                              >{{coordinator_data.birth_date}}</span
-                            >
-                          </li>
-                          <li>
-                            <span class="title">Address:</span>
-                            <span class="text"
-                              >{{coordinator_data.address_line_1}}</span
-                            >
-                          </li>
-                          <li>
-                            <span class="title">Gender:</span>
-                            <span class="text"
-                              >{{coordinator_data.gender}}</span
-                            >
-                          </li>
-                        </ul>
-                      </div>
+                    </div>
+                    <div class="col-md-7">
+                      <ul class="personal-info">
+                        <li>
+                          <span class="title">Phone:</span>
+                          <span class="text"><a href="#">{{coordinator_data.mobile_number}}</a></span>
+                        </li>
+                        <li>
+                          <span class="title">Email:</span>
+                          <span class="text"><a href="#"><span
+                                class="__cf_email__">{{coordinator_data.email}}</span></a></span>
+                        </li>
+                        <li>
+                          <span class="title">Birthday:</span>
+                          <span class="text">{{coordinator_data.birth_date}}</span>
+                        </li>
+                        <li>
+                          <span class="title">Address:</span>
+                          <span class="text">{{coordinator_data.address_line_1}}</span>
+                        </li>
+                        <li>
+                          <span class="title">Gender:</span>
+                          <span class="text">{{coordinator_data.gender}}</span>
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>
@@ -105,8 +110,9 @@
         </div>
       </div>
     </div>
+  </div>
 
-    
-  </body>
-  {% endblock body %}
+
+</body>
+
 </html>
