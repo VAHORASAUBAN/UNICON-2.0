@@ -251,7 +251,6 @@ def edit_subject(request, id):
         return redirect(f'/edit_subject/{subject.id}?success=1')
     return render(request, 'superadmin/edit-subject.html', context)
 
-
 def add_batch(request):
     all_courses = Course.objects.all()
 
@@ -276,7 +275,6 @@ def add_batch(request):
     else:
         context = {'all_courses': all_courses}
         return render(request, 'superadmin/add-batch.html', context)
-
 
 def delete_batch(request, id):
     delete_batch_id = Batch.objects.get(id=id)

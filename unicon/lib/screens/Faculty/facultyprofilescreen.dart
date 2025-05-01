@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../../services/Config.dart';
+
 class FacultyProfileScreen extends StatefulWidget {
   const FacultyProfileScreen({super.key});
 
@@ -20,7 +22,7 @@ class _FacultyProfileScreenState extends State<FacultyProfileScreen> {
   }
 
   Future<void> fetchFacultyProfile() async {
-    const url = "http://192.168.188.15:8000/teacher/profile/"; // Update URL if necessary
+    const url = Config.teacherProfile; // Update URL if necessary
     try {
       final response = await http.post(
         Uri.parse(url),

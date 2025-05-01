@@ -1,12 +1,13 @@
 class Config {
-  // Base URL for your API
-  static const String baseUrl = "http://192.168.188.15:8000"; // Change this to your base URL
+  static const String baseIp = "http://192.168.128.166:8000"; // <- Change IP only here
 
-  // Endpoint paths for student and teacher login
-  static const String studentLogin = "/student/login/";
-  static const String teacherLogin = "/teacher/login/";
+  // Auth Endpoints
+  static const String studentLogin = "$baseIp/student/login/";
+  static const String teacherLogin = "$baseIp/teacher/login/";
 
-  // You can add more endpoints for different APIs here
-  static const String studentProfile = "/student/profile/";
-// Add more paths for other services
+  // Profiles and other endpoints
+  static const String studentProfile = "$baseIp/student/profile/";
+  static const String teacherProfile = "$baseIp/teacher/profile/";
+
+// Add more as needed, all use baseIp
 }

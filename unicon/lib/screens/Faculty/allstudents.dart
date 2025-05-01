@@ -250,6 +250,7 @@ class _StudentListScreenState extends State<StudentListScreen> {
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:unicon/services/Config.dart';
 
 // Student Model
 class Student {
@@ -293,7 +294,7 @@ class _StudentListScreenState extends State<StudentListScreen> {
   Future<void> fetchStudents() async {
     try {
       final response = await http.get(
-        Uri.parse("http://192.168.188.15:8000/teacher/students/"),
+        Uri.parse(Config.baseIp),
       );
 
       if (response.statusCode == 200) {

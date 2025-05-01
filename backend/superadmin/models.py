@@ -107,10 +107,9 @@ class Teacher(models.Model):
     def __str__(self):
         return f'{self.firstname} {self.lastname} ({self.faculty_id})'
 
-
 class Batch(models.Model):
-    batch_start_year = models.IntegerField()
-    batch_end_year = models.IntegerField()
+    batch_start_year = models.IntegerField(null=True, blank=True)
+    batch_end_year = models.IntegerField(null=True, blank=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
     class Meta:
@@ -155,9 +154,9 @@ class Placement(models.Model):
 
 
 class Timetable(models.Model):
-    timetable_subject_name = models.ForeignKey(
-        Subject, on_delete=models.CASCADE)
+    timetable_subject_name = models.ForeignKey(Subject, on_delete=models.CASCADE)
     faculty_name = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+
     day = models.CharField(
         max_length=20,
         choices=[
@@ -169,16 +168,15 @@ class Timetable(models.Model):
             ('Saturday', 'Saturday'),
         ]
     )
-    lecture_start_time = models.CharField(max_length=20)
-    lecture_end_time = models.CharField(max_length=20)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    timetable_department = models.ForeignKey(
-        department, on_delete=models.CASCADE)
-    # Add semester as IntegerField (or CharField if required)
-    # semester = models.IntegerField()
-    semester = models.IntegerField(null=True, blank=True)
 
+    lecture_start_time = models.CharField(max_length=20, default="09:00 AM")
+    lecture_end_time = models.CharField(max_length=20, default="10:00 AM")
+
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    timetable_department = models.ForeignKey(department, on_delete=models.CASCADE)
+    semester = models.IntegerField(null=True, blank=True)
     batch = models.ForeignKey(Batch, on_delete=models.CASCADE)
+
     division = models.CharField(max_length=1, choices=[
         ('A', 'A'),
         ('B', 'B'),
@@ -186,7 +184,8 @@ class Timetable(models.Model):
     ])
 
     def __str__(self):
-        return f"{self.timetable_subject_name} - {self.day} ({self.start_time} to {self.end_time})"
+        return f"{self.timetable_subject_name} - {self.day} ({self.lecture_start_time} to {self.lecture_end_time})"
+
 
 
 class AttendanceSession(models.Model):
