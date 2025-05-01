@@ -1,6 +1,13 @@
+from django.utils import timezone
+from datetime import timedelta
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
+from django.db import models
+from django.db import models
+import uuid
+from datetime import datetime
 
 
 class department(models.Model):
@@ -180,3 +187,35 @@ class Timetable(models.Model):
 
     def __str__(self):
         return f"{self.timetable_subject_name} - {self.day} ({self.start_time} to {self.end_time})"
+
+
+class AttendanceSession(models.Model):
+    subject = models.ForeignKey('Subject', on_delete=models.CASCADE)
+    faculty = models.ForeignKey('Teacher', on_delete=models.CASCADE)
+    date = models.DateField(auto_now_add=True)
+    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    token_expiry = models.DateTimeField()
+
+    def save(self, *args, **kwargs):
+        # Always set expiry to 5 minutes from now
+        if not self.token_expiry:
+            self.token_expiry = timezone.now() + timedelta(minutes=5)
+        super().save(*args, **kwargs)
+
+    def is_expired(self):
+        return timezone.now() > self.token_expiry
+
+    def __str__(self):
+        return f"{self.subject.subject_name} - {self.date}"
+
+
+class AttendanceRecord(models.Model):
+    session = models.ForeignKey(AttendanceSession, on_delete=models.CASCADE)
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('session', 'student')  # Prevent duplicate entries
+
+    def __str__(self):
+        return f"{self.student.firstname} - {self.session.subject.subject_name} @ {self.timestamp}"

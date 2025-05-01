@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'facultyprofilescreen.dart'; // Make sure you have a ProfileScreen.dart
+
 class faculty_sidemenu extends StatelessWidget {
   final String userName;
   final String userEmail;
@@ -15,7 +17,7 @@ class faculty_sidemenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.white, // <-- Set white background for Drawer
+      backgroundColor: Colors.white,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -34,22 +36,33 @@ class faculty_sidemenu extends StatelessWidget {
               children: [
                 const SizedBox(height: 20),
 
-                // Profile Picture with Border & Shadow
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 8,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: const CircleAvatar(
-                    radius: 35,
-                    backgroundImage: AssetImage('assets/images/profile.png'),
+                // Profile Picture with GestureDetector
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context); // Close the drawer first
+                    Future.delayed(const Duration(milliseconds: 250), () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => FacultyProfileScreen()),
+                      );
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 3),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: const CircleAvatar(
+                      radius: 35,
+                      backgroundImage: AssetImage('assets/images/profile.png'),
+                    ),
                   ),
                 ),
 
@@ -79,26 +92,20 @@ class faculty_sidemenu extends StatelessWidget {
 
           // ==== Academics Section ====
           _buildSectionTitle("Academics"),
-          _buildDrawerItem(
-              Icons.groups, "All Students", () => onMenuTap("/allstudent")),
-          _buildDrawerItem(Icons.calendar_month_rounded, "Attendance Report",
-                  () => onMenuTap("/attendance")),
+          _buildDrawerItem(Icons.groups, "All Students", () => onMenuTap("/allstudent")),
+          _buildDrawerItem(Icons.calendar_month_rounded, "Attendance Report", () => onMenuTap("/attendance")),
           const Divider(),
 
           // ==== Support Section ====
           _buildSectionTitle("Support"),
-          _buildDrawerItem(
-              Icons.contact_mail, "Contact Us", () => onMenuTap("/contact")),
-          _buildDrawerItem(
-              Icons.help_outline, "Help & Support", () => onMenuTap("/help")),
+          _buildDrawerItem(Icons.contact_mail, "Contact Us", () => onMenuTap("/contact")),
+          _buildDrawerItem(Icons.help_outline, "Help & Support", () => onMenuTap("/help")),
           const Divider(),
 
           // ==== App Info Section ====
           _buildSectionTitle("App Info"),
-          _buildDrawerItem(
-              Icons.info_outline, "About App", () => onMenuTap("/about")),
-          _buildDrawerItem(
-              Icons.privacy_tip, "Privacy Policy", () => onMenuTap("/privacy")),
+          _buildDrawerItem(Icons.info_outline, "About App", () => onMenuTap("/about")),
+          _buildDrawerItem(Icons.privacy_tip, "Privacy Policy", () => onMenuTap("/privacy")),
           const Divider(),
 
           // ==== Logout Section ====
@@ -113,25 +120,21 @@ class faculty_sidemenu extends StatelessWidget {
 
   // ===== Helper Functions =====
 
-  // Custom ListTile for Menu Items
-  ListTile _buildDrawerItem(IconData icon, String title, VoidCallback onTap,
-      {Color color = const Color(0xFF0A3B87)}) {
+  ListTile _buildDrawerItem(IconData icon, String title, VoidCallback onTap, {Color color = const Color(0xFF0A3B87)}) {
     return ListTile(
-      tileColor: Colors.white, // Optional: ensure item background is white
+      tileColor: Colors.white,
       leading: Icon(icon, color: color),
       title: Text(title, style: TextStyle(color: color)),
       onTap: onTap,
     );
   }
 
-  // Section Title Style
   Padding _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       child: Text(
         title,
-        style: const TextStyle(
-            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black54),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black54),
       ),
     );
   }
