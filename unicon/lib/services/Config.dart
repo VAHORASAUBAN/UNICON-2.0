@@ -1,6 +1,6 @@
 class Config {
   // Base URL for your API
-  static const String baseUrl = "http://192.168.128.166:8000"; // Change this to your base URL
+  static const String baseUrl = "http://192.168.188.15:8000"; // Change this to your base URL
 
   // Endpoint paths for student and teacher login
   static const String studentLogin = "/student/login/";
