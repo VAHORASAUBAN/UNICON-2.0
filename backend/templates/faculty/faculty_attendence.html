@@ -136,51 +136,24 @@
 											</tr>
 										</thead>
 										<tbody>
-											<!-- Subject 1 -->
-											<tr>
-												<td>Data Structures</td>
-												<td>Computer Science</td>
-												<td>BCA</td>
-												<td>1</td>
-												<td>A</td>
+											{% for subject in subjects %}
+											  <tr>
+												<td>{{ subject.subject_name }}</td>
+												<td>{{ subject.subject_department.department_name }}</td>
+												<td>{{ subject.subject_course.course_name }}</td>
+												<td>{{ subject.subject_semester }}</td>
+												<td>{{ subject.subject_batch.batch_name }}</td>
 												<td class="text-right">
-													<a href="{% url 'faculty_attendence_1' %}"
-														class="btn btn-primary btn-sm mb-1">
-														<i class="far fa-eye"></i>
-													</a>
+												  <a href="{% url 'faculty_attendence_1' %}?subject_id={{ subject.id }}" class="btn btn-primary btn-sm mb-1">
+													<i class="far fa-eye"></i>
+												  </a>
 												</td>
-											</tr>
-											<!-- Subject 2 -->
-											<tr>
-												<td>Algorithms</td>
-												<td>Computer Science</td>
-												<td>IMSCIT</td>
-												<td>1</td>
-												<td>B</td>
-
-												<td class="text-right">
-													<a href="{% url 'faculty_attendence_1' %}"
-														class="btn btn-primary btn-sm mb-1">
-														<i class="far fa-eye"></i>
-													</a>
-												</td>
-											</tr>
-											
-											<!-- Subject 3 -->
-											<tr>
-												<td>Mathematics</td>
-												<td>Mathematics</td>
-												<td>MCA</td>
-												<td>2</td>
-												<td>D</td>
-												<td class="text-right">
-													<a href="{% url 'faculty_attendence_1' %}"
-														class="btn btn-primary btn-sm mb-1">
-														<i class="far fa-eye"></i>
-													</a>
-												</td>
-											</tr>
-										</tbody>
+											  </tr>
+											{% empty %}
+											  <tr><td colspan="6">No subjects assigned to you.</td></tr>
+											{% endfor %}
+										  </tbody>
+										  
 									</table>
 								</div>
 							</div>

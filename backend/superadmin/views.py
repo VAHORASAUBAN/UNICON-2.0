@@ -1733,7 +1733,23 @@ def faculty_stud_edit(request):
 
 
 def faculty_attendence(request):
-    return render(request, 'faculty/faculty_attendence.html')
+    faculty_id = request.session.get("faculty_id")
+
+    if not faculty_id:
+        return redirect("login")
+
+    try:
+        faculty = Teacher.objects.get(faculty_id=faculty_id)
+    except Teacher.DoesNotExist:
+        return redirect("login")
+    subject_links = SubjectTeacher.objects.filter(
+        teacher=faculty).select_related('subject')
+    subjects = [link.subject for link in subject_links]
+
+    context = {
+        'subjects': subjects
+    }
+    return render(request, 'faculty/faculty_attendence.html', context)
 
 
 def faculty_attendence_1(request):
