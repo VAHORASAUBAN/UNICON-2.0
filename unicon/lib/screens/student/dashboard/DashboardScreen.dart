@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:unicon/services/Config.dart';
 import 'dart:convert';
 
 import '../../../widgets/AttendancePieChart.dart';
@@ -16,56 +17,60 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
-  bool isLoading = true;
+
+  bool isProfileLoading = true;
+  bool isTimetableLoading = true;
+
   List<dynamic> timetable = [];
   String userName = "";
   String userEmail = "";
 
-  // Fetch user profile data from the API
   Future<void> fetchUserProfile() async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.128.166:8000/student/profile/'), // Replace with your actual URL
+        Uri.parse(Config.studentProfile),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"student_id": 1}),
       );
+
+      print("Profile Response: ${response.statusCode} ${response.body}");
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         setState(() {
           userName = data['firstname'] ?? 'Unknown';
           userEmail = data['email'] ?? 'Unknown';
-          isLoading = false;
+          isProfileLoading = false;
         });
       } else {
         throw Exception('Failed to load user data');
       }
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
       print('Error fetching user data: $e');
+      setState(() => isProfileLoading = false);
     }
   }
 
-  // Fetch timetable data from the API
   Future<void> fetchTimetable() async {
     try {
-      final response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/todos'));
+      final studentId = 1;
+      final response = await http.get(Uri.parse('${Config.todayTimetable}?student_id=$studentId'));
+
+      print("Timetable Response: ${response.statusCode} ${response.body}");
+
       if (response.statusCode == 200) {
-        List<dynamic> data = json.decode(response.body);
+        final jsonData = jsonDecode(response.body);
         setState(() {
-          timetable = data.take(5).toList();
-          isLoading = false;
+          timetable = jsonData['today_subjects'] ?? [];
+          isTimetableLoading = false;
         });
       } else {
-        throw Exception('Failed to load timetable data');
+        print("Failed to load timetable: ${response.body}");
+        setState(() => isTimetableLoading = false);
       }
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      print('Error fetching timetable: $e');
+      print("Error fetching timetable: $e");
+      setState(() => isTimetableLoading = false);
     }
   }
 
@@ -73,7 +78,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     fetchTimetable();
-    fetchUserProfile();  // Fetch user profile data when the screen loads
+    fetchUserProfile();
   }
 
   void _onTabSelected(int index) {
@@ -95,6 +100,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLoading = isProfileLoading || isTimetableLoading;
+
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
@@ -109,7 +116,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
       drawer: isLoading
-          ? const Center(child: CircularProgressIndicator()) // Show loading indicator until data is fetched
+          ? const Center(child: CircularProgressIndicator())
           : SideMenu(
         userName: userName,
         userEmail: userEmail,
@@ -118,7 +125,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Navigator.pushNamed(context, route);
         },
       ),
-      body: IndexedStack(
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : IndexedStack(
         index: _currentIndex,
         children: [
           _buildDashboardContent(),
@@ -133,67 +142,54 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  // Dashboard Content with Timeline
   Widget _buildDashboardContent() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Attendance Pie Chart
           AttendancePieChart(),
           const SizedBox(height: 24),
-
-          // Today's Classes Section
           const Text(
             "Today's Classes",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 12),
-
-          // Timeline View: show loading, no classes, or the timeline
-          if (isLoading)
-            const Center(child: CircularProgressIndicator())
-          else if (timetable.isEmpty)
-            const Center(
-              child: Text(
-                "No Classes Today",
-                style: TextStyle(fontSize: 16, color: Colors.black54),
-              ),
-            )
-          else
-            _buildTimeline(),
+          timetable.isEmpty
+              ? const Center(
+            child: Text(
+              "No Classes Today",
+              style: TextStyle(fontSize: 16, color: Colors.black54),
+            ),
+          )
+              : _buildTimeline(),
         ],
       ),
     );
   }
 
-  // Enhanced Timeline Widget
   Widget _buildTimeline() {
     return Column(
       children: List.generate(timetable.length, (index) {
         final item = timetable[index];
         return _buildTimelineItem(
-          "SUBJECT ${item["id"]}",
-          "10:00 AM - 11:00 AM",
-          "Batch ${item["id"]}",
+          item["timetable_subject_name"]["subject_name"] ?? "N/A",
+          "${item["lecture_start_time"]} - ${item["lecture_end_time"]}",
+          "Batch ${item["batch"]["batch_name"] ?? 'N/A'}",
           index == timetable.length - 1,
         );
       }),
     );
   }
 
-  // Modern Timeline Item
   Widget _buildTimelineItem(String subject, String time, String batch, bool isLast) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Timeline Column (Dot + Line)
           Column(
             children: [
-              // Circular Dot
               Container(
                 width: 15,
                 height: 30,
@@ -210,15 +206,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               if (!isLast)
                 Container(
-                  width: 2, // Slim line for clean look
-                  height: 40, // Adjust height for even spacing
+                  width: 2,
+                  height: 40,
                   color: Colors.blue.shade800,
                 ),
             ],
           ),
-          const SizedBox(width: 7 ), // Space between line & card
-
-          // Class Details Card
+          const SizedBox(width: 7),
           Expanded(
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 500),
@@ -242,15 +236,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               child: Row(
                 children: [
-                  // Subject Icon
                   CircleAvatar(
                     backgroundColor: Colors.white,
                     radius: 20,
                     child: _getSubjectIcon(subject),
                   ),
                   const SizedBox(width: 12),
-
-                  // Subject & Batch Details
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -273,8 +264,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ],
                     ),
                   ),
-
-                  // Time Display
                   Text(
                     time,
                     style: const TextStyle(
@@ -292,7 +281,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  // Dynamic Subject Icons
   Widget _getSubjectIcon(String subject) {
     if (subject.toLowerCase().contains("java")) {
       return const Icon(Icons.code, color: Colors.blue);
