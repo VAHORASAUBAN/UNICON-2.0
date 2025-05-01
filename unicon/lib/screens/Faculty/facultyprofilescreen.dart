@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../../services/AuthService.dart';
 import '../../services/Config.dart';
 
 class FacultyProfileScreen extends StatefulWidget {
@@ -22,34 +23,61 @@ class _FacultyProfileScreenState extends State<FacultyProfileScreen> {
   }
 
   Future<void> fetchFacultyProfile() async {
-    const url = Config.teacherProfile; // Update URL if necessary
+    final facultyId = AuthService.facultyId;
+
+    if (facultyId == null) {
+      print("Faculty ID is null. Cannot fetch profile.");
+      setState(() {
+        isLoading = false;
+      });
+      return;
+    }
+
+    const url = Config.teacherProfile;
     try {
       final response = await http.post(
         Uri.parse(url),
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"faculty_id": 1}), // Replace with actual faculty_id
+        body: jsonEncode({"faculty_id": facultyId}),
       );
 
-      if (response.statusCode == 200) {
-        print("Response body: ${response.body}");  // Debugging line
+      print("Status Code: ${response.statusCode}");
+      print("Response Body: ${response.body}");
 
-        if (mounted) {
+      if (response.statusCode == 200) {
+        final responseList = jsonDecode(response.body);
+
+        if (responseList is List) {
+          final matchedFaculty = responseList.firstWhere(
+                (faculty) => faculty['faculty_id'].toString() == facultyId.toString(),
+            orElse: () => null,
+          );
+
+          if (mounted) {
+            setState(() {
+              facultyData = matchedFaculty != null
+                  ? Map<String, dynamic>.from(matchedFaculty)
+                  : {};
+              isLoading = false;
+            });
+          }
+        } else {
+          print("Invalid response format.");
           setState(() {
-            // Parse the response as a list of dynamic objects
-            List<dynamic> responseList = jsonDecode(response.body);
-            if (responseList.isNotEmpty) {
-              facultyData = Map<String, dynamic>.from(responseList[0]);  // Convert the first element to a Map
-            } else {
-              facultyData = {};  // Empty data if the list is empty
-            }
             isLoading = false;
           });
         }
       } else {
         print("Failed to fetch: ${response.body}");
+        setState(() {
+          isLoading = false;
+        });
       }
     } catch (e) {
       print("Error fetching profile: $e");
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -75,8 +103,8 @@ class _FacultyProfileScreenState extends State<FacultyProfileScreen> {
                   _buildInfoTile(Icons.person, 'First Name', facultyData?['firstname'] ?? ''),
                   _buildInfoTile(Icons.person_outline, 'Middle Name', facultyData?['middlename'] ?? ''),
                   _buildInfoTile(Icons.person, 'Last Name', facultyData?['lastname'] ?? ''),
-                  _buildInfoTile(Icons.apartment, 'Department', facultyData?['department']['department_name'] ?? 'Unknown Department'),
-                  _buildInfoTile(Icons.menu_book, 'Course', facultyData?['course']['course_name'] ?? 'Unknown Course'),
+                  _buildInfoTile(Icons.apartment, 'Department', facultyData?['department']?['department_name'] ?? 'Unknown Department'),
+                  _buildInfoTile(Icons.menu_book, 'Course', facultyData?['course']?['course_name'] ?? 'Unknown Course'),
                   _buildInfoTile(Icons.work, 'Designation', facultyData?['designations'] ?? ''),
                   _buildInfoTile(Icons.school, 'Qualification', facultyData?['qualification'] ?? ''),
                   _buildInfoTile(Icons.military_tech, 'Achievements', facultyData?['achievements'] ?? ''),

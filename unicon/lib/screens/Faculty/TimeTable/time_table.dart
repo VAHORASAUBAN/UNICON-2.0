@@ -216,10 +216,14 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
   }
 
   String getEndTime(String startTime) {
-    final DateFormat formatter = DateFormat.jm();
-    final DateTime startDateTime = formatter.parse(startTime);
-    final DateTime endDateTime = startDateTime.add(Duration(hours: 1));
-    return formatter.format(endDateTime);
+    try {
+      final DateFormat formatter = DateFormat.jm();
+      final DateTime startDateTime = formatter.parse(startTime);
+      final DateTime endDateTime = startDateTime.add(Duration(hours: 1));
+      return formatter.format(endDateTime);
+    } catch (e) {
+      return startTime; // Fallback if time parsing fails
+    }
   }
 
   @override
