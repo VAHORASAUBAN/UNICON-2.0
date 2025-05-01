@@ -1,3 +1,5 @@
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -160,6 +162,22 @@
         cursor: pointer;
         transition: 0.3s;
     }
+    .badge {
+        padding: 5px 10px;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+    
+    .bg-success {
+        background-color: #28a745;
+        color: white;
+    }
+    
+    .bg-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+    
 
     .btn-submit:hover {
         background-color: #286090;
@@ -220,100 +238,7 @@
                         <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
                             <i class="fa-solid fa-bell" style="color: #337AB7;"></i>
                         </a>
-                        <div class="dropdown-menu notifications">
-                            <div class="topnav-dropdown-header">
-                                <span>Notifications</span>
-                            </div>
-                            <div class="drop-scroll">
-                                <ul class="notification-list">
-                                    <li class="notification-message">
-                                        <a href="activities">
-                                            <div class="media">
-                                                <span class="avatar">
-                                                    <img alt="John Doe" src="{% static 'assets/img/user-06.jpg' %}"
-                                                        class="img-fluid rounded-circle" />
-                                                </span>
-                                                <div class="media-body">
-                                                    <p class="noti-details">
-                                                        <span class="noti-title">John Doe</span> is now following you
-                                                    </p>
-                                                    <p class="noti-time">
-                                                        <span class="notification-time">4 mins ago</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="notification-message">
-                                        <a href="activities">
-                                            <div class="media">
-                                                <span class="avatar">T</span>
-                                                <div class="media-body">
-                                                    <p class="noti-details">
-                                                        <span class="noti-title">Tarah Shropshire</span> sent you a
-                                                        message.
-                                                    </p>
-                                                    <p class="noti-time">
-                                                        <span class="notification-time">6 mins ago</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="notification-message">
-                                        <a href="activities">
-                                            <div class="media">
-                                                <span class="avatar">L</span>
-                                                <div class="media-body">
-                                                    <p class="noti-details">
-                                                        <span class="noti-title">Misty Tison</span> liked your photo.
-                                                    </p>
-                                                    <p class="noti-time">
-                                                        <span class="notification-time">8 mins ago</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="notification-message">
-                                        <a href="activities">
-                                            <div class="media">
-                                                <span class="avatar">G</span>
-                                                <div class="media-body">
-                                                    <p class="noti-details">
-                                                        <span class="noti-title">Rolland Webber</span> booked an
-                                                        appointment for a meeting.
-                                                    </p>
-                                                    <p class="noti-time">
-                                                        <span class="notification-time">12 mins ago</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="notification-message">
-                                        <a href="activities">
-                                            <div class="media">
-                                                <span class="avatar">T</span>
-                                                <div class="media-body">
-                                                    <p class="noti-details">
-                                                        <span class="noti-title">Bernardo Galaviz</span> liked your
-                                                        photo.
-                                                    </p>
-                                                    <p class="noti-time">
-                                                        <span class="notification-time">2 days ago</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="topnav-dropdown-footer">
-                                <a href="activities">View all Notifications</a>
-                            </div>
-                        </div>
-                    </li>
+                   </li>
                     <li class="nav-item dropdown has-arrow">
                         <a href="#" class="nav-link user-link" data-toggle="dropdown">
                             <span class="user-img">
@@ -321,8 +246,8 @@
                             </span>
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{% url "faculty_profile" %}">My Profile</a>
-                            <a class="dropdown-item" href="{% url "faculty_logout_view" %}">Logout</a>
+                            <a class="dropdown-item" href="{% url 'faculty_profile' %}">My Profile</a>
+                            <a class="dropdown-item" href="{% url 'faculty_logout_view' %}">Logout</a>
                         </div>
                     </li>
                 </ul>
@@ -331,8 +256,8 @@
                         <i class="fas fa-ellipsis-v"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="{% url "faculty_profile" %}">My Profile</a>
-                        <a class="dropdown-item" href="{% url "faculty_logout_view" %}">Logout</a>
+                        <a class="dropdown-item" href="{% url 'faculty_profile' %}">My Profile</a>
+                        <a class="dropdown-item" href="{% url 'faculty_logout_view' %}">Logout</a>
                     </div>
                 </div>
             </div>
@@ -344,13 +269,12 @@
                 <div class="page-header">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                            <h5 class="text-uppercase mb-0 mt-0 page-title">subject name Attendance</h5>
+                            <h5 class="text-uppercase mb-0 mt-0 page-title">Subject Name Attendance</h5>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                             <ul class="breadcrumb float-right p-0 mb-0">
-                                <li class="breadcrumb-item"><a href="/index/"><i class="fas fa-home"></i> Home</a>
-                                </li>
-                                <li class="breadcrumb-item"> <span>subject name Attendance</span></li>
+                                <li class="breadcrumb-item"><a href="/index/"><i class="fas fa-home"></i> Home</a></li>
+                                <li class="breadcrumb-item"> <span>Subject Name Attendance</span></li>
                                 <li class="breadcrumb-item"> <span>Course</span></li>
                                 <li class="breadcrumb-item"> <span>Sem</span></li>
                                 <li class="breadcrumb-item"> <span>Div</span></li>
@@ -358,7 +282,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
@@ -382,40 +305,23 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>ENR-001</td>
-                                                <td>Parker</td>
-                                                <td>
-                                                    <label class="switch">
-                                                        <input type="checkbox" onchange="toggleAttendance(this)">
-                                                        <span class="slider round"></span>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>ENR-002</td>
-                                                <td>Smith</td>
-                                                <td>
-                                                    <label class="switch">
-                                                        <input type="checkbox" onchange="toggleAttendance(this)">
-                                                        <span class="slider round"></span>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>ENR-003</td>
-                                                <td>Hensley</td>
-                                                <td>
-                                                    <label class="switch">
-                                                        <input type="checkbox" onchange="toggleAttendance(this)">
-                                                        <span class="slider round"></span>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                        </tbody>
+                                            {% for student in students %}
+                                                <tr>
+                                                    <td>{{ student.enrollment }}</td>
+                                                    <td>{{ student.firstname }} {{ student.lastname }}</td>
+                                                    <td>
+                                                        {% if attendance_data|get_item:student.id %}
+                                                            <span class="badge bg-success">Present</span>
+                                                        {% else %}
+                                                            <span class="badge bg-danger">Absent</span>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                            
                                     </table>
-                                    <!-- Submit Button -->
-                                    <button class="btn btn-primary btn-submit" type="submit">Update Attendance</button>
+                                    <button class="btn btn-primary btn-submit" type="submit" id="submitAttendance">Update Attendance</button>
                                 </div>
                             </div>
                         </div>
@@ -423,50 +329,20 @@
                 </div>
             </div>
         </div>
-
-        <div id="delete_employee" class="modal" role="dialog">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content modal-md">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Delete Employee</h4>
-                    </div>
-                    <form>
-                        <div class="modal-body">
-                            <p>Are you sure want to delete this?</p>
-                            <div class="m-t-20"> <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
     <script>
-        // Function to dynamically toggle the color and state of the checkbox (Present/Absent)
-        function toggleAttendance(element) {
-            const slider = element.nextElementSibling;
+        // Initialize the datepicker
+        $('#datepicker').datepicker({
+            format: "dd-mm-yyyy",
+            autoclose: true
+        });
 
-            if (element.checked) {
-                slider.style.backgroundColor = "#4CAF50"; // Green (Present)
-            } else {
-                slider.style.backgroundColor = "red"; // Red (Absent)
-            }
-        }
-
-        $(document).ready(function () {
-            // Initialize the datepicker
-            $('#datepicker').datepicker({
-                format: "dd-mm-yyyy",
-                autoclose: true
-            });
-
-            // Show the datepicker when the calendar button is clicked
-            $('#calendarButton').on('click', function () {
-                $('#datepicker').datepicker('show');
-            });
+        // Show the datepicker when the calendar button is clicked
+        $('#calendarButton').on('click', function () {
+            $('#datepicker').datepicker('show');
         });
     </script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
@@ -475,7 +351,5 @@
     <script src="assets/js/moment.min.js"></script>
     <script src="assets/js/app.js"></script>
 </body>
-
-<!-- Mirrored from dreamguystech.com/preadmin/html/school/light/all-students.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jun 2022 14:07:21 GMT -->
 
 </html>

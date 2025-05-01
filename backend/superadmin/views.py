@@ -251,6 +251,7 @@ def edit_subject(request, id):
         return redirect(f'/edit_subject/{subject.id}?success=1')
     return render(request, 'superadmin/edit-subject.html', context)
 
+
 def add_batch(request):
     all_courses = Course.objects.all()
 
@@ -275,6 +276,7 @@ def add_batch(request):
     else:
         context = {'all_courses': all_courses}
         return render(request, 'superadmin/add-batch.html', context)
+
 
 def delete_batch(request, id):
     delete_batch_id = Batch.objects.get(id=id)
@@ -1734,14 +1736,19 @@ def faculty_attendence(request):
     faculty_id = request.session.get("faculty_id")
 
     if not faculty_id:
+        # Redirect to login if no faculty_id in session
         return redirect("login")
 
     try:
         faculty = Teacher.objects.get(faculty_id=faculty_id)
     except Teacher.DoesNotExist:
-        return redirect("login")
-    subject_links = SubjectTeacher.objects.filter(
-        teacher=faculty).select_related('subject')
+        return redirect("login")  # If faculty doesn't exist, redirect to login
+
+    # Fetch subjects assigned to the faculty (via SubjectTeacher model)
+    subject_links = SubjectTeacher.objects.filter(teacher=faculty).select_related(
+        'subject', 'subject__subject_department', 'subject__subject_batch', 'subject__subject_course'
+    )
+
     subjects = [link.subject for link in subject_links]
 
     context = {
@@ -1751,8 +1758,33 @@ def faculty_attendence(request):
 
 
 def faculty_attendence_1(request):
-    return render(request, 'faculty/faculty_attendence_1.html')
+    subject_id = request.GET.get('subject_id')
+    subject = Subject.objects.get(id=subject_id)
 
+    students = Student.objects.filter(
+        course=subject.subject_course,
+        semester=subject.subject_semester,
+        division='B'
+    )
+
+    attendance_sessions = AttendanceSession.objects.filter(
+        subject=subject
+    ).order_by('-date')
+
+    attendance_data = {}  # student_id => True (Present) / False (Absent)
+    for student in students:
+        present = False
+        for session in attendance_sessions:
+            if AttendanceRecord.objects.filter(student=student, session=session).exists():
+                present = True
+                break  # At least one session has a record => present
+        attendance_data[student.id] = present
+
+    context = {
+        'students': students,
+        'attendance_data': attendance_data,
+    }
+    return render(request, 'faculty/faculty_attendence_1.html', context)
 
 # Serializers Views
 
@@ -1862,11 +1894,13 @@ def teacher_profile(request):
 
             if teacher_id:
                 teacher = Teacher.objects.get(id=teacher_id)
-                serializer = TeacherSerializer(teacher, context={'request': request})
+                serializer = TeacherSerializer(
+                    teacher, context={'request': request})
                 return JsonResponse(serializer.data, status=200)
             else:
                 teachers = Teacher.objects.all()
-                serializer = TeacherSerializer(teachers, many=True, context={'request': request})
+                serializer = TeacherSerializer(
+                    teachers, many=True, context={'request': request})
                 return JsonResponse(serializer.data, safe=False, status=200)
 
         except Teacher.DoesNotExist:
@@ -1875,6 +1909,7 @@ def teacher_profile(request):
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
 
 @csrf_exempt
 def teacher_login(request):
@@ -2007,3 +2042,38 @@ def mark_attendance(request):
         return Response({"error": "Invalid student ID"}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+def update_attendance(request):
+    try:
+        session_id = request.data.get('session_id')
+        student_id = request.data.get('student_id')
+        status = request.data.get('status')
+
+        if not session_id or not student_id or not status:
+            return JsonResponse({"error": "Missing session, student ID or status"}, status=400)
+
+        # Fetch session using session_id
+        session = AttendanceSession.objects.get(id=session_id)
+        student = Student.objects.get(id=student_id)
+
+        # Prevent duplicate attendance
+        if AttendanceRecord.objects.filter(session=session, student=student).exists():
+            return JsonResponse({"message": "Attendance already marked"}, status=200)
+
+        # Mark attendance based on the status
+        if status == "present":
+            AttendanceRecord.objects.create(session=session, student=student)
+        else:
+            # If absent, attendance record should not be created. Optionally handle differently.
+            pass
+
+        return JsonResponse({"message": "Attendance updated successfully"}, status=201)
+
+    except AttendanceSession.DoesNotExist:
+        return JsonResponse({"error": "Invalid session ID"}, status=400)
+    except Student.DoesNotExist:
+        return JsonResponse({"error": "Invalid student ID"}, status=400)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

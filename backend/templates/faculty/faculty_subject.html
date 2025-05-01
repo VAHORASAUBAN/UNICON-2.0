@@ -197,104 +197,7 @@
                 </ul>
 
                 <ul class="nav user-menu float-right">
-                    <li class="nav-item dropdown d-none d-sm-block">
-                        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                            <i class="fa-solid fa-bell" style="color: #337AB7;"></i>
-                        </a>
-                        <div class="dropdown-menu notifications">
-                            <div class="topnav-dropdown-header">
-                                <span>Notifications</span>
-                            </div>
-                            <div class="drop-scroll">
-                                <ul class="notification-list">
-                                    <li class="notification-message">
-                                        <a href="activities">
-                                            <div class="media">
-                                                <span class="avatar">
-                                                    <img alt="John Doe" src="{% static 'assets/img/user-06.jpg' %}"
-                                                        class="img-fluid rounded-circle" />
-                                                </span>
-                                                <div class="media-body">
-                                                    <p class="noti-details">
-                                                        <span class="noti-title">John Doe</span> is now following you
-                                                    </p>
-                                                    <p class="noti-time">
-                                                        <span class="notification-time">4 mins ago</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="notification-message">
-                                        <a href="activities">
-                                            <div class="media">
-                                                <span class="avatar">T</span>
-                                                <div class="media-body">
-                                                    <p class="noti-details">
-                                                        <span class="noti-title">Tarah Shropshire</span> sent you a
-                                                        message.
-                                                    </p>
-                                                    <p class="noti-time">
-                                                        <span class="notification-time">6 mins ago</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="notification-message">
-                                        <a href="activities">
-                                            <div class="media">
-                                                <span class="avatar">L</span>
-                                                <div class="media-body">
-                                                    <p class="noti-details">
-                                                        <span class="noti-title">Misty Tison</span> liked your photo.
-                                                    </p>
-                                                    <p class="noti-time">
-                                                        <span class="notification-time">8 mins ago</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="notification-message">
-                                        <a href="activities">
-                                            <div class="media">
-                                                <span class="avatar">G</span>
-                                                <div class="media-body">
-                                                    <p class="noti-details">
-                                                        <span class="noti-title">Rolland Webber</span> booked an
-                                                        appointment for a meeting.
-                                                    </p>
-                                                    <p class="noti-time">
-                                                        <span class="notification-time">12 mins ago</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="notification-message">
-                                        <a href="activities">
-                                            <div class="media">
-                                                <span class="avatar">T</span>
-                                                <div class="media-body">
-                                                    <p class="noti-details">
-                                                        <span class="noti-title">Bernardo Galaviz</span> liked your
-                                                        photo.
-                                                    </p>
-                                                    <p class="noti-time">
-                                                        <span class="notification-time">2 days ago</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="topnav-dropdown-footer">
-                                <a href="activities">View all Notifications</a>
-                            </div>
-                        </div>
-                    </li>
+                    
                     <li class="nav-item dropdown has-arrow">
                         <a href="#" class="nav-link user-link" data-toggle="dropdown">
                             <span class="user-img">
@@ -317,6 +220,7 @@
                     </div>
                 </div>
             </div>
+        </div>
             {% include 'faculty/faculty_sidebar.html' %}
             <!-- add faculty subject card with subject details -->
             <div class="page-wrapper">
@@ -417,277 +321,54 @@
                         <div class="table-responsive">
                             {% load custom_filters %}
 
-<table class="table table-bordered text-center">
-    <thead>
-        <tr class="bg-light-gray">
-            <th class="text-uppercase">Time</th>
-            {% for day in days %}
-                <th class="text-uppercase">{{ day }}</th>
-            {% endfor %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for row in timetable_matrix %}
-            <tr>
-                <td class="align-middle">
-                    {{ row.time }}
-                </td>
-                {% for day in days %}
-                    <td>
-                        {% with lecture=row|dict_get:day %}
-                            {% if lecture %}
-                                <div>
-                                    <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">
-                                        {{ lecture.timetable_subject_name.subject_name }}
-                                    </span>
-                                </div>
-                                <div class="margin-10px-top font-size14">
-                                    {{ lecture.lecture_start_time }} - {{ lecture.lecture_end_time }}
-                                </div>
-                                <div class="font-size13 text-light-gray">
-                                    Faculty: {{ lecture.faculty_name }}<br>
-                                    Division: {{ lecture.division }}
-                                </div>
-                            {% else %}
-                                <div class="font-size13 text-light-gray">No Lecture</div>
-                            {% endif %}
-                        {% endwith %}
-                    </td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
 
-                        </div>
-                    </div>
-    
-                    <div class="notification-box">
-                        <div class="msg-sidebar notifications msg-noti">
-                            <div class="topnav-dropdown-header">
-                                <span>Messages</span>
-                            </div>
-                            <div class="drop-scroll msg-list-scroll">
-                                <ul class="list-box">
-                                    <li>
-                                        <a href="chat.html">
-                                            <div class="list-item">
-                                                <div class="list-left">
-                                                    <span class="avatar">R</span>
-                                                </div>
-                                                <div class="list-body">
-                                                    <span class="message-author">Richard Miles </span>
-                                                    <span class="message-time">12:28 AM</span>
-                                                    <div class="clearfix"></div>
-                                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="chat.html">
-                                            <div class="list-item new-message">
-                                                <div class="list-left">
-                                                    <span class="avatar">R</span>
-                                                </div>
-                                                <div class="list-body">
-                                                    <span class="message-author">Ruth C. Gault</span>
-                                                    <span class="message-time">1 Aug</span>
-                                                    <div class="clearfix"></div>
-                                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="chat.html">
-                                            <div class="list-item">
-                                                <div class="list-left">
-                                                    <span class="avatar">T</span>
-                                                </div>
-                                                <div class="list-body">
-                                                    <span class="message-author"> Tarah Shropshire </span>
-                                                    <span class="message-time">12:28 AM</span>
-                                                    <div class="clearfix"></div>
-                                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="chat.html">
-                                            <div class="list-item">
-                                                <div class="list-left">
-                                                    <span class="avatar">M</span>
-                                                </div>
-                                                <div class="list-body">
-                                                    <span class="message-author">Mike Litorus</span>
-                                                    <span class="message-time">12:28 AM</span>
-                                                    <div class="clearfix"></div>
-                                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="chat.html">
-                                            <div class="list-item">
-                                                <div class="list-left">
-                                                    <span class="avatar">C</span>
-                                                </div>
-                                                <div class="list-body">
-                                                    <span class="message-author"> Catherine Manseau </span>
-                                                    <span class="message-time">12:28 AM</span>
-                                                    <div class="clearfix"></div>
-                                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="chat.html">
-                                            <div class="list-item">
-                                                <div class="list-left">
-                                                    <span class="avatar">D</span>
-                                                </div>
-                                                <div class="list-body">
-                                                    <span class="message-author"> Domenic Houston </span>
-                                                    <span class="message-time">12:28 AM</span>
-                                                    <div class="clearfix"></div>
-                                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="chat.html">
-                                            <div class="list-item">
-                                                <div class="list-left">
-                                                    <span class="avatar">B</span>
-                                                </div>
-                                                <div class="list-body">
-                                                    <span class="message-author"> Buster Wigton </span>
-                                                    <span class="message-time">12:28 AM</span>
-                                                    <div class="clearfix"></div>
-                                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="chat.html">
-                                            <div class="list-item">
-                                                <div class="list-left">
-                                                    <span class="avatar">R</span>
-                                                </div>
-                                                <div class="list-body">
-                                                    <span class="message-author"> Rolland Webber </span>
-                                                    <span class="message-time">12:28 AM</span>
-                                                    <div class="clearfix"></div>
-                                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="chat.html">
-                                            <div class="list-item">
-                                                <div class="list-left">
-                                                    <span class="avatar">C</span>
-                                                </div>
-                                                <div class="list-body">
-                                                    <span class="message-author"> Claire Mapes </span>
-                                                    <span class="message-time">12:28 AM</span>
-                                                    <div class="clearfix"></div>
-                                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="chat.html">
-                                            <div class="list-item">
-                                                <div class="list-left">
-                                                    <span class="avatar">M</span>
-                                                </div>
-                                                <div class="list-body">
-                                                    <span class="message-author">Melita Faucher</span>
-                                                    <span class="message-time">12:28 AM</span>
-                                                    <div class="clearfix"></div>
-                                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="chat.html">
-                                            <div class="list-item">
-                                                <div class="list-left">
-                                                    <span class="avatar">J</span>
-                                                </div>
-                                                <div class="list-body">
-                                                    <span class="message-author">Jeffery Lalor</span>
-                                                    <span class="message-time">12:28 AM</span>
-                                                    <div class="clearfix"></div>
-                                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="chat.html">
-                                            <div class="list-item">
-                                                <div class="list-left">
-                                                    <span class="avatar">L</span>
-                                                </div>
-                                                <div class="list-body">
-                                                    <span class="message-author">Loren Gatlin</span>
-                                                    <span class="message-time">12:28 AM</span>
-                                                    <div class="clearfix"></div>
-                                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="chat.html">
-                                            <div class="list-item">
-                                                <div class="list-left">
-                                                    <span class="avatar">T</span>
-                                                </div>
-                                                <div class="list-body">
-                                                    <span class="message-author">Tarah Shropshire</span>
-                                                    <span class="message-time">12:28 AM</span>
-                                                    <div class="clearfix"></div>
-                                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="topnav-dropdown-footer">
-                                <a href="chat.html">See all messages</a>
-                            </div>
+
                         </div>
                     </div>
                 </div>
+                <table class="table table-bordered text-center table-responsive-md">
+                    <thead>
+                        <tr class="bg-light text-uppercase">
+                            <th class="align-middle">Time</th>
+                            {% for day in days %}
+                                <th class="align-middle">{{ day }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in timetable_matrix %}
+                            <tr>
+                                <td class="align-middle fw-bold">
+                                    {{ row.time }}
+                                </td>
+                                {% for day in days %}
+                                    <td class="align-middle">
+                                        {% with lecture=row|dict_get:day %}
+                                            {% if lecture %}
+                                                <div>
+                                                    <span class="badge bg-primary text-white fs-6 px-3 py-1 d-inline-block mb-2">
+                                                        {{ lecture.timetable_subject_name.subject_name }}
+                                                    </span>
+                                                </div>
+                                                <div class="fw-semibold text-muted">
+                                                    {{ lecture.lecture_start_time }} - {{ lecture.lecture_end_time }}
+                                                </div>
+                                                <div class="text-secondary small">
+                                                    Faculty: {{ lecture.faculty_name }}<br>
+                                                    Division: {{ lecture.division }}
+                                                </div>
+                                            {% else %}
+                                                <div class="text-secondary small">No Lecture</div>
+                                            {% endif %}
+                                        {% endwith %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
-
     </div>
     <!-- end of faculty subject card -->
     <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
