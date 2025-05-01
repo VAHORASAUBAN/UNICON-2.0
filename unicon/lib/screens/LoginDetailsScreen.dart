@@ -127,7 +127,7 @@ class _LoginDetailsScreenState extends State<LoginDetailsScreen> {
                     controller: _usernameController,
                     color: Colors.grey,
                     icon: Icons.person,
-                    text: "Enrollment Number",
+                    text: "University ID",
                     privacy: false,
                     suffixicon: null,
                     inputStyle: const TextStyle(color: Colors.black),

@@ -111,13 +111,12 @@ urlpatterns = [
     path('teacher/login/', superadmin_views.teacher_login, name='teacher_login'),
     path('teacher/students/', superadmin_views.all_students_api,
          name='all_students_api'),
+    
     path('student/today-sessions/', superadmin_views.student_today_sessions,
          name='student-today-sessions'),
-
     path('student/placements/', superadmin_views.student_placement_list,
          name='student-placements'),
     path('student/mark-attendance/',
          superadmin_views.mark_attendance, name='mark_attendance'),
-
 
 ]

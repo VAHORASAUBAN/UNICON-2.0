@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import '../../../services/Config.dart';
 import '../dashboard/DashboardScreen.dart';
 import '../sidemenu.dart';
 import '../../../../widgets/navbar.dart';
@@ -13,33 +16,41 @@ class PlacementScreen extends StatefulWidget {
 
 class _PlacementScreenState extends State<PlacementScreen> {
   int _currentIndex = 1;
+  List<Map<String, dynamic>> companies = [];
+  bool isLoading = true;
 
-  final List<Map<String, String>> companies = [
-    {
-      "name": "Google",
-      "role": "Software Engineer",
-      "logo": "https://logo.clearbit.com/google.com",
-      "location": "Mountain View, CA",
-      "package": "₹35 LPA",
-      "deadline": "March 25, 2025",
-    },
-    {
-      "name": "Microsoft",
-      "role": "Cloud Developer",
-      "logo": "https://logo.clearbit.com/microsoft.com",
-      "location": "Redmond, WA",
-      "package": "₹30 LPA",
-      "deadline": "April 15, 2025",
-    },
-    {
-      "name": "Amazon",
-      "role": "AI/ML Engineer",
-      "logo": "https://logo.clearbit.com/amazon.com",
-      "location": "Seattle, WA",
-      "package": "₹40 LPA",
-      "deadline": "May 10, 2025",
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    loadPlacements();
+  }
+
+  Future<void> loadPlacements() async {
+    try {
+      final response = await http.get(Uri.parse(Config.allPlacements)).timeout(Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonData = jsonDecode(response.body);  // Decode as Map
+        final List<dynamic> placements = jsonData['placements'];  // Access the list of placements
+
+        if (mounted) {
+          setState(() {
+            companies = List<Map<String, dynamic>>.from(placements);
+            isLoading = false;
+          });
+        }
+      } else {
+        throw Exception('Failed to load placements, status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching placements: $e');
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
 
   void _onTabSelected(int index) {
     if (index == 0) {
@@ -62,8 +73,6 @@ class _PlacementScreenState extends State<PlacementScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-
-      // **AppBar with SideMenu**
       appBar: AppBar(
         title: const Text("Placement Opportunities"),
         backgroundColor: const Color(0xFF0A3B87),
@@ -75,7 +84,6 @@ class _PlacementScreenState extends State<PlacementScreen> {
           ),
         ),
       ),
-
       drawer: SideMenu(
         onMenuTap: (route) {
           Navigator.pop(context);
@@ -84,19 +92,21 @@ class _PlacementScreenState extends State<PlacementScreen> {
         userName: "John Doe",
         userEmail: "johndoe@example.com",
       ),
-
-      body: SingleChildScrollView(
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : companies.isEmpty
+          ? const Center(child: Text("No placements found."))
+          : SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: Column(
             children: List.generate(
               companies.length,
-                  (index) => _buildCompanyCard(context, companies[index]),
+                  (index) => _buildCompanyCard(context, companies[index], index),
             ),
           ),
         ),
       ),
-
       bottomNavigationBar: CustomNavBar(
         currentIndex: _currentIndex,
         onTap: _onTabSelected,
@@ -105,8 +115,7 @@ class _PlacementScreenState extends State<PlacementScreen> {
     );
   }
 
-  // **Company Card UI (Now More Mobile-Friendly)**
-  Widget _buildCompanyCard(BuildContext context, Map<String, String> company) {
+  Widget _buildCompanyCard(BuildContext context, Map<String, dynamic> company, int index) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -125,51 +134,40 @@ class _PlacementScreenState extends State<PlacementScreen> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // **Company Logo**
-                  Hero(
-                    tag: company["name"]!,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        company["logo"]!,
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) =>
-                        const Icon(Icons.broken_image, size: 50, color: Colors.grey),
-                      ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      company["placement_company_logo"] ?? "",
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image, size: 50, color: Colors.grey),
                     ),
                   ),
                   const SizedBox(width: 16),
-
-                  // **Company Details**
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          company["name"]!,
+                          company["placement_company_name"] ?? "",
                           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          company["role"]!,
+                          company["job_role"] ?? "",
                           style: TextStyle(fontSize: 14, color: Colors.blueGrey.shade600),
                         ),
                         const SizedBox(height: 6),
-
-                        // **Location, Package, Deadline**
-                        _buildIconText(Icons.location_on, company["location"]!, Colors.blueGrey),
-                        _buildIconText(Icons.currency_rupee_rounded, company["package"]!, Colors.green.shade700),
-                        _buildIconText(Icons.calendar_today, "Deadline: ${company["deadline"]}", Colors.red.shade600),
+                        _buildIconText(Icons.location_on, company["placement_company_location"] ?? "", Colors.blueGrey),
+                        _buildIconText(Icons.currency_rupee_rounded, company["placement_company_package"] ?? "", Colors.green.shade700),
+                        _buildIconText(Icons.calendar_today, "Deadline: ${company["deadline_date"]}", Colors.red.shade600),
                       ],
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 10),
-
-              // **Apply Button**
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -184,7 +182,7 @@ class _PlacementScreenState extends State<PlacementScreen> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
-                  child: const Text("Apply Now", style: TextStyle(color: Colors.white, fontSize: 16)),
+                  child: const Text("Details", style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
             ],
@@ -194,7 +192,6 @@ class _PlacementScreenState extends State<PlacementScreen> {
     );
   }
 
-  // **Helper Function for Icon & Text**
   Widget _buildIconText(IconData icon, String text, Color color) {
     return Row(
       children: [
