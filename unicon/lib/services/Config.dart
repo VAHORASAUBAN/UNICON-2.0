@@ -16,6 +16,9 @@ class Config {
   static const String facultytodayTimetable = "$baseIp/teacher/faculty_today_sessions/";
 
   static const String weeklyTimetable = "$baseIp/student/student_week_sessions/";
+  static const String fweeklyTimetable = "$baseIp/teacher/faculty_week_sessions/";
+  static const String facultyTodayTimetable = "$baseIp/teacher/faculty_today_sessions/";
+
   static const String markAttendance = "$baseIp/student/mark-attendance/";
 
 

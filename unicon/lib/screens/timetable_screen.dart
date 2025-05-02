@@ -41,27 +41,27 @@ class _TimetableScreenState extends State<TimetableScreen> {
       final response = await http.get(Uri.parse('${Config.weeklyTimetable}?student_id=$studentId'));
 
       if (response.statusCode == 200) {
-        // Print the raw response body to inspect its structure
-        print("Response Body: ${response.body}");
-
         final data = json.decode(response.body);
 
-        // Check if 'week_sessions' is present and properly handle the structure
+        // Log the raw data and decoded response for debugging
+        print("Response Body: ${response.body}");
+        print("Decoded Data: $data");
+
         if (data.containsKey('week_sessions')) {
-          final weekSessions = data['week_sessions'];  // Expecting this to be a Map or List
+          final weekSessions = data['week_sessions'];
 
           if (weekSessions is Map) {
-            // If week_sessions is a map, where each day is a key
+            // Handle when 'week_sessions' is a Map
             setState(() {
-              weeklySchedule = {}; // Clear any previous data
+              weeklySchedule = {}; // Reset the schedule
               weekSessions.forEach((day, sessions) {
                 if (sessions is List) {
-                  // Process each session for the given day
                   weeklySchedule[day] = [];
                   for (var session in sessions) {
+                    print("Session Data: $session"); // Log each session data
                     weeklySchedule[day]?.add({
-                      'subject': session['subject'] ?? '',
-                      'time': session['time'] ?? '',
+                      'subject': session['subject'] ?? 'No Subject',
+                      'time': session['time'] ?? 'No Time',
                       'division': session['division'] ?? 'N/A',
                     });
                   }
@@ -69,18 +69,19 @@ class _TimetableScreenState extends State<TimetableScreen> {
               });
             });
           } else if (weekSessions is List) {
-            // If week_sessions is a list
+            // Handle when 'week_sessions' is a List
             setState(() {
-              weeklySchedule = {}; // Clear any previous data
+              weeklySchedule = {}; // Reset the schedule
               for (var session in weekSessions) {
                 final day = session['day'];
                 if (day != null) {
                   if (!weeklySchedule.containsKey(day)) {
                     weeklySchedule[day] = [];
                   }
+                  print("Session Data: $session"); // Log each session data
                   weeklySchedule[day]?.add({
-                    'subject': session['subject'] ?? '',
-                    'time': session['time'] ?? '',
+                    'subject': session['subject'] ?? 'No Subject',
+                    'time': session['time'] ?? 'No Time',
                     'division': session['division'] ?? 'N/A',
                   });
                 }

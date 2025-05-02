@@ -105,60 +105,68 @@ class _StudentListScreenState extends State<StudentListScreen> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          _buildFilters(),
+      body: SingleChildScrollView( // Wrap entire body with SingleChildScrollView
+        child: Column(
+          children: [
+            _buildFilters(),
 
-          Expanded(
-            child: filteredStudents.isEmpty
-                ? const Center(
-              child: Text(
-                "No Students Available",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey),
+            // Display a message when no students are found
+            if (filteredStudents.isEmpty)
+              const Center(
+                child: Text(
+                  "No Students Available",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey),
+                ),
+              )
+            else
+            // List of students with pagination
+              ListView.builder(
+                shrinkWrap: true, // Let the ListView take only required space
+                physics: NeverScrollableScrollPhysics(), // Disable scrolling within the ListView
+                itemCount: getDisplayedItemCount(),
+                itemBuilder: (context, index) {
+                  int studentIndex = currentPage * studentsPerPage + index;
+                  final student = filteredStudents[studentIndex];
+
+                  return Card(
+                    color: Colors.white,
+                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ListTile(
+                      leading: student.imageUrl != null
+                          ? CircleAvatar(
+                        backgroundImage: NetworkImage(student.imageUrl!),
+                      )
+                          : CircleAvatar(
+                        backgroundColor: const Color(0xFF0A3B87),
+                        child: const Icon(Icons.person, color: Colors.white),
+                      ),
+                      title: Text(
+                        student.name,
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        "Course: ${student.course} | Sem: ${student.sem} | Div: ${student.div}",
+                        style: const TextStyle(fontSize: 14, color: Colors.black54),
+                      ),
+                    ),
+                  );
+                },
               ),
-            )
-                : ListView.builder(
-              itemCount: getDisplayedItemCount(),
-              itemBuilder: (context, index) {
-                int studentIndex = currentPage * studentsPerPage + index;
-                final student = filteredStudents[studentIndex];
 
-                return Card(
-                  color: Colors.white,
-                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ListTile(
-                    leading: student.imageUrl != null
-                        ? CircleAvatar(
-                      backgroundImage: NetworkImage(student.imageUrl!),
-                    )
-                        : CircleAvatar(
-                      backgroundColor: const Color(0xFF0A3B87),
-                      child: const Icon(Icons.person, color: Colors.white),
-                    ),
-                    title: Text(
-                      student.name,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text(
-                      "Course: ${student.course} | Sem: ${student.sem} | Div: ${student.div}",
-                      style: const TextStyle(fontSize: 14, color: Colors.black54),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-
-          if (filteredStudents.length > studentsPerPage) _buildPaginationControls(totalPages),
-        ],
+            // Pagination controls at the bottom
+            if (filteredStudents.length > studentsPerPage)
+              _buildPaginationControls(totalPages),
+          ],
+        ),
       ),
     );
   }
 
+  // Filter Dropdowns
   Widget _buildFilters() {
     List<String> courses = ["All"];
     courses.addAll(allStudents.map((s) => s.course).toSet().toList());
@@ -190,6 +198,7 @@ class _StudentListScreenState extends State<StudentListScreen> {
     );
   }
 
+  // Pagination Controls
   Widget _buildPaginationControls(int totalPages) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
@@ -247,6 +256,7 @@ class _StudentListScreenState extends State<StudentListScreen> {
     );
   }
 
+  // Dropdown menu widget
   Widget _buildDropdown(String label, List<String> items, String selectedValue, Function(String?) onChanged) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

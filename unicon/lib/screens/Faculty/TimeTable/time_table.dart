@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:unicon/services/AuthService.dart';
+
+import '../../../services/Config.dart';
 
 import '../../../services/AuthService.dart';
 import '../../../services/Config.dart';
@@ -17,6 +20,7 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
   late String displayedDate;
   bool isLoading = true;
   Map<String, List<Map<String, String>>> weeklySchedule = {};
+
   String facultyId = AuthService.facultyId; // Replace with actual faculty ID after login
 
   @override
@@ -84,11 +88,36 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
 
   String getEndTime(String startTime) {
     try {
-      final DateFormat formatter = DateFormat.jm();
-      final DateTime startDateTime = formatter.parse(startTime);
-      final DateTime endDateTime = startDateTime.add(Duration(hours: 1));
-      return formatter.format(endDateTime);
+      final response = await http.get(
+        Uri.parse('${Config.fweeklyTimetable}?faculty_id=${AuthService.facultyId}'),
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        Map<String, List<Map<String, String>>> schedule = {};
+
+        data['week_sessions'].forEach((day, sessions) {
+          List<Map<String, String>> daySessions = [];
+          for (var session in sessions) {
+            daySessions.add({
+              'subject': session['timetable_subject_name']['subject_name'],
+              'time': session['lecture_start_time'],
+              'division': session['division'],
+            });
+          }
+          schedule[day] = daySessions;
+        });
+
+        setState(() {
+          weeklySchedule = schedule;
+          isLoading = false;
+        });
+      } else {
+        setState(() => isLoading = false);
+        print("Failed to fetch timetable. Status: ${response.statusCode}");
+      }
     } catch (e) {
+      setState(() => isLoading = false);
+      print("Error fetching timetable: $e");
       return startTime;
     }
   }
@@ -151,10 +180,16 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
           Expanded(
             child: isLoading
                 ? const Center(child: CircularProgressIndicator())
-                : todaySessions.isEmpty
-                ? const Center(child: Text("No sessions today"))
+                : (weeklySchedule[selectedDay] == null || weeklySchedule[selectedDay]!.isEmpty)
+                ? const Center(
+              child: Text(
+                "No session today",
+                style: TextStyle(fontSize: 18, color: Colors.black54),
+              ),
+            )
                 : ListView.builder(
-              itemCount: todaySessions.length,
+              itemCount: weeklySchedule[selectedDay]!.length,
+
               itemBuilder: (context, index) {
                 var entry = todaySessions[index];
                 String subject = entry["subject"]!;
@@ -223,4 +258,5 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
       ),
     );
   }
+
 }
