@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../services/AuthService.dart';
 import 'ProfileScreen.dart';
 
 class SideMenu extends StatelessWidget {
@@ -113,10 +114,11 @@ class SideMenu extends StatelessWidget {
             _buildDrawerItem(
               Icons.logout,
               "Logout",
-                  () {
-                Navigator.pop(context);
-                onMenuTap("/logout");
-              },
+                  () async {
+                    await AuthService.logout();
+                    // Optional: Clear any other in-memory state if needed
+                    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false); // Send back to login
+                  },
               color: Colors.red,
             ),
           ],

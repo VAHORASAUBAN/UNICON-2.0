@@ -32,7 +32,6 @@ from django.contrib import messages
 from django.core.files import File
 from django.contrib.auth.hashers import make_password
 from .models import Teacher, department, Course
-from datetime import datetime
 from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
@@ -359,10 +358,19 @@ def format_time_to_am_pm(time_str):
     return time_obj.strftime('%I:%M %p')
 
 
-def parse_time_string(time_str):
-    fmt = "%I.%M %p"
-    return datetime.strptime(time_str.strip(), fmt).time()
+# def parse_time_string(time_str):
+#     fmt = "%I:%M %p"
+#     return datetime.strptime(time_str.strip(), fmt).time()
 
+def parse_time_string(time_str):
+    try:
+        # Replace period with a colon to match the correct format
+        time_str = time_str.replace('.', ':')
+        
+        # Now parse the time string in 12-hour AM/PM format (e.g., '9:30 AM')
+        return datetime.strptime(time_str, "%I:%M %p").time()
+    except ValueError:
+        return None  # Return None if the string cannot be parsed
 
 def show_timetable(request):
     # Get selected filter values from request
@@ -423,6 +431,91 @@ def show_timetable(request):
             row[day] = lecture
         timetable_matrix.append(row)
 
+    context = {
+        'timetable_matrix': timetable_matrix,
+        'days': days,
+        'department': department_name,
+        'course': course,
+        'semester': semester,
+        'division': division,
+        'departments': department.objects.all(),
+        'courses': Course.objects.all(),
+    }
+
+    return render(request, 'superadmin/show_timetable.html', context)
+# from collections import OrderedDict
+# from django.shortcuts import render
+# from .models import Timetable, department, Course, Subject, Teacher, Batch
+
+# def show_timetable(request):
+    # Get selected filter values from request
+    department_name = request.GET.get('department', '')
+    course = request.GET.get('course', '')
+    semester = request.GET.get('semester', '')
+    division = request.GET.get('division', '')
+
+    # Days of the week for the timetable
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+    # Define time slots with start and end times
+    time_slots = OrderedDict([
+        ("7:30 AM - 8:25 AM", (parse_time_string("7:30 AM"), parse_time_string("8:25 AM"))),
+        ("8:25 AM - 9:20 AM", (parse_time_string("8:25 AM"), parse_time_string("9:20 AM"))),
+        ("9:30 AM - 10:25 AM", (parse_time_string("9:30 AM"), parse_time_string("10:25 AM"))),
+        ("10:25 AM - 11:20 AM", (parse_time_string("10:25 AM"), parse_time_string("11:20 AM"))),
+        ("11:30 AM - 12:25 PM", (parse_time_string("11:30 AM"), parse_time_string("12:25 PM"))),
+        ("12:25 PM - 1:20 PM", (parse_time_string("12:25 PM"), parse_time_string("1:20 PM"))),
+    ])
+
+    # Fetch all timetables initially
+    timetable = Timetable.objects.all()
+
+    # Filter by department
+    if department_name:
+        try:
+            dept_obj = department.objects.get(department_name=department_name)
+            timetable = timetable.filter(timetable_department=dept_obj)
+        except department.DoesNotExist:
+            timetable = Timetable.objects.none()
+
+    # Filter by course
+    if course:
+        try:
+            course_obj = Course.objects.get(course_name=course)
+            timetable = timetable.filter(course=course_obj)
+        except Course.DoesNotExist:
+            timetable = Timetable.objects.none()
+
+    # Filter by semester
+    if semester:
+        timetable = timetable.filter(semester=semester)
+
+    # Filter by division
+    if division:
+        timetable = timetable.filter(division=division)
+
+    timetable_matrix = []
+
+    # Iterate over time slots and check if there's a lecture in that slot for each day
+    for slot_label, (slot_start, slot_end) in time_slots.items():
+        row = {'time': slot_label}
+        for day in days:
+            lecture = None
+            for entry in timetable:
+                if entry.day != day:
+                    continue
+                # Parse start and end time of the entry
+                entry_start = parse_time_string(entry.lecture_start_time)
+                entry_end = parse_time_string(entry.lecture_end_time)
+
+                # Ensure that both entry times are valid and within the current slot
+                if entry_start and entry_end and slot_start <= entry_start < slot_end:
+                    lecture = entry
+                    break
+            row[day] = lecture
+        timetable_matrix.append(row)
+
+    # Prepare context for the template
     context = {
         'timetable_matrix': timetable_matrix,
         'days': days,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:unicon/services/AuthService.dart';
 import 'package:unicon/services/Config.dart';
 import 'dart:convert';
 
@@ -30,10 +31,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       final response = await http.post(
         Uri.parse(Config.studentProfile),
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"student_id": 1}),
+        body: jsonEncode({"student_id": AuthService.studentId}),
       );
-
-      print("Profile Response: ${response.statusCode} ${response.body}");
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -53,10 +52,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> fetchTimetable() async {
     try {
-      final studentId = 1;
+      final studentId = AuthService.studentId;
       final response = await http.get(Uri.parse('${Config.todayTimetable}?student_id=$studentId'));
-
-      print("Timetable Response: ${response.statusCode} ${response.body}");
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
@@ -65,7 +62,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           isTimetableLoading = false;
         });
       } else {
-        print("Failed to load timetable: ${response.body}");
         setState(() => isTimetableLoading = false);
       }
     } catch (e) {
@@ -96,6 +92,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _onScannerTap() {
     print('Scanner tapped');
+  }
+
+  bool _isSessionOver(String endTime, TimeOfDay now) {
+    try {
+      final format = RegExp(r'(\d{1,2})[:.](\d{2})\s*([APMapm]{2})');
+      final match = format.firstMatch(endTime);
+      if (match != null) {
+        final hour = int.parse(match.group(1)!);
+        final minute = int.parse(match.group(2)!);
+        final isPM = match.group(3)!.toLowerCase().contains('pm');
+
+        final time = TimeOfDay(
+          hour: isPM && hour != 12 ? hour + 12 : (hour == 12 && !isPM ? 0 : hour),
+          minute: minute,
+        );
+
+        return time.hour < now.hour || (time.hour == now.hour && time.minute <= now.minute);
+      }
+    } catch (e) {
+      print("Time parse error: $e");
+    }
+
+    return false;
   }
 
   @override
@@ -143,6 +162,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildDashboardContent() {
+    final now = TimeOfDay.now();
+
+    bool allSessionsOver = timetable.isNotEmpty &&
+        timetable.every((item) => _isSessionOver(item["lecture_end_time"], now));
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -155,128 +179,142 @@ class _DashboardScreenState extends State<DashboardScreen> {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 12),
-          timetable.isEmpty
-              ? const Center(
-            child: Text(
-              "No Classes Today",
-              style: TextStyle(fontSize: 16, color: Colors.black54),
-            ),
-          )
-              : _buildTimeline(),
+          if (timetable.isEmpty && !isTimetableLoading)
+            const Center(
+              child: Text(
+                "No Classes Today",
+                style: TextStyle(fontSize: 16, color: Colors.black54),
+              ),
+            )
+          else
+            _buildTimeline(now),
         ],
       ),
     );
   }
 
-  Widget _buildTimeline() {
+  Widget _buildTimeline(TimeOfDay now) {
     return Column(
       children: List.generate(timetable.length, (index) {
         final item = timetable[index];
+
+        final startTimeStr = item["lecture_start_time"];
+        final endTimeStr = item["lecture_end_time"];
+        final subject = item["timetable_subject_name"]["subject_name"] ?? "N/A";
+        final batch = "Batch ${item["batch"]["batch_name"] ?? 'N/A'}";
+
+        final sessionOver = _isSessionOver(endTimeStr, now);
+
         return _buildTimelineItem(
-          item["timetable_subject_name"]["subject_name"] ?? "N/A",
-          "${item["lecture_start_time"]} - ${item["lecture_end_time"]}",
-          "Batch ${item["batch"]["batch_name"] ?? 'N/A'}",
+          subject,
+          "$startTimeStr - $endTimeStr",
+          batch,
           index == timetable.length - 1,
+          sessionOver,
         );
       }),
     );
   }
 
-  Widget _buildTimelineItem(String subject, String time, String batch, bool isLast) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            children: [
-              Container(
-                width: 15,
-                height: 30,
+  Widget _buildTimelineItem(
+      String subject, String time, String batch, bool isLast, bool isOver) {
+    return Opacity(
+      opacity: isOver ? 0.4 : 1.0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              children: [
+                Container(
+                  width: 15,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade800,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.blue.shade300,
+                        blurRadius: 8,
+                      ),
+                    ],
+                  ),
+                ),
+                if (!isLast)
+                  Container(
+                    width: 2,
+                    height: 40,
+                    color: Colors.blue.shade800,
+                  ),
+              ],
+            ),
+            const SizedBox(width: 7),
+            Expanded(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+                margin: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade800,
-                  shape: BoxShape.circle,
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF0A3B87), Color(0xFF004AAD)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.blue.shade300,
+                      color: Colors.blue.shade300.withOpacity(0.4),
                       blurRadius: 8,
+                      offset: const Offset(2, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 20,
+                      child: _getSubjectIcon(subject),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            subject,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            batch,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.white70,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      time,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ],
                 ),
               ),
-              if (!isLast)
-                Container(
-                  width: 2,
-                  height: 40,
-                  color: Colors.blue.shade800,
-                ),
-            ],
-          ),
-          const SizedBox(width: 7),
-          Expanded(
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
-              margin: const EdgeInsets.symmetric(vertical: 4),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF0A3B87), Color(0xFF004AAD)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.blue.shade300.withOpacity(0.4),
-                    blurRadius: 8,
-                    offset: const Offset(2, 4),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 20,
-                    child: _getSubjectIcon(subject),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          subject,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          batch,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    time,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
