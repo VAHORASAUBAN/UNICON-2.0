@@ -45,7 +45,7 @@ class _StudentListScreenState extends State<StudentListScreen> {
   Future<void> fetchStudents() async {
     try {
       final response = await http.get(
-        Uri.parse(Config.allStudents), // Using the Config class here
+        Uri.parse(Config.allStudents),
       );
 
       if (response.statusCode == 200) {
@@ -54,7 +54,7 @@ class _StudentListScreenState extends State<StudentListScreen> {
         List<Student> fetchedStudents = data.map((studentData) {
           return Student(
             name: "${studentData['firstname'] ?? ''} ${studentData['lastname'] ?? ''}",
-            course: studentData['course_name'] ?? "Unknown", // Ensure course_name is used here
+            course: studentData['course_name'] ?? "Unknown",
             sem: studentData['semester'] != null ? studentData['semester'].toString() : "Unknown",
             div: studentData['division'] ?? "Unknown",
           );
@@ -171,12 +171,14 @@ class _StudentListScreenState extends State<StudentListScreen> {
     List<String> courses = ["All"];
     courses.addAll(allStudents.map((s) => s.course).toSet().toList());
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: SingleChildScrollView( // Add horizontal scrolling to Row
-        scrollDirection: Axis.horizontal, // Allow horizontal scrolling
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          alignment: WrapAlignment.center,
           children: [
             _buildDropdown("Course", courses, selectedCourse, (value) {
               selectedCourse = value!;
@@ -199,44 +201,54 @@ class _StudentListScreenState extends State<StudentListScreen> {
   // Pagination Controls
   Widget _buildPaginationControls(int totalPages) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          ElevatedButton(
-            onPressed: currentPage > 0
-                ? () {
-              setState(() {
-                currentPage--;
-              });
-            }
-                : null,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF0A3B87),
-            ),
-            child: const Text(
-              "Previous",
-              style: TextStyle(color: Colors.white),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: currentPage > 0
+                  ? () {
+                setState(() {
+                  currentPage--;
+                });
+              }
+                  : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF0A3B87),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+              child: const Text(
+                "Previous",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
-          Text(
-            "Page ${currentPage + 1} of $totalPages",
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          ElevatedButton(
-            onPressed: currentPage < totalPages - 1
-                ? () {
-              setState(() {
-                currentPage++;
-              });
-            }
-                : null,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF0A3B87),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              "Page ${currentPage + 1} of $totalPages",
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
-            child: const Text(
-              "Next",
-              style: TextStyle(color: Colors.white),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: currentPage < totalPages - 1
+                  ? () {
+                setState(() {
+                  currentPage++;
+                });
+              }
+                  : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF0A3B87),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+              child: const Text(
+                "Next",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ],
@@ -247,28 +259,30 @@ class _StudentListScreenState extends State<StudentListScreen> {
   // Dropdown menu widget
   Widget _buildDropdown(String label, List<String> items, String selectedValue, Function(String?) onChanged) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
         ),
         Container(
-          width: 120,
+          width: 140,
           padding: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
-            color: Colors.white,  // Set background color to white
+            color: Colors.white,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.black26), // Keeps the border style
+            border: Border.all(color: Colors.black26),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: selectedValue,
+              isExpanded: true,
               onChanged: onChanged,
               style: const TextStyle(fontSize: 14, color: Colors.black),
               items: items.map((item) {
                 return DropdownMenuItem(
                   value: item,
-                  child: Text(item),
+                  child: Text(item, overflow: TextOverflow.ellipsis),
                 );
               }).toList(),
             ),

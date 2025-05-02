@@ -6,6 +6,9 @@ import 'package:unicon/services/AuthService.dart';
 
 import '../../../services/Config.dart';
 
+import '../../../services/AuthService.dart';
+import '../../../services/Config.dart';
+
 class FacultyTimetableScreen extends StatefulWidget {
   @override
   _FacultyTimetableScreenState createState() => _FacultyTimetableScreenState();
@@ -18,8 +21,7 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
   bool isLoading = true;
   Map<String, List<Map<String, String>>> weeklySchedule = {};
 
-  // Temporary faculty ID for demo
-  String facultyId = "1"; // Replace with actual faculty ID from login
+  String facultyId = AuthService.facultyId; // Replace with actual faculty ID after login
 
   @override
   void initState() {
@@ -42,6 +44,49 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
   }
 
   Future<void> fetchWeeklyTimetable() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${Config.weeklyTimetable}?faculty_id=$facultyId'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        Map<String, List<Map<String, String>>> schedule = {};
+
+        data['week_sessions'].forEach((day, sessions) {
+          List<Map<String, String>> daySessions = [];
+          Set<String> seenSubjects = {};
+
+          for (var session in sessions) {
+            String subject = session['timetable_subject_name']['subject_name'];
+            if (!seenSubjects.contains(subject)) {
+              daySessions.add({
+                'subject': subject,
+                'time': session['lecture_start_time'],
+                'division': session['division'],
+              });
+              seenSubjects.add(subject);
+            }
+          }
+
+          schedule[day] = daySessions;
+        });
+
+        setState(() {
+          weeklySchedule = schedule;
+          isLoading = false;
+        });
+      } else {
+        setState(() => isLoading = false);
+        print("Failed to fetch timetable. Status: ${response.statusCode}");
+      }
+    } catch (e) {
+      setState(() => isLoading = false);
+      print("Error fetching timetable: $e");
+    }
+  }
+
+  String getEndTime(String startTime) {
     try {
       final response = await http.get(
         Uri.parse('${Config.fweeklyTimetable}?faculty_id=${AuthService.facultyId}'),
@@ -73,11 +118,14 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
     } catch (e) {
       setState(() => isLoading = false);
       print("Error fetching timetable: $e");
+      return startTime;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, String>> todaySessions = weeklySchedule[selectedDay] ?? [];
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -141,8 +189,9 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
             )
                 : ListView.builder(
               itemCount: weeklySchedule[selectedDay]!.length,
+
               itemBuilder: (context, index) {
-                var entry = weeklySchedule[selectedDay]![index];
+                var entry = todaySessions[index];
                 String subject = entry["subject"]!;
                 String startTime = entry["time"]!;
                 String endTime = getEndTime(startTime);
@@ -210,14 +259,4 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
     );
   }
 
-  String getEndTime(String startTime) {
-    try {
-      final DateFormat formatter = DateFormat.jm();
-      final DateTime startDateTime = formatter.parse(startTime);
-      final DateTime endDateTime = startDateTime.add(const Duration(hours: 1));
-      return formatter.format(endDateTime);
-    } catch (e) {
-      return startTime;
-    }
-  }
 }

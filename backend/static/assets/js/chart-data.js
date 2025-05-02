@@ -4,8 +4,8 @@ $(document).ready(function () {
     // Options for Area Chart
     var areaChartOptions = {
         series: [
-            { name: 'Abrar', data: [31, 40, 28, 51, 42, 109, 100] },
-            { name: 'Shaikh', data: [11, 32, 45, 32, 34, 52, 41] }
+            { name: 'Last Month', data: [31, 40, 28, 51, 42, 109, 100] },
+            { name: 'Current Month', data: [11, 32, 45, 32, 34, 52, 41] }
         ],
         chart: { height: 350, type: 'area' },
         dataLabels: { enabled: false },
