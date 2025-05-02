@@ -1,206 +1,268 @@
-/*
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import '../services/AuthService.dart';
+import '../services/Config.dart';
 
-class TimetableScreen extends StatelessWidget {
-  // Sample data for the timetable
-  final Map<String, List<String>> timetable = {
-    "Monday": ["Math - 9:00 AM", "Science - 11:00 AM", "History - 2:00 PM"],
-    "Tuesday": ["English - 9:00 AM", "Biology - 11:00 AM", "Art - 2:00 PM"],
-    "Wednesday": ["Math - 9:00 AM", "Chemistry - 11:00 AM", "PE - 2:00 PM"],
-    "Thursday": ["Physics - 9:00 AM", "Math - 11:00 AM", "History - 2:00 PM"],
-    "Friday": ["Computer Science - 9:00 AM", "Music - 11:00 AM", "Geography - 2:00 PM"],
-    "Saturday": ["Extra Class - 9:00 AM"],
-    "Sunday": ["Holiday"],
-  };
+class TimetableScreen extends StatefulWidget {
+  @override
+  _TimetableScreenState createState() => _TimetableScreenState();
+}
+
+class _TimetableScreenState extends State<TimetableScreen> {
+  final List<String> days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  late String selectedDay;
+  late String displayedDate;
+  late Map<String, List<Map<String, String>>> weeklySchedule;
+
+  final String courseName = "IMSCIT";
+
+  bool isLoading = false; // To handle loading state
+
+  @override
+  void initState() {
+    super.initState();
+    DateTime now = DateTime.now();
+    String today = DateFormat('EEEE').format(now);
+    selectedDay = days.contains(today) ? today : "Monday";
+    displayedDate = _getDateForSelectedDay(selectedDay);
+    weeklySchedule = {};
+    _fetchTimetableData();
+  }
+
+  // Method to fetch timetable data from the API
+  Future<void> _fetchTimetableData() async {
+    setState(() {
+      isLoading = true; // Show loading indicator
+    });
+    final studentId = AuthService.studentId;
+    try {
+      final response = await http.get(Uri.parse('${Config.weeklyTimetable}?student_id=$studentId'));
+
+      if (response.statusCode == 200) {
+        // Print the raw response body to inspect its structure
+        print("Response Body: ${response.body}");
+
+        final data = json.decode(response.body);
+
+        // Check if 'week_sessions' is present and properly handle the structure
+        if (data.containsKey('week_sessions')) {
+          final weekSessions = data['week_sessions'];  // Expecting this to be a Map or List
+
+          if (weekSessions is Map) {
+            // If week_sessions is a map, where each day is a key
+            setState(() {
+              weeklySchedule = {}; // Clear any previous data
+              weekSessions.forEach((day, sessions) {
+                if (sessions is List) {
+                  // Process each session for the given day
+                  weeklySchedule[day] = [];
+                  for (var session in sessions) {
+                    weeklySchedule[day]?.add({
+                      'subject': session['subject'] ?? '',
+                      'time': session['time'] ?? '',
+                      'division': session['division'] ?? 'N/A',
+                    });
+                  }
+                }
+              });
+            });
+          } else if (weekSessions is List) {
+            // If week_sessions is a list
+            setState(() {
+              weeklySchedule = {}; // Clear any previous data
+              for (var session in weekSessions) {
+                final day = session['day'];
+                if (day != null) {
+                  if (!weeklySchedule.containsKey(day)) {
+                    weeklySchedule[day] = [];
+                  }
+                  weeklySchedule[day]?.add({
+                    'subject': session['subject'] ?? '',
+                    'time': session['time'] ?? '',
+                    'division': session['division'] ?? 'N/A',
+                  });
+                }
+              }
+            });
+          } else {
+            print("Unexpected structure for week_sessions: $weekSessions");
+          }
+        } else {
+          print("No week_sessions found in the response");
+        }
+      } else {
+        print("Failed to load timetable data. Status code: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error fetching timetable: $e"); // Handle API call error
+    } finally {
+      setState(() {
+        isLoading = false; // Hide loading indicator
+      });
+    }
+  }
+
+  String _getDateForSelectedDay(String dayName) {
+    final DateTime now = DateTime.now();
+    final int todayWeekday = now.weekday;
+    final int selectedWeekday = days.indexOf(dayName) + 1;
+    int daysDifference = selectedWeekday - todayWeekday;
+    if (daysDifference < 0) daysDifference += 7;
+    final DateTime selectedDate = now.add(Duration(days: daysDifference));
+    return DateFormat('yMMMMd').format(selectedDate);
+  }
+
+  String getEndTime(String startTime) {
+    try {
+      final DateFormat formatter = DateFormat.jm();
+      final DateTime startDateTime = formatter.parse(startTime);
+      final DateTime endDateTime = startDateTime.add(Duration(hours: 1));
+      return formatter.format(endDateTime);
+    } catch (e) {
+      return startTime; // Fallback if time parsing fails
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0A3B87),
         title: const Text(
-          "Weekly Timetable",
-          style: TextStyle(color: Colors.white),
+          "Student Timetable",
+          style: TextStyle(
+            fontSize: 24,
+            fontFamily: "Arial",
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(8.0),
-        children: timetable.entries.map((entry) {
-          String day = entry.key;
-          List<String> classes = entry.value;
-          return Card(
-            margin: const EdgeInsets.symmetric(vertical: 8.0),
-            child: ListTile(
-              title: Text(day, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: classes.map((classItem) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: Text(classItem),
-                  );
-                }).toList(),
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-}
-*/
-// timetable_screen.dart
-import 'package:flutter/material.dart';
-
-// Data model to represent a subject with a time range
-class Subject {
-  final String name;
-  final String timeRange; // Time range such as "9:00 AM - 10:00 AM"
-
-  Subject({required this.name, required this.timeRange});
-}
-
-class TimetableService {
-  static final Map<String, List<Subject>> timetable = {
-    "Monday": [
-      Subject(name: "Math", timeRange: "9:00 AM - 10:00 AM"),
-      Subject(name: "Science", timeRange: "11:00 AM - 12:00 PM"),
-      Subject(name: "History", timeRange: "2:00 PM - 3:00 PM"),
-    ],
-    "Tuesday": [
-      Subject(name: "English", timeRange: "9:00 AM - 10:00 AM"),
-      Subject(name: "Biology", timeRange: "11:00 AM - 12:00 PM"),
-      Subject(name: "Art", timeRange: "2:00 PM - 3:00 PM"),
-    ],
-    "Wednesday": [
-      Subject(name: "Math", timeRange: "9:00 AM - 10:00 AM"),
-      Subject(name: "Chemistry", timeRange: "11:00 AM - 12:00 PM"),
-      Subject(name: "PE", timeRange: "2:00 PM - 3:00 PM"),
-    ],
-    "Thursday": [
-      Subject(name: "Physics", timeRange: "9:00 AM - 10:00 AM"),
-      Subject(name: "Math", timeRange: "11:00 AM - 12:00 PM"),
-      Subject(name: "History", timeRange: "2:00 PM - 3:00 PM"),
-    ],
-    "Friday": [
-      Subject(name: "Computer Science", timeRange: "9:00 AM - 10:00 AM"),
-      Subject(name: "Music", timeRange: "11:00 AM - 12:00 PM"),
-      Subject(name: "Geography", timeRange: "2:00 PM - 3:00 PM"),
-    ],
-    "Saturday": [
-      Subject(name: "Extra Class", timeRange: "9:00 AM - 10:00 AM"),
-    ],
-    "Sunday": [Subject(name: "Holiday", timeRange: "")],
-  };
-
-  static List<Subject> getTodaysTimetable() {
-    String today = DateTime.now().weekday == 7
-        ? "Sunday"
-        : [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday"
-          ][DateTime.now().weekday - 1];
-    return timetable[today] ??
-        [Subject(name: "No classes today", timeRange: "")];
-  }
-
-  static List<Subject> getFullTimetable() {
-    // Returns the full timetable for the week
-    return timetable.entries.expand((entry) {
-      return entry.value.map((subject) => subject);
-    }).toList();
-  }
-}
-
-class TimetableScreen extends StatelessWidget {
-  const TimetableScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final timetableData = TimetableService.timetable;
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A3B87),
-        title: const Text(
-          "Full Timetable",
-          style: TextStyle(color: Colors.white),
-        ),
+        backgroundColor: const Color(0xFF004AAD),
+        elevation: 4,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 10),
-            Table(
-              border: TableBorder.all(color: Colors.black),
-              children: [
-                TableRow(
-                  children: [
-                    _buildTableCell('Time'),
-                    _buildTableCell('Monday'),
-                    _buildTableCell('Tuesday'),
-                    _buildTableCell('Wednesday'),
-                    _buildTableCell('Thursday'),
-                    _buildTableCell('Friday'),
-                    _buildTableCell('Saturday'),
-                    _buildTableCell('Sunday'),
-                  ],
-                ),
-                for (int i = 0;
-                    i < 4;
-                    i++) // Limit to 4 time slots (for example)
-                  TableRow(
-                    children: [
-                      _buildTableCell(_getTimeSlot(i)),
-                      _buildTableCell(_getSubjectForDay('Monday', i)),
-                      _buildTableCell(_getSubjectForDay('Tuesday', i)),
-                      _buildTableCell(_getSubjectForDay('Wednesday', i)),
-                      _buildTableCell(_getSubjectForDay('Thursday', i)),
-                      _buildTableCell(_getSubjectForDay('Friday', i)),
-                      _buildTableCell(_getSubjectForDay('Saturday', i)),
-                      _buildTableCell(_getSubjectForDay('Sunday', i)),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator()) // Show loading indicator while fetching data
+          : Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+            child: Text(
+              "Date for $selectedDay: $displayedDate",
+              style: const TextStyle(fontSize: 16, color: Colors.black87),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+            child: DropdownButtonFormField<String>(
+              value: selectedDay,
+              dropdownColor: Colors.white,
+              decoration: InputDecoration(
+                labelText: "Select Day",
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              onChanged: (newValue) {
+                setState(() {
+                  selectedDay = newValue!;
+                  displayedDate = _getDateForSelectedDay(selectedDay);
+                });
+              },
+              items: days.map((day) {
+                return DropdownMenuItem(
+                  value: day,
+                  child: Text(
+                    day,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: weeklySchedule[selectedDay]?.length ?? 0,
+              itemBuilder: (context, index) {
+                var entry = weeklySchedule[selectedDay]![index];
+                String subject = entry["subject"]!;
+                String startTime = entry["time"]!;
+                String endTime = getEndTime(startTime);
+                String division = entry["division"]!;
+
+                return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 8,
+                        offset: Offset(2, 4),
+                      ),
                     ],
                   ),
-              ],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            subject,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue.shade900,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              const Icon(Icons.schedule, size: 18, color: Colors.grey),
+                              const SizedBox(width: 4),
+                              Text(
+                                "$startTime - $endTime",
+                                style: const TextStyle(fontSize: 14, color: Colors.black87),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          const Icon(Icons.group, size: 20, color: Colors.grey),
+                          const SizedBox(width: 6),
+                          Text(
+                            "Division: $division",
+                            style: const TextStyle(fontSize: 16, color: Colors.black87),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          const Icon(Icons.school, size: 20, color: Colors.grey),
+                          const SizedBox(width: 6),
+                          Text(
+                            "Course: $courseName",
+                            style: const TextStyle(fontSize: 16, color: Colors.black87),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
-  }
-
-  Widget _buildTableCell(String text) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 16),
-      ),
-    );
-  }
-
-  String _getTimeSlot(int index) {
-    // Define the time slots based on index (e.g. "9:00 AM - 10:00 AM")
-    final timeSlots = [
-      "9:00 AM - 10:00 AM",
-      "11:00 AM - 12:00 PM",
-      "2:00 PM - 3:00 PM",
-      "4:00 PM - 5:00 PM", // Add more if necessary
-    ];
-    return timeSlots[index];
-  }
-
-  String _getSubjectForDay(String day, int index) {
-    final subjects = TimetableService.timetable[day];
-    return subjects != null && index < subjects.length
-        ? subjects[index].name
-        : '';
   }
 }
