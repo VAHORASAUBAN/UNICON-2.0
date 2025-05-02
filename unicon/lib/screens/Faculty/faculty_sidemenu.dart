@@ -79,13 +79,6 @@ class faculty_sidemenu extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 5),
-                Text(
-                  userEmail,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
-                ),
               ],
             ),
           ),

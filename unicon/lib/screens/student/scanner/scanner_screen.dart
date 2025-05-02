@@ -16,8 +16,8 @@ class ScannerScreen extends StatefulWidget {
 class _ScannerScreenState extends State<ScannerScreen> {
   final MobileScannerController _scannerController = MobileScannerController();
   bool isFlashOn = false;
-  bool isOtpMode = false; // Toggle between scanner and OTP mode
-  String? scannedValue; // Store scanned QR code value
+  bool isOtpMode = false;
+  String? scannedValue;
   final TextEditingController _otpController = TextEditingController();
 
   Future<void> _handleScan(BarcodeCapture capture) async {
@@ -25,16 +25,16 @@ class _ScannerScreenState extends State<ScannerScreen> {
     if (barcodes.isNotEmpty) {
       final String? code = barcodes.first.rawValue;
       if (code != null) {
+        print("QR Scanned: $code");
         setState(() {
           scannedValue = code;
         });
 
-        // Get the student ID from shared preferences
         final prefs = await SharedPreferences.getInstance();
         final String? studentId = prefs.getString('userId');
+        print("Fetched Student ID: $studentId");
 
         if (studentId != null) {
-          // Mark attendance using the API
           bool success = await _markAttendance(code, studentId);
 
           if (success) {
@@ -48,35 +48,44 @@ class _ScannerScreenState extends State<ScannerScreen> {
             _showError("Failed to mark attendance.");
           }
         } else {
-          _showError("Student ID not found.");
+          _showError("Student ID not found in shared preferences.");
         }
       }
     }
   }
 
   Future<bool> _markAttendance(String token, String studentId) async {
-    final String url = Config.markAttendance; // Replace with your base IP
+    final String url = Config.markAttendance;
+    print("📡 Sending attendance to: $url");
+    print("📦 Token: $token | Student ID: $studentId");
 
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        "token": token,
-        "student_id": studentId,
-      }),
-    );
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          "token": token,
+          "student_id": studentId,
+        }),
+      );
 
-    if (response.statusCode == 201) {
-      // Attendance marked successfully
-      return true;
-    } else if (response.statusCode == 400) {
-      // Handle specific error from the API
-      final errorResponse = jsonDecode(response.body);
-      print("Error: ${errorResponse['error']}");
-      return false;
-    } else {
-      // Other errors, e.g., server error
-      print("Error: Unable to mark attendance.");
+      print("✅ Status Code: ${response.statusCode}");
+      print("📨 Response Body: ${response.body}");
+
+      if (response.statusCode == 201) {
+        return true;
+      } else if (response.statusCode == 200) {
+        final result = jsonDecode(response.body);
+        _showError(result["message"] ?? "Attendance already marked.");
+        return false;
+      } else {
+        final error = jsonDecode(response.body);
+        _showError(error["error"] ?? "Something went wrong");
+        return false;
+      }
+    } catch (e) {
+      print("❌ Network/Error: $e");
+      _showError("Failed to connect. Check your internet or server.");
       return false;
     }
   }
@@ -153,9 +162,9 @@ class _ScannerScreenState extends State<ScannerScreen> {
               children: [
                 const Icon(Icons.check_circle, color: Colors.white, size: 40),
                 const SizedBox(height: 10),
-                Text(
+                const Text(
                   "Scanned Successfully!",
-                  style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   "Value: $scannedValue",
@@ -240,7 +249,7 @@ class ScanSuccessScreen extends StatelessWidget {
               const Icon(Icons.verified, color: Colors.green, size: 80),
               const SizedBox(height: 20),
               const Text(
-                "Attendance Successfully! ",
+                "Attendance Successful!",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),

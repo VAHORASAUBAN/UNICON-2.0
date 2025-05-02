@@ -201,14 +201,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
         final startTimeStr = item["lecture_start_time"];
         final endTimeStr = item["lecture_end_time"];
         final subject = item["timetable_subject_name"]["subject_name"] ?? "N/A";
-        final batch = "Batch ${item["batch"]["batch_name"] ?? 'N/A'}";
 
         final sessionOver = _isSessionOver(endTimeStr, now);
 
         return _buildTimelineItem(
           subject,
           "$startTimeStr - $endTimeStr",
-          batch,
+
           index == timetable.length - 1,
           sessionOver,
         );
@@ -217,7 +216,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildTimelineItem(
-      String subject, String time, String batch, bool isLast, bool isOver) {
+      String subject, String time, bool isLast, bool isOver) {
     return Opacity(
       opacity: isOver ? 0.4 : 1.0,
       child: Padding(
@@ -289,13 +288,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
-                            ),
-                          ),
-                          Text(
-                            batch,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.white70,
                             ),
                           ),
                         ],
