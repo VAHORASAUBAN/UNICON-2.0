@@ -267,11 +267,9 @@
 												<div class="form-group">
 													<label>Gender</label>
 													<select class="form-control select" name="gender">
-														<option value="Male" {% if teacher.gender=="Male" %}selected{%
-															endif %}>Male</option>
-														<option value="Female" {% if teacher.gender=="Female"
-															%}selected{% endif %}>Female</option>
-													</select>
+														<option value="Male" {% if teacher.gender == "Male" %}selected{% endif %}>Male</option>
+														<option value="Female" {% if teacher.gender == "Female" %}selected{% endif %}>Female</option>
+													  </select>
 												</div>
 
 												<div class="form-group">
@@ -296,14 +294,15 @@
 												<!-- Country -->
 												<div class="form-group">
 													<label>Country</label>
-													<select class="form-control select form-select country"
-														aria-label="Default select example" name="country"
-														onchange="loadStates()">
-														<option value="{{ teacher.country }}" selected>{{
-															teacher.country }}</option>
-														<!-- More country options can be added via JS or here -->
+													<select
+													  class="form-control select form-select country"
+													  aria-label="Default select example"
+													  name="country"
+													  onchange="loadStates()">
+													  <option value="{{ teacher.country }}" selected>{{ teacher.country }}</option>
+													  <!-- More country options can be added via JS or here -->
 													</select>
-												</div>
+												  </div>
 
 												<!-- State -->
 												<div class="form-group">
@@ -342,18 +341,16 @@
 													<label>Course</label>
 													<select class="form-control select" name="course">
 														{% for i in all_courses %}
-														<option value="{{ i.id }}" {% if teacher.course.id==i.id
-															%}selected{% endif %}>{{ i.course_name }}</option>
-														{% endfor %}
+														<option value="{{ i.id }}" {% if teacher.course.id == i.id %}selected{% endif %}>{{ i.course_name }}</option>
+													  {% endfor %}
 													</select>
 												</div>
 												<div class="form-group">
 													<label>Department</label>
 													<select class="form-control select" name="department">
 														{% for i in all_departments %}
-														<option value="{{ i.id }}" {% if teacher.department.id==i.id
-															%}selected{% endif %}>{{ i.department_name }}</option>
-														{% endfor %}
+														<option value="{{ i.id }}" {% if teacher.department.id == i.id %}selected{% endif %}>{{ i.department_name }}</option>
+													  {% endfor %}
 													</select>
 												</div>
 												<div class="form-group">
