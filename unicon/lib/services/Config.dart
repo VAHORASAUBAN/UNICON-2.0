@@ -11,5 +11,7 @@ class Config {
   static const String allStudents = "$baseIp/teacher/students/";
   static const String allPlacements = "$baseIp/student/placements/";
   static const String todayTimetable = "$baseIp/student/today-sessions/";
+  static const String weeklyTimetable = "$baseIp/student/student_week_sessions/";
+  static const String markAttendance = "$baseIp/student/mark-attendance/";
 
 }

@@ -1,6 +1,10 @@
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../services/Config.dart';
 
 class ScannerScreen extends StatefulWidget {
   const ScannerScreen({super.key});
@@ -16,7 +20,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
   String? scannedValue; // Store scanned QR code value
   final TextEditingController _otpController = TextEditingController();
 
-  void _handleScan(BarcodeCapture capture) {
+  Future<void> _handleScan(BarcodeCapture capture) async {
     final List<Barcode> barcodes = capture.barcodes;
     if (barcodes.isNotEmpty) {
       final String? code = barcodes.first.rawValue;
@@ -25,29 +29,72 @@ class _ScannerScreenState extends State<ScannerScreen> {
           scannedValue = code;
         });
 
-        // Navigate to confirmation screen after a short delay
-        Future.delayed(const Duration(milliseconds: 500), () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ScanSuccessScreen(scannedData: code),
-            ),
-          );
-        });
+        // Get the student ID from shared preferences
+        final prefs = await SharedPreferences.getInstance();
+        final String? studentId = prefs.getString('userId');
+
+        if (studentId != null) {
+          // Mark attendance using the API
+          bool success = await _markAttendance(code, studentId);
+
+          if (success) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ScanSuccessScreen(scannedData: code),
+              ),
+            );
+          } else {
+            _showError("Failed to mark attendance.");
+          }
+        } else {
+          _showError("Student ID not found.");
+        }
       }
     }
   }
 
-  void _submitOtp() {
-    final String otp = _otpController.text.trim();
-    if (otp.isNotEmpty) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ScanSuccessScreen(scannedData: otp),
-        ),
-      );
+  Future<bool> _markAttendance(String token, String studentId) async {
+    final String url = Config.markAttendance; // Replace with your base IP
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "token": token,
+        "student_id": studentId,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      // Attendance marked successfully
+      return true;
+    } else if (response.statusCode == 400) {
+      // Handle specific error from the API
+      final errorResponse = jsonDecode(response.body);
+      print("Error: ${errorResponse['error']}");
+      return false;
+    } else {
+      // Other errors, e.g., server error
+      print("Error: Unable to mark attendance.");
+      return false;
     }
+  }
+
+  void _showError(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -67,22 +114,6 @@ class _ScannerScreenState extends State<ScannerScreen> {
                 isFlashOn = !isFlashOn;
               });
               _scannerController.toggleTorch();
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              isOtpMode ? Icons.qr_code : Icons.keyboard,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              setState(() {
-                isOtpMode = !isOtpMode;
-                scannedValue = null;
-                _otpController.clear();
-              });
-              if (!isOtpMode) {
-                _scannerController.start();
-              }
             },
           ),
         ],
@@ -171,6 +202,18 @@ class _ScannerScreenState extends State<ScannerScreen> {
     );
   }
 
+  Future<void> _submitOtp() async {
+    final String otp = _otpController.text.trim();
+    if (otp.isNotEmpty) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ScanSuccessScreen(scannedData: otp),
+        ),
+      );
+    }
+  }
+
   @override
   void dispose() {
     _scannerController.dispose();
@@ -197,7 +240,7 @@ class ScanSuccessScreen extends StatelessWidget {
               const Icon(Icons.verified, color: Colors.green, size: 80),
               const SizedBox(height: 20),
               const Text(
-                "Attendance Successfully!",
+                "Attendance Successfully! ",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),

@@ -18,7 +18,8 @@ class _PlacementScreenState extends State<PlacementScreen> {
   int _currentIndex = 1;
   List<Map<String, dynamic>> companies = [];
   bool isLoading = true;
-
+  String userName = "";
+  String userEmail = "";
   @override
   void initState() {
     super.initState();
@@ -89,8 +90,8 @@ class _PlacementScreenState extends State<PlacementScreen> {
           Navigator.pop(context);
           Navigator.pushNamed(context, route);
         },
-        userName: "John Doe",
-        userEmail: "johndoe@example.com",
+        userName: userName,
+        userEmail: userEmail,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
