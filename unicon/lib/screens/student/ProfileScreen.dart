@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../../services/AuthService.dart';
 import '../../services/Config.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -21,11 +22,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> fetchStudentProfile() async {
-    const url = Config.studentProfile; // change if hosted
+    final int? studentId = AuthService.studentId;
+
+    if (studentId == null) {
+      print("No student ID found. Make sure user is logged in.");
+      return;
+    }
+    const url = Config.studentProfile;
     final response = await http.post(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"student_id": 1}), // Replace with actual student ID
+      body: jsonEncode({"student_id": studentId}),
     );
 
     if (response.statusCode == 200) {
@@ -34,7 +41,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         isLoading = false;
       });
     } else {
-      // Handle error
       print("Failed to fetch: ${response.body}");
     }
   }
