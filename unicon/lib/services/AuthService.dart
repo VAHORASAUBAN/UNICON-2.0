@@ -25,11 +25,11 @@ import 'package:http/http.dart' as http;
 import 'config.dart';
 
 class AuthService {
-  static int? facultyId;
+  static dynamic facultyId;
 
   static Future<bool> login(String id, String password, String userType) async {
     final String url =
-    userType == 'Faculty' ? Config.teacherLogin : Config.studentLogin;
+    userType == 'Faculty' ? Config.teacherLogin.toString() : Config.studentLogin;
 
     final response = await http.post(
       Uri.parse(url),
@@ -42,7 +42,8 @@ class AuthService {
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
       if (userType == 'Faculty') {
-        facultyId = int.tryParse(data['faculty_id'].toString());
+        // Parse the faculty_id as a dynamic value to support both int and String
+        facultyId = data['faculty_id'];
         print("Logged in faculty ID: $facultyId");
       }
       return true;
