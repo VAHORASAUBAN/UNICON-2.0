@@ -260,18 +260,47 @@
                 <div class="row">
                     {% if todays_lectures %}
                         {% for lecture in todays_lectures %}
-                        <div class="col-md-4 lecture-info">
-                            <div class="lecture-card">
-                                <h4 class="lecture-title">{{ lecture.timetable_subject_name.subject_name }}</h4>
-                                <p><strong>Course:</strong> {{ lecture.course.course_name }}</p>
-                                <p><strong>Department:</strong> {{ lecture.timetable_department.department_name }}</p>
-                                <p><strong>Division:</strong> {{ lecture.division }}</p>
-                                <p><strong>Semester:</strong> {{ lecture.semester }}</p>
-                                <p><strong>Date:</strong> {{ lecture.date }}</p>
-                                <p><strong>Time:</strong> {{ lecture.lecture_start_time }} - {{ lecture.lecture_end_time }}</p>
-                                <button class="btn btn-primary btn-qr" onclick="generateQRCode('{{ lecture.timetable_subject_name.id }}', '{{ lecture.faculty_name.id }}')">
-                                    <i class="fas fa-qrcode"></i> Generate QR Code
-                                </button>
+                        <div class="col-md-4 mb-4">
+                            <div class="lecture-card shadow-lg rounded-lg bg-white p-4 border border-light">
+                                <!-- Header: Subject Name -->
+                                <div class="d-flex justify-content-between mb-3">
+                                    <!-- Increased Font Style for Lecture Title -->
+                                    <h2 class="lecture-title text-primary fw-bold mb-0" style="font-size: 2rem; line-height: 1.2;">
+                                        {{ lecture.timetable_subject_name.subject_name }}
+                                    </h2>
+                                
+                                    <!-- Increased Font Style for Time -->
+                                    <p class="text-muted small mb-0" style="font-size: 1.2rem; font-weight: 500;">
+                                        {{ lecture.lecture_start_time }} - {{ lecture.lecture_end_time }}
+                                    </p>
+                                </div>
+                                
+                
+                                <!-- Content: Details Section -->
+                                <div class="lecture-details mb-4">
+                                    <div class="row">
+                                        <div class="col-6 mb-2">
+                                            <p><strong class="text-muted">Course:</strong> {{ lecture.course.course_name }}</p>
+                                        </div>
+                                        <div class="col-6 mb-2">
+                                            <p><strong class="text-muted">Department:</strong> {{ lecture.timetable_department.department_name }}</p>
+                                        </div>
+                                        <div class="col-6 mb-2">
+                                            <p><strong class="text-muted">Division:</strong> {{ lecture.division }}</p>
+                                        </div>
+                                        <div class="col-6 mb-2">
+                                            <p><strong class="text-muted">Semester:</strong> {{ lecture.semester }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                
+                                <!-- QR Code Generation Button -->
+                                <div class="d-flex justify-content-center">
+                                    <button class="btn btn-primary btn-qr px-4 py-2 rounded-pill shadow-md" 
+                                        onclick="generateQRCode('{{ lecture.timetable_subject_name.id }}', '{{ lecture.faculty_name.id }}')">
+                                        <i class="fas fa-qrcode"></i> Generate QR Code
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         {% endfor %}
@@ -289,6 +318,7 @@
                         </div>
                     {% endif %}
                 </div>
+                
                 
             </div>
         </div>

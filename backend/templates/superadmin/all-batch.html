@@ -60,74 +60,66 @@
 					</div>
 				</div>
 				<form method="get" action="{% url 'all_batch' %}">
-					<div class="row g-3 align-items-center">
-						<!-- Start Year -->
-						<div class="col-md-3">
-							<div class="form-floating">
-								<input 
-									type="number" 
-									name="start_year" 
-									class="form-control"
-									id="startYear" 
-									placeholder="Start Year" 
-									value="{{ request.GET.start_year }}">
-								<label for="startYear">Start Year</label>
-							</div>
+					<div class="row filter-row">
+					  
+					  <!-- Start Year -->
+					  <div class="col-sm-6 col-md-4">
+						<div class="form-group form-focus">
+						  <input 
+							type="number" 
+							name="start_year" 
+							class="form-control floating" 
+							value="{{ request.GET.start_year }}">
+						  <label class="focus-label">Start Year</label>
 						</div>
-				
-						<!-- End Year -->
-						<div class="col-md-3">
-							<div class="form-floating">
-								<input 
-									type="number" 
-									name="end_year" 
-									class="form-control"
-									id="endYear" 
-									placeholder="End Year" 
-									value="{{ request.GET.end_year }}">
-								<label for="endYear">End Year</label>
-							</div>
+					  </div>
+				  
+					  <!-- End Year -->
+					  <div class="col-sm-6 col-md-4">
+						<div class="form-group form-focus">
+						  <input 
+							type="number" 
+							name="end_year" 
+							class="form-control floating" 
+							value="{{ request.GET.end_year }}">
+						  <label class="focus-label">End Year</label>
 						</div>
-				
-						<!-- Course -->
-						<div class="col-md-3">
-							<div class="form-floating">
-								<select 
-									name="course" 
-									class="form-select" 
-									id="course">
-									<option value="">All Courses</option>
-									{% for course in all_courses %}
-										<option 
-											value="{{ course.id }}" 
-											{% if request.GET.course == course.id|stringformat:"s" %}selected{% endif %}>
-											{{ course.course_name }}
-										</option>
-									{% endfor %}
-								</select>
-								<label for="course">Course</label>
-							</div>
+					  </div>
+				  
+					  <!-- Course -->
+					  <div class="col-sm-6 col-md-4">
+						<div class="form-group form-focus select-focus">
+						  <select name="course" class="select form-control">
+							<option value="">All Courses</option>
+							{% for course in all_courses %}
+							  <option 
+								value="{{ course.id }}" 
+								{% if request.GET.course == course.id|stringformat:"s" %}selected{% endif %}>
+								{{ course.course_name }}
+							  </option>
+							{% endfor %}
+						  </select>
+						  <label class="focus-label">Course</label>
 						</div>
-				
-						<!-- Search Button -->
-						<div class="col-md-2 d-flex justify-content-md-start">
-							<button 
-								type="submit" 
-								class="btn btn-primary w-100">
-								Search
-							</button>
+					  </div>
+				  
+					  <!-- Search Button -->
+					  <div class="col-sm-6 col-md-2">
+						<div class="form-group">
+						  <button type="submit" class="btn btn-search rounded btn-block mb-3">Search</button>
 						</div>
-				
-						<!-- Clear Filter Button -->
-						<div class="col-md-1 d-flex justify-content-md-start">
-							<a 
-								href="{% url 'all_batch' %}" 
-								class="btn btn-secondary w-100">
-								Clear
-							</a>
+					  </div>
+				  
+					  <!-- Clear Filter Button -->
+					  <div class="col-sm-6 col-md-2">
+						<div class="form-group">
+						  <a href="{% url 'all_batch' %}" class="btn btn-secondary rounded btn-block mb-3">Clear Filter</a>
 						</div>
+					  </div>
+				  
 					</div>
-				</form>
+				  </form>
+				  
 				  
 
 				<div class="row">
