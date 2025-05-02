@@ -76,7 +76,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
           Navigator.pushNamed(context, route);
         },
         userName: widget.userName,
-        userEmail: "johndoe@example.com",
+        userEmail: "",
       ),
       body: IndexedStack(
         index: _currentIndex,
