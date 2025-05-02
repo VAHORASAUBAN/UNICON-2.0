@@ -1,150 +1,10 @@
-/*
+import 'dart:convert';
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(FacultyTimetableApp());
-}
-
-class FacultyTimetableApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Weekly Faculty Timetable',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: FacultyTimetableScreen(),
-    );
-  }
-}
-
-class FacultyTimetableScreen extends StatelessWidget {
-  final Map<String, List<Map<String, String>>> weeklyClasses = {
-    "Monday": [
-      {"subject": "CNS", "division": "iMscIT-Sem 7 (Div B)", "time": "07:00 AM - 08:00 AM"},
-      {"subject": "ADS", "division": "iMscIT-Sem 7 (Div B)", "time": "08:00 AM - 09:00 AM"},
-      {"subject": "Machine Learning", "division": "iMscIT-Sem 7 (Div A)", "time": "09:00 AM - 10:00 AM"},
-      {"subject": "Blockchain", "division": "iMscIT-Sem 7 (Div B)", "time": "10:00 AM - 11:00 AM"},
-    ],
-    "Tuesday": [
-      {"subject": "AI", "division": "iMscIT-Sem 7 (Div A)", "time": "07:00 AM - 08:00 AM"},
-      {"subject": "Data Science", "division": "iMscIT-Sem 7 (Div B)", "time": "08:00 AM - 09:00 AM"},
-      {"subject": "Cloud Computing", "division": "iMscIT-Sem 7 (Div A)", "time": "09:00 AM - 10:00 AM"},
-    ],
-    "Wednesday": [
-      {"subject": "Big Data", "division": "iMscIT-Sem 7 (Div B)", "time": "07:00 AM - 08:00 AM"},
-      {"subject": "Deep Learning", "division": "iMscIT-Sem 7 (Div A)", "time": "08:00 AM - 09:00 AM"},
-      {"subject": "Cyber Security", "division": "iMscIT-Sem 7 (Div B)", "time": "09:00 AM - 10:00 AM"},
-    ],
-    "Thursday": [
-      {"subject": "Internet of Things", "division": "iMscIT-Sem 7 (Div A)", "time": "07:00 AM - 08:00 AM"},
-      {"subject": "Data Analytics", "division": "iMscIT-Sem 7 (Div B)", "time": "08:00 AM - 09:00 AM"},
-      {"subject": "Software Engineering", "division": "iMscIT-Sem 7 (Div A)", "time": "09:00 AM - 10:00 AM"},
-    ],
-    "Friday": [
-      {"subject": "DevOps", "division": "iMscIT-Sem 7 (Div A)", "time": "07:00 AM - 08:00 AM"},
-      {"subject": "Ethical Hacking", "division": "iMscIT-Sem 7 (Div B)", "time": "08:00 AM - 09:00 AM"},
-      {"subject": "Cloud Security", "division": "iMscIT-Sem 7 (Div A)", "time": "09:00 AM - 10:00 AM"},
-    ],
-    "Saturday": [
-      {"subject": "Database Management", "division": "iMscIT-Sem 7 (Div B)", "time": "07:00 AM - 08:00 AM"},
-      {"subject": "Full-Stack Development", "division": "iMscIT-Sem 7 (Div A)", "time": "08:00 AM - 09:00 AM"},
-      {"subject": "AI Ethics", "division": "iMscIT-Sem 7 (Div B)", "time": "09:00 AM - 10:00 AM"},
-    ],
-    "Sunday": [],
-  };
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A3B87),
-        title: const Text(
-          "Weekly Timetable",
-          style: TextStyle(color: Colors.white),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white), // Back button color set to white
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: weeklyClasses.keys.map((day) {
-            List<Map<String, String>> classes = weeklyClasses[day]!;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  day,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF0A3B87)),
-                ),
-                const SizedBox(height: 8),
-                if (classes.isEmpty)
-                  Center(child: Text("No Classes", style: TextStyle(fontSize: 16, color: Colors.grey)))
-                else
-                  ...classes.map((classData) {
-                    return ClassCard(
-                      subject: classData["subject"]!,
-                      division: classData["division"]!,
-                      time: classData["time"]!,
-                    );
-                  }).toList(),
-                const SizedBox(height: 16),
-              ],
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
-}
-
-class ClassCard extends StatelessWidget {
-  final String subject;
-  final String division;
-  final String time;
-
-  const ClassCard({Key? key, required this.subject, required this.division, required this.time}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 3,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: const Color(0xFF0A3B87),
-              child: const Text("iM", style: TextStyle(color: Colors.white)),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(subject, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                  Text(division, style: const TextStyle(color: Colors.black)),
-                ],
-              ),
-            ),
-            Text(time, style: const TextStyle(fontSize: 14, color: Colors.grey)),
-          ],
-        ),
-      ),
-    );
-  }
-}
-*/
-import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+
+import '../../../services/AuthService.dart';
+import '../../../services/Config.dart';
 
 class FacultyTimetableScreen extends StatefulWidget {
   @override
@@ -155,46 +15,9 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
   final List<String> days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   late String selectedDay;
   late String displayedDate;
-
-  final String courseName = "IMSCIT";
-
-  final Map<String, List<Map<String, String>>> weeklySchedule = {
-    "Monday": [
-      {"subject": "ADS", "time": "9:00 AM", "division": "A"},
-      {"subject": "CNS", "time": "10:00 AM", "division": "B"},
-      {"subject": "MLP", "time": "11:00 AM", "division": "A"},
-      {"subject": "HPC", "time": "12:00 PM", "division": "B"},
-    ],
-    "Tuesday": [
-      {"subject": "Flutter", "time": "9:00 AM", "division": "B"},
-      {"subject": "ADS Practical", "time": "10:00 AM", "division": "A"},
-      {"subject": "CNS", "time": "11:00 AM", "division": "A"},
-      {"subject": "MLP", "time": "12:00 PM", "division": "B"},
-    ],
-    "Wednesday": [
-      {"subject": "HPC", "time": "9:00 AM", "division": "A"},
-      {"subject": "Flutter", "time": "10:00 AM", "division": "A"},
-      {"subject": "ADS", "time": "11:00 AM", "division": "B"},
-      {"subject": "MLP", "time": "12:00 PM", "division": "B"},
-    ],
-    "Thursday": [
-      {"subject": "ADS Practical", "time": "9:00 AM", "division": "B"},
-      {"subject": "CNS", "time": "10:00 AM", "division": "A"},
-      {"subject": "Flutter", "time": "11:00 AM", "division": "B"},
-      {"subject": "HPC", "time": "12:00 PM", "division": "A"},
-    ],
-    "Friday": [
-      {"subject": "ADS", "time": "9:00 AM", "division": "A"},
-      {"subject": "MLP", "time": "10:00 AM", "division": "B"},
-      {"subject": "CNS", "time": "11:00 AM", "division": "A"},
-      {"subject": "Flutter", "time": "12:00 PM", "division": "B"},
-    ],
-    "Saturday": [
-      {"subject": "HPC", "time": "9:00 AM", "division": "B"},
-      {"subject": "ADS Practical", "time": "10:00 AM", "division": "A"},
-      {"subject": "MLP", "time": "11:00 AM", "division": "B"},
-    ],
-  };
+  bool isLoading = true;
+  Map<String, List<Map<String, String>>> weeklySchedule = {};
+  String facultyId = AuthService.facultyId; // Replace with actual faculty ID after login
 
   @override
   void initState() {
@@ -203,6 +26,7 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
     String today = DateFormat('EEEE').format(now);
     selectedDay = days.contains(today) ? today : "Monday";
     displayedDate = _getDateForSelectedDay(selectedDay);
+    fetchWeeklyTimetable();
   }
 
   String _getDateForSelectedDay(String dayName) {
@@ -215,6 +39,49 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
     return DateFormat('yMMMMd').format(selectedDate);
   }
 
+  Future<void> fetchWeeklyTimetable() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${Config.weeklyTimetable}?faculty_id=$facultyId'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        Map<String, List<Map<String, String>>> schedule = {};
+
+        data['week_sessions'].forEach((day, sessions) {
+          List<Map<String, String>> daySessions = [];
+          Set<String> seenSubjects = {};
+
+          for (var session in sessions) {
+            String subject = session['timetable_subject_name']['subject_name'];
+            if (!seenSubjects.contains(subject)) {
+              daySessions.add({
+                'subject': subject,
+                'time': session['lecture_start_time'],
+                'division': session['division'],
+              });
+              seenSubjects.add(subject);
+            }
+          }
+
+          schedule[day] = daySessions;
+        });
+
+        setState(() {
+          weeklySchedule = schedule;
+          isLoading = false;
+        });
+      } else {
+        setState(() => isLoading = false);
+        print("Failed to fetch timetable. Status: ${response.statusCode}");
+      }
+    } catch (e) {
+      setState(() => isLoading = false);
+      print("Error fetching timetable: $e");
+    }
+  }
+
   String getEndTime(String startTime) {
     try {
       final DateFormat formatter = DateFormat.jm();
@@ -222,14 +89,16 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
       final DateTime endDateTime = startDateTime.add(Duration(hours: 1));
       return formatter.format(endDateTime);
     } catch (e) {
-      return startTime; // Fallback if time parsing fails
+      return startTime;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, String>> todaySessions = weeklySchedule[selectedDay] ?? [];
+
     return Scaffold(
-      backgroundColor: Colors.white, // White background
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
           "Faculty Timetable",
@@ -258,11 +127,11 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
             child: DropdownButtonFormField<String>(
               value: selectedDay,
-              dropdownColor: Colors.white, // Dropdown background color white
+              dropdownColor: Colors.white,
               decoration: InputDecoration(
                 labelText: "Select Day",
                 filled: true,
-                fillColor: Colors.white, // TextField box white
+                fillColor: Colors.white,
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               ),
               onChanged: (newValue) {
@@ -274,19 +143,20 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
               items: days.map((day) {
                 return DropdownMenuItem(
                   value: day,
-                  child: Text(
-                    day,
-                    style: const TextStyle(color: Colors.black), // Text in dropdown
-                  ),
+                  child: Text(day),
                 );
               }).toList(),
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: weeklySchedule[selectedDay]?.length ?? 0,
+            child: isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : todaySessions.isEmpty
+                ? const Center(child: Text("No sessions today"))
+                : ListView.builder(
+              itemCount: todaySessions.length,
               itemBuilder: (context, index) {
-                var entry = weeklySchedule[selectedDay]![index];
+                var entry = todaySessions[index];
                 String subject = entry["subject"]!;
                 String startTime = entry["time"]!;
                 String endTime = getEndTime(startTime);
@@ -343,17 +213,6 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          const Icon(Icons.school, size: 20, color: Colors.grey),
-                          const SizedBox(width: 6),
-                          Text(
-                            "Course: $courseName",
-                            style: const TextStyle(fontSize: 16, color: Colors.black87),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
                 );
@@ -364,12 +223,4 @@ class _FacultyTimetableScreenState extends State<FacultyTimetableScreen> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    theme: ThemeData(fontFamily: 'Roboto', primarySwatch: Colors.blue),
-    debugShowCheckedModeBanner: false,
-    home: FacultyTimetableScreen(),
-  ));
 }

@@ -6,12 +6,13 @@ import 'config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
+
   static int? facultyId;
   static int? studentId;
 
   static Future<bool> login(String id, String password, String userType) async {
     final String url =
-    userType == 'Faculty' ? Config.teacherLogin : Config.studentLogin;
+    userType == 'Faculty' ? Config.teacherLogin.toString() : Config.studentLogin;
 
     final response = await http.post(
       Uri.parse(url),
@@ -26,11 +27,13 @@ class AuthService {
       final prefs = await SharedPreferences.getInstance();
 
       if (userType == 'Faculty') {
+
         facultyId = int.tryParse(data['faculty_id'].toString());
         await prefs.setString('userId', facultyId.toString());
       } else {
         studentId = int.tryParse(data['student_id'].toString());
         await prefs.setString('userId', studentId.toString());
+
       }
 
       await prefs.setBool('isLoggedIn', true);
